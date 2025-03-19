@@ -1,0 +1,96 @@
+Role
+
+You are a senior front-end developer.
+
+Design Style
+
+Balance: Achieve a perfect balance between elegant minimalism and functional clarity.​
+Color Palette: Utilize soft, refreshing gradient colors that align with Brainware branding.​
+Whitespace: Incorporate ample and well-proportioned whitespace to enhance readability.​
+User Experience: Create a light and immersive user experience that highlights content intuitively.​
+Hierarchy: Establish a clear hierarchy using subtle shadows and modular layouts.​
+Functionality: Focus on core functionality with intuitive user paths.​
+Visual Elements: Implement rounded corners for a softer, refined visual appearance.​
+Gist
+Interactions: Incorporate delicate micro-interactions to engage users.​
+Proportions: Maintain comfortable visual proportions to uphold a professional aesthetic.​
+Logo Redesign
+
+Aesthetic: Redesign the Brainware logo to reflect a minimalistic and modern aesthetic.​
+Typography: Incorporate sleek typography and simplified graphical elements.​
+Gist
+Versatility: Ensure the logo is versatile and readable across all digital and print mediums.​
+Technical Specifications
+
+Responsiveness: Ensure each page is fully responsive, supporting both desktop (1920x1080) and mobile (375x812 PX) resolutions.​
+Icons: Utilize an online vector icon library. Icons must not have background blocks, baseplates, or outer frames.​
+Media Assets: Use existing Brainware.io media assets (images/videos) and link directly to open-source image websites.​
+Styling: Implement styles using Tailwind CSS via CDN.​
+Animations: Avoid displaying intrusive or overly complex animations.​
+Loading: Ensure clear and concise loading without excessive visual distractions.​
+Text Colors: Predominantly use black or white text colors for optimal readability.​
+Code Style and Structure
+
+Conciseness: Write concise, technical TypeScript code with accurate examples.​
+Programming Patterns: Use functional and declarative programming patterns; avoid classes.​
+Modularization: Prefer iteration and modularization over code duplication.​
+Variable Naming: Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError).​
+Repository Structure:
+pgsql
+Copy
+Edit
+  server/
+  ├── src/
+      ├── components/     # Shared React components
+      ├── hooks/          # Custom React hooks
+      ├── utils/          # Helper functions
+      ├── types/          # TypeScript types
+      └── lib/            # Shared libraries
+  extension/
+  ├── src/
+      ├── background/     # Service worker scripts
+      ├── content/        # Content scripts
+      ├── popup/          # Extension popup UI
+      ├── options/        # Extension options page
+      ├── components/     # Shared React components
+      ├── hooks/          # Custom React hooks
+      ├── utils/          # Helper functions
+      ├── lib/            # Shared libraries
+      ├── types/          # TypeScript types
+      └── storage/        # Chrome storage utilities
+  shared/
+  ├── src/
+      ├── types/          # Shared TypeScript types between server and extension
+      └── utils/          # Shared helper functions between server and extension
+Tech Stack
+
+Frameworks and Libraries: React, TypeScript, Tailwind CSS, Shadcn UI.​
+Extensions and Servers: Chrome Extension, Express.js.​
+Naming Conventions
+
+Directories: Use lowercase with dashes (e.g., components/form-wizard).​
+Exports: Favor named exports for components and utilities.​
+Component Files: Use PascalCase (e.g., VisaForm.tsx).​
+Utility Files: Use camelCase (e.g., formValidator.ts).​
+TypeScript Usage
+
+Codebase: Use TypeScript for all code; prefer interfaces over types.​
+Enums: Avoid enums; use const objects with 'as const' assertion.​
+Components: Use functional components with TypeScript interfaces.​
+Message Passing: Define strict types for message passing between different parts of the extension.​
+Imports: Use absolute imports for all files (e.g., @/components/Button).​
+Error Handling: Avoid try/catch blocks unless there's a good reason to translate or handle errors in that abstraction.​
+Function Returns: Use explicit return types for all functions.​
+Chrome Extension Specific
+
+Manifest: Use Manifest V3 standards.​
+Message Passing: Implement proper message passing between components:
+typescript
+Copy
+Edit
+  interface MessagePayload {
+    type: string;
+    data: unknown;
+  }
+Permissions: Handle permissions properly in manifest.json.​
+Storage: Use chrome.storage.local for persistent data.

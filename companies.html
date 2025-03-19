@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Companies | Brainware</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <link rel="icon" href="images/brainware-icon.svg?v=1">
+</head>
+<body class="bg-dark-bg">
+    <!-- Header -->
+    <header class="fixed w-full z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="flex items-center">
+                <img src="images/brainware-logo.svg?v=1" alt="Brainware" class="h-8">
+            </a>
+            
+            <!-- Navigation - Desktop -->
+            <nav class="hidden md:flex space-x-10">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="companies.html" class="nav-link active">Companies</a>
+                <a href="opinions.html" class="nav-link">Opinions</a>
+            </nav>
+            
+            <!-- Mobile menu button -->
+            <div class="md:hidden">
+                <button type="button" class="text-gray-400 hover:text-white">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section pt-32 pb-20 relative overflow-hidden">
+        <div class="network-bg absolute inset-0 z-0"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-3xl mx-auto text-center">
+                <h1 class="text-5xl md:text-7xl font-bold leading-tight mb-10">
+                    Our Companies
+                </h1>
+                <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
+                    Building the future of technology and innovation
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Companies Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-6">
+            <p class="text-center text-xl">Coming soon...</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark-accent pt-20 pb-10">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="md:col-span-1">
+                    <img src="images/brainware-logo.svg?v=1" alt="Brainware" class="h-8 mb-6">
+                    <p class="text-gray-500 mb-6">Empowering Founders to Create Wealth and Sustainable Jobs in the 4th Industrial Revolution.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-500 hover:text-teal-400">
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-teal-400">
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 10.016 10.016 0 01-3.127 1.195 4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.937 4.937 0 004.604 3.417 9.868 9.868 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63a9.936 9.936 0 002.46-2.548l-.047-.02z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-6">Company</h4>
+                    <ul class="space-y-4">
+                        <li><a href="about.html" class="text-gray-500 hover:text-teal-400">About Us</a></li>
+                        <li><a href="companies.html" class="text-gray-500 hover:text-teal-400">Companies</a></li>
+                        <li><a href="opinions.html" class="text-gray-500 hover:text-teal-400">Opinions</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-6">Contact Us</h4>
+                    <ul class="space-y-4">
+                        <li class="text-gray-500">Email: <a href="mailto:info@brainware.com" class="hover:text-teal-400">info@brainware.com</a></li>
+                        <li class="text-gray-500">Location: San Francisco, CA</li>
+                        <li><a href="#" class="text-gray-500 hover:text-teal-400">Get in Touch</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-16 pt-8">
+                <p class="text-gray-600 text-sm text-center">&copy; 2025 Brainware. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
