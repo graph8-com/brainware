@@ -4,30 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Opinions | Brainware</title>
+    <link href="https://unpkg.com/@tailwindcss/line-clamp@0.4.4/dist/line-clamp.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/@tailwindcss/typography@0.5.10/dist/typography.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/@tailwindcss/line-clamp@0.4.4/dist/line-clamp.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/@tailwindcss/typography@0.5.10/dist/typography.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
     <link rel="icon" href="images/brainware-icon.svg?v=1">
 </head>
-<body class="bg-dark-bg">
+<body class="bg-white">
     <!-- Header -->
-    <header class="fixed w-full z-50">
+    <header class="fixed w-full z-50 bg-white border-b border-gray-200 shadow-sm">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="index.html" class="flex items-center">
-                <img src="images/brainware-logo.svg?v=1" alt="Brainware" class="h-8">
+            <a href="/" class="flex items-center">
+                <img src="images/brainware-logo-dark.svg" alt="Brainware" class="h-7">
             </a>
             
             <!-- Navigation - Desktop -->
             <nav class="hidden md:flex space-x-10">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="about.html" class="nav-link">About</a>
-                <a href="companies.html" class="nav-link">Companies</a>
-                <a href="opinions.html" class="nav-link active">Opinions</a>
+                <a href="index.html" class="text-gray-600 hover:text-gray-900">Home</a>
+                <a href="about.html" class="text-gray-600 hover:text-gray-900">About</a>
+                <a href="companies.html" class="text-gray-600 hover:text-gray-900">Companies</a>
+                <a href="builders.html" class="text-gray-600 hover:text-gray-900">Builders</a>
+                <a href="pe-partners.html" class="text-gray-600 hover:text-gray-900">Private Equity</a>
+                <a href="opinions.html" class="text-gray-900 font-medium">Opinions</a>
             </nav>
             
             <!-- Mobile menu button -->
             <div class="md:hidden">
-                <button type="button" class="text-gray-400 hover:text-white">
+                <button type="button" class="text-gray-900 hover:text-indigo-600">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
@@ -36,35 +42,132 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero-section pt-32 pb-20 relative overflow-hidden">
-        <div class="network-bg absolute inset-0 z-0"></div>
-        <div class="container mx-auto px-6 relative z-10">
-            <div class="max-w-3xl mx-auto text-center">
-                <h1 class="text-5xl md:text-7xl font-bold leading-tight mb-10">
-                    Our Opinions
-                </h1>
-                <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
-                    Insights on technology, innovation, and the future
-                </p>
+    <!-- Featured Post -->
+    <section class="pt-32 pb-20 bg-gray-50">
+        <div class="container mx-auto px-6 max-w-7xl">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Main Featured Post -->
+                <div class="lg:col-span-8">
+                    <div id="featured-post-container">
+                        <!-- Loading state -->
+                        <div class="loading-state">
+                            <div class="animate-pulse bg-gray-200 h-[600px] rounded-2xl"></div>
+                        </div>
+                        <!-- Error state -->
+                        <div class="error-state hidden">
+                            <div class="bg-red-50 p-6 rounded-2xl">
+                                <p class="text-red-600">Failed to load featured post</p>
+                            </div>
+                        </div>
+                        <!-- Empty state -->
+                        <div class="empty-state hidden">
+                            <div class="bg-gray-50 p-6 rounded-2xl">
+                                <p class="text-gray-600">No featured post available</p>
+                            </div>
+                        </div>
+                        <!-- Featured post -->
+                        <article id="featured-post" class="relative group h-[600px] rounded-2xl overflow-hidden hidden">
+                        </article>
+                    </div>
+                </div>
+
+                <!-- Recent Posts -->
+                <div class="lg:col-span-4 space-y-6">
+                    <div id="recent-posts">
+                        <!-- Recent posts will be injected here -->
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Opinions Section -->
+    <!-- Category Filters -->
+    <section class="py-8 border-t border-gray-200">
+        <div class="container mx-auto px-6 max-w-7xl mb-12">
+            <div class="flex justify-between items-center">
+                <div id="admin-actions" class="hidden">
+                    <a href="edit-post.html" class="inline-flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        New Post
+                    </a>
+                </div>
+                <div class="flex flex-wrap gap-4" id="category-filters">
+                    <button class="category-filter active px-4 py-2 rounded-full bg-teal-50 border border-teal-400 text-teal-600 hover:bg-teal-400 hover:text-white transition-all" data-category="">
+                        All Posts
+                    </button>
+                    <!-- Category filters will be injected here -->
+                </div>
+            </div>
+            
+            <!-- Regular Posts Grid -->
+            <div class="mt-16">
+                <h3 class="text-2xl font-bold mb-8 text-gray-900">All Posts</h3>
+                <div id="posts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+                    <!-- Posts will be injected here -->
+                </div>
+            </div>
+            <div id="no-posts" class="hidden text-center py-12">
+                <p class="text-gray-500 text-lg">No posts found in this category.</p>
+            </div>
+            <div class="text-center mt-12">
+                <button id="load-more" class="btn-primary hidden">
+                    Load More
+                </button>
+                <p id="loading" class="text-gray-500 hidden">Loading...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6 max-w-7xl">
+            <div class="max-w-2xl mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-4 text-gray-900">Stay Updated</h2>
+                <p class="text-gray-600 mb-8">Get the latest insights delivered to your inbox.</p>
+                <form class="flex gap-4 max-w-md mx-auto">
+                    <input type="email" placeholder="Enter your email" class="flex-1 bg-white border border-gray-300 rounded px-4 py-2 text-gray-900">
+                    <button type="submit" class="bg-teal-600 text-white px-6 py-2 rounded hover:bg-teal-700">
+                        Subscribe
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Topics -->
     <section class="py-20">
-        <div class="container mx-auto px-6">
-            <p class="text-center text-xl">Coming soon...</p>
+        <div class="container mx-auto px-6 max-w-7xl">
+            <h2 class="text-3xl font-bold mb-12 text-gray-900">Related Topics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm hover:border-teal-400 transition-all">
+                    <h3 class="text-xl font-bold mb-4 text-gray-900">Technology</h3>
+                    <p class="text-gray-600">Latest trends and innovations in tech</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm hover:border-teal-400 transition-all">
+                    <h3 class="text-xl font-bold mb-4 text-gray-900">Business</h3>
+                    <p class="text-gray-600">Insights on building successful companies</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm hover:border-teal-400 transition-all">
+                    <h3 class="text-xl font-bold mb-4 text-gray-900">Innovation</h3>
+                    <p class="text-gray-600">Breaking new ground in various industries</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm hover:border-teal-400 transition-all">
+                    <h3 class="text-xl font-bold mb-4 text-gray-900">Leadership</h3>
+                    <p class="text-gray-600">Building and leading successful teams</p>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-dark-accent pt-20 pb-10">
+    <footer class="bg-gray-50 pt-20 pb-10">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                 <div class="md:col-span-1">
-                    <img src="images/brainware-logo.svg?v=1" alt="Brainware" class="h-8 mb-6">
-                    <p class="text-gray-500 mb-6">Empowering Founders to Create Wealth and Sustainable Jobs in the 4th Industrial Revolution.</p>
+                    <img src="images/brainware-logo-dark.svg" alt="Brainware" class="h-7 mb-6">
+                    <p class="text-gray-600 mb-6">Empowering Founders to Create Wealth and Sustainable Jobs in the 4th Industrial Revolution.</p>
                     <div class="flex space-x-4">
                         <a href="#" class="text-gray-500 hover:text-teal-400">
                             <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
@@ -80,28 +183,296 @@
                 </div>
                 
                 <div>
-                    <h4 class="text-lg font-bold mb-6">Company</h4>
+                    <h4 class="text-lg font-bold mb-6 text-gray-900">Company</h4>
                     <ul class="space-y-4">
-                        <li><a href="about.html" class="text-gray-500 hover:text-teal-400">About Us</a></li>
-                        <li><a href="companies.html" class="text-gray-500 hover:text-teal-400">Companies</a></li>
-                        <li><a href="opinions.html" class="text-gray-500 hover:text-teal-400">Opinions</a></li>
+                        <li><a href="about.html" class="text-gray-600 hover:text-teal-700">About Us</a></li>
+                        <li><a href="companies.html" class="text-gray-600 hover:text-teal-700">Companies</a></li>
+                        <li><a href="opinions.html" class="text-gray-600 hover:text-teal-700">Opinions</a></li>
                     </ul>
                 </div>
                 
                 <div>
-                    <h4 class="text-lg font-bold mb-6">Contact Us</h4>
+                    <h4 class="text-lg font-bold mb-6 text-gray-900">Contact Us</h4>
                     <ul class="space-y-4">
-                        <li class="text-gray-500">Email: <a href="mailto:info@brainware.com" class="hover:text-teal-400">info@brainware.com</a></li>
-                        <li class="text-gray-500">Location: San Francisco, CA</li>
-                        <li><a href="#" class="text-gray-500 hover:text-teal-400">Get in Touch</a></li>
+                        <li class="text-gray-600">Location: San Francisco, CA</li>
+                        <li><a href="#" class="text-gray-600 hover:text-teal-700">Get in Touch</a></li>
                     </ul>
                 </div>
             </div>
-            
-            <div class="border-t border-gray-800 mt-16 pt-8">
-                <p class="text-gray-600 text-sm text-center">&copy; 2025 Brainware. All rights reserved.</p>
-            </div>
         </div>
     </footer>
+
+    <!-- JavaScript -->
+    <script type="module">
+        (async function() {
+            try {
+                const { createClient } = await import('@supabase/supabase-js');
+                const { format } = await import('date-fns');
+
+                const POSTS_PER_PAGE = 9;
+                let currentPage = 1;
+                let currentCategory = '';
+                let isLoading = false;
+
+                // Initialize Supabase client
+                const supabase = createClient(
+                    import.meta.env.VITE_SUPABASE_URL,
+                    import.meta.env.VITE_SUPABASE_ANON_KEY,
+                    { 
+                        auth: { persistSession: false },
+                        realtime: { enabled: false }
+                    }
+                );
+
+                // DOM Elements
+                const postsGrid = document.getElementById('posts-grid');
+                const loadMoreButton = document.getElementById('load-more');
+                const loadingIndicator = document.getElementById('loading');
+                const noPostsMessage = document.getElementById('no-posts');
+
+                // Check if user is authenticated and show admin actions
+                supabase.auth.onAuthStateChange((event, session) => {
+                    const adminActions = document.getElementById('admin-actions');
+                    if (session && adminActions) {
+                        adminActions.classList.remove('hidden');
+                    } else if (adminActions) {
+                        adminActions.classList.add('hidden');
+                    }
+                });
+
+                async function loadFeaturedPost() {
+                    try {
+                        const { data: posts, error } = await supabase
+                            .from('posts')
+                            .select(`
+                                *,
+                                categories!posts_category_id_fkey (
+                                    name,
+                                    slug
+                                ),
+                                users (
+                                    full_name,
+                                    avatar_url
+                                )
+                            `)
+                            .eq('status', 'published')
+                            .eq('is_featured', true)
+                            .order('published_at', { ascending: false })
+                            .limit(1);
+
+                        if (error) {
+                            throw error;
+                        }
+
+                        if (posts && posts.length > 0) {
+                            const post = posts[0];
+                            const featuredPost = document.getElementById('featured-post');
+                            featuredPost.classList.remove('hidden');
+                            document.getElementById('featured-post-container').querySelector('.loading-state').classList.add('hidden');
+                            featuredPost.innerHTML = `
+                                <img src="${post.featured_image_large || post.featured_image || 'https://via.placeholder.com/1200x800'}" 
+                                    alt="${post.title}"
+                                    class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                                <div class="absolute bottom-0 left-0 p-8">
+                                    <div class="flex items-center space-x-2 text-sm text-white/80 mb-4">
+                                        <span>${format(new Date(post.published_at), 'MMM d, yyyy')}</span>
+                                        <span>•</span>
+                                        <span>${post.categories ? post.categories.name : 'Uncategorized'}</span>
+                                    </div>
+                                    <h2 class="text-4xl font-bold mb-4 text-white group-hover:text-teal-400 transition-colors">
+                                        <a href="post.html?slug=${post.slug}" class="line-clamp-2">${post.title}</a>
+                                    </h2>
+                                    <p class="text-gray-200 mb-6 line-clamp-2">${post.excerpt}</p>
+                                    <div class="flex items-center">
+                                        <img src="${post.users.avatar_url || 'https://via.placeholder.com/40'}" 
+                                             alt="${post.users.full_name}"
+                                             class="w-10 h-10 rounded-full mr-3">
+                                        <span class="text-white">${post.users.full_name}</span>
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            document.getElementById('featured-post-container').querySelector('.empty-state').classList.remove('hidden');
+                            document.getElementById('featured-post-container').querySelector('.loading-state').classList.add('hidden');
+                        }
+                        
+                        // Load recent posts
+                        const { data: recentPosts, error: recentError } = await supabase
+                            .from('posts')
+                            .select(`
+                                *,
+                                categories!posts_category_id_fkey (
+                                    name,
+                                    slug
+                                ),
+                                users (
+                                    full_name,
+                                    avatar_url
+                                )
+                            `)
+                            .eq('status', 'published')
+                            .eq('is_featured', false)
+                            .order('published_at', { ascending: false })
+                            .limit(3);
+
+                        if (!recentError && recentPosts) {
+                            document.getElementById('recent-posts').innerHTML = recentPosts.map(post => `
+                                <article class="group bg-white rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
+                                    <a href="post.html?slug=${post.slug}" class="block">
+                                        <div class="aspect-[16/9] overflow-hidden">
+                                            <img src="${post.featured_image || 'https://via.placeholder.com/400x225'}" 
+                                                 alt="${post.title}"
+                                                 class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300">
+                                        </div>
+                                        <div class="p-6">
+                                            <h3 class="text-lg font-bold mb-2 text-gray-900 group-hover:text-teal-600 line-clamp-2">${post.title}</h3>
+                                            <div class="flex items-center text-sm text-gray-500">
+                                                <span>${format(new Date(post.published_at), 'MMM d, yyyy')}</span>
+                                                <span class="mx-2">•</span>
+                                                <span class="text-teal-600">${post.categories ? post.categories.name : 'Uncategorized'}</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </article>
+                            `).join('');
+                        }
+                    } catch (error) {
+                        console.error('Error fetching featured post:', error);
+                        document.getElementById('featured-post-container').querySelector('.error-state').classList.remove('hidden');
+                        document.getElementById('featured-post-container').querySelector('.loading-state').classList.add('hidden');
+                    }
+                }
+
+                async function loadCategories() {
+                    try {
+                        const { data: categories, error } = await supabase
+                            .from('categories')
+                            .select('*')
+                            .order('name');
+
+                        if (error) {
+                            throw error;
+                        }
+
+                        document.getElementById('category-filters').innerHTML += categories.map(category => `
+                            <button class="category-filter px-4 py-2 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all"
+                                    data-category="${category.id}">
+                                ${category.name}
+                            </button>
+                        `).join('');
+
+                        // Add click handlers
+                        document.querySelectorAll('.category-filter').forEach(button => {
+                            button.addEventListener('click', () => {
+                                document.querySelectorAll('.category-filter').forEach(btn => btn.classList.remove('active'));
+                                button.classList.add('active');
+                                currentCategory = button.dataset.category;
+                                currentPage = 1;
+                                postsGrid.innerHTML = '';
+                                loadPosts();
+                            });
+                        });
+                    } catch (error) {
+                        console.error('Error loading categories:', error);
+                    }
+                }
+
+                async function loadPosts() {
+                    if (isLoading) return;
+                    isLoading = true;
+                    noPostsMessage.classList.add('hidden');
+                    loadingIndicator.classList.remove('hidden');
+                    loadMoreButton.classList.add('hidden');
+
+                    try {
+                        let query = supabase
+                            .from('posts')
+                            .select(`
+                                *,
+                                categories!posts_category_id_fkey (
+                                    name,
+                                    slug
+                                ),
+                                users (
+                                    full_name,
+                                    avatar_url
+                                )
+                            `)
+                            .eq('status', 'published')
+                            .eq('is_featured', false)
+                            .order('published_at', { ascending: false })
+                            .range((currentPage - 1) * POSTS_PER_PAGE, currentPage * POSTS_PER_PAGE - 1);
+
+                        if (currentCategory) {
+                            query = query.eq('category_id', currentCategory);
+                        }
+
+                        const { data: posts, error } = await query;
+
+                        if (error) throw error;
+                        
+                        postsGrid.innerHTML += posts.map(post => {
+                            return `
+                                <a href="post.html?slug=${post.slug}" class="block">
+                                    <article class="group bg-white rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
+                                        <div class="aspect-[4/3] overflow-hidden">
+                                            <img src="${post.featured_image || 'https://via.placeholder.com/600x400'}" 
+                                                 alt="${post.title}"
+                                                 class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300">
+                                        </div>
+                                        <div class="p-6">
+                                            <div class="flex gap-2 mb-4">
+                                                ${post.categories ? `<span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-teal-50 text-teal-600">${post.categories.name}</span>` : ''}
+                                            </div>
+                                            <h3 class="text-xl font-bold mb-3 text-gray-900 group-hover:text-teal-600 line-clamp-2">${post.title}</h3>
+                                            <p class="text-gray-600 mb-6 line-clamp-2">${post.excerpt}</p>
+                                            <footer class="flex items-center justify-between pt-4 border-t border-gray-100">
+                                                <div class="flex items-center">
+                                                    <img src="${post.users.avatar_url || 'https://via.placeholder.com/32'}" 
+                                                         alt="${post.users.full_name}"
+                                                         class="w-6 h-6 rounded-full mr-2">
+                                                    <span class="text-sm text-gray-600">${post.users.full_name}</span>
+                                                </div>
+                                                <div class="text-sm text-gray-500">${format(new Date(post.published_at), 'MMM d, yyyy')}</div>
+                                            </footer>
+                                        </div>
+                                    </article>
+                                </a>
+                            `;
+                        }).join('');
+
+                        isLoading = false;
+                        loadingIndicator.classList.add('hidden');
+                        
+                        if (posts.length === POSTS_PER_PAGE) {
+                            loadMoreButton.classList.remove('hidden');
+                        }
+
+                        noPostsMessage.classList.toggle('hidden', posts.length > 0);
+                    } catch (error) {
+                        console.error('Error loading posts:', error);
+                        isLoading = false;
+                        loadingIndicator.classList.add('hidden');
+                    }
+                }
+
+                // Load More button handler
+                loadMoreButton.addEventListener('click', () => {
+                    currentPage++;
+                    loadPosts();
+                });
+
+                // Initialize
+                await Promise.all([
+                    loadFeaturedPost(),
+                    loadCategories(),
+                    loadPosts()
+                ]);
+            } catch (error) {
+                console.error('Application error:', error);
+            }
+        })();
+    </script>
 </body>
 </html>

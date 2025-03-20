@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PE Partners | Brainware</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <link rel="icon" href="images/brainware-icon.svg?v=1">
+</head>
+<body class="bg-dark-bg">
+    <div class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="fixed w-full z-50 transition-transform duration-300">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="flex items-center z-20">
+                <img src="images/brainware-logo.svg?v=1" alt="Brainware" class="h-7">
+            </a>
+            
+            <!-- Mobile menu button -->
+            <button id="menu-toggle" class="focus:outline-none z-20">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Full Screen Navigation Menu -->
+        <div id="nav-menu" class="fixed top-0 right-0 h-screen bg-gradient-to-br from-dark-accent via-dark-bg to-dark-bg border-l border-gray-800 z-10 hidden transform transition-transform duration-300">
+            <nav class="h-full flex items-start pt-32">
+                <ul class="space-y-2 w-full">
+                    <li><a href="/" class="text-sm font-bold text-white hover:text-teal-400 transition-colors block">Home</a></li>
+                    <li><a href="founders.html" class="text-sm font-bold text-white hover:text-teal-400 transition-colors block">Founders</a></li>
+                    <li><a href="builders.html" class="text-sm font-bold text-white hover:text-teal-400 transition-colors block">Builders</a></li>
+                    <li><a href="pe-partners.html" class="text-sm font-bold text-teal-400 transition-colors block">PE</a></li>
+                    <li><a href="companies.html" class="text-sm font-bold text-white hover:text-teal-400 transition-colors block">Companies</a></li>
+                    <li><a href="about.html" class="text-sm font-bold text-white hover:text-teal-400 transition-colors block">About</a></li>
+                    <li><a href="opinions.html" class="text-sm font-bold text-white hover:text-teal-400 transition-colors block">Opinions</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content" class="flex-grow">
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl">
+                <h1 class="text-4xl md:text-6xl font-bold mb-8">
+                    Partnering with Private Equity
+                    <span class="gradient-text">—</span>
+                </h1>
+                <p class="text-xl text-gray-400 mb-8">
+                    A Smarter Path to High-Value Acquisitions
+                </p>
+                <div class="prose prose-lg prose-invert">
+                    <p class="text-gray-300">
+                        At <strong>Brainware.io</strong>, we <strong>build, scale, and transition high-growth, profitable businesses</strong>, making them <strong>ideal acquisition targets for Private Equity (PE) firms</strong>. Unlike traditional venture-backed startups that <strong>burn cash chasing growth</strong>, our companies are structured for <strong>profitability, clean equity structures, and seamless majority ownership transitions.</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Benefits -->
+    <section class="py-20 bg-dark-accent">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl">
+                <h2 class="text-3xl font-bold mb-12">Our Model Benefits</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-dark-bg p-6 rounded-lg border border-gray-800">
+                        <div class="w-12 h-12 bg-teal-900 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Cash-flow Positive</h3>
+                        <p class="text-gray-400">Profitable and self-sustaining, not reliant on venture funding.</p>
+                    </div>
+
+                    <div class="bg-dark-bg p-6 rounded-lg border border-gray-800">
+                        <div class="w-12 h-12 bg-teal-900 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Founder-Led</h3>
+                        <p class="text-gray-400">Leadership team retains significant equity and long-term commitment.</p>
+                    </div>
+
+                    <div class="bg-dark-bg p-6 rounded-lg border border-gray-800">
+                        <div class="w-12 h-12 bg-teal-900 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Built for Scale</h3>
+                        <p class="text-gray-400">Reaching $50M+ in revenue before transitioning majority ownership.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl">
+                <h2 class="text-3xl font-bold mb-12">How Our PE Partnership Model Works</h2>
+                <div class="space-y-16">
+                    <div class="flex gap-8">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-dark-accent rounded-lg flex items-center justify-center text-2xl font-bold text-teal-400">1</div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4">We Build the Business</h3>
+                            <p class="text-gray-400">We identify, fund, and launch businesses, setting up operations and securing first customers to validate product-market fit and early profitability.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-8">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-dark-accent rounded-lg flex items-center justify-center text-2xl font-bold text-teal-400">2</div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4">Scaling to $50M+ in Revenue</h3>
+                            <p class="text-gray-400">Our companies are structured to reach $50M+ ARR profitably, using sustainable growth strategies without excessive outside capital.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-8">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-dark-accent rounded-lg flex items-center justify-center text-2xl font-bold text-teal-400">3</div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4">PE Acquisition (50% Majority Ownership)</h3>
+                            <p class="text-gray-400">At the optimal growth stage ($50M+ revenue), Brainware sells 50% of its equity to a PE firm, giving them immediate majority control while ensuring strong leadership continuity.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-8">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-dark-accent rounded-lg flex items-center justify-center text-2xl font-bold text-teal-400">4</div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4">Long-Term Growth & Exit Strategy</h3>
+                            <p class="text-gray-400">Post-acquisition, the business scales further under PE ownership, with the highly motivated founding team still owning 45% of the company—ensuring continued success.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Grid -->
+    <section class="py-20 bg-dark-accent">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl">
+                <h2 class="text-3xl font-bold mb-12">Why Brainware.io Businesses Are Perfect for PE Firms</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-dark-bg p-6 rounded-lg border border-gray-800">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-teal-900 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold">Immediate Majority Control</h3>
+                        </div>
+                        <p class="text-gray-400">PE firms can acquire 50% outright, gaining majority ownership without dilution risks or investor negotiations.</p>
+                    </div>
+
+                    <div class="bg-dark-bg p-6 rounded-lg border border-gray-800">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-teal-900 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold">Clean Cap Tables</h3>
+                        </div>
+                        <p class="text-gray-400">No multiple funding rounds. No preferred shares. Just a simple, founder-friendly ownership structure.</p>
+                    </div>
+
+                    <div class="bg-dark-bg p-6 rounded-lg border border-gray-800">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-teal-900 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold">Proven Profitability</h3>
+                        </div>
+                        <p class="text-gray-400">Companies scale organically with strong cash flows and EBITDA-positive operations.</p>
+                    </div>
+
+                    <div class="bg-dark-bg p-6 rounded-lg border border-gray-800">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-teal-900 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold">Retained Leadership</h3>
+                        </div>
+                        <p class="text-gray-400">Co-founders retain 45% equity and have long-term upside—keeping them fully committed post-acquisition.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl">
+                <h2 class="text-3xl font-bold mb-8">Interested in Partnering With Us?</h2>
+                <p class="text-xl text-gray-400 mb-8">
+                    We work with mid-market and growth-focused PE firms seeking high-revenue, cash-flow-positive businesses with founder-driven operational continuity.
+                </p>
+                <a href="#" class="inline-flex items-center px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors">
+                    Contact Us
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="md:col-span-1">
+                    <img src="images/brainware-logo.svg?v=1" alt="Brainware" class="h-7 mb-6">
+                    <p class="text-gray-500 mb-6">Empowering Founders to Create Wealth and Sustainable Jobs in the 4th Industrial Revolution.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-500 hover:text-teal-400">
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-teal-400">
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-6">Menu</h4>
+                    <ul class="space-y-4">
+                        <li><a href="index.html" class="text-gray-500 hover:text-teal-400">Home</a></li>
+                        <li><a href="about.html" class="text-gray-500 hover:text-teal-400">About Us</a></li>
+                        <li><a href="companies.html" class="text-gray-500 hover:text-teal-400">Companies</a></li>
+                        <li><a href="pe-partners.html" class="text-gray-500 hover:text-teal-400">Private Equity</a></li>
+                        <li><a href="opinions.html" class="text-gray-500 hover:text-teal-400">Opinions</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-6">Contact Us</h4>
+                    <ul class="space-y-4">
+                        <li class="text-gray-500">Location: Miami, FL</li>
+                        <li><a href="#" class="text-gray-500 hover:text-teal-400">Get in Touch</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 text-sm">© 2025 Brainware • All Rights Reserved</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-500 hover:text-teal-400 text-sm">Privacy Policy</a>
+                    <a href="#" class="text-gray-500 hover:text-teal-400 text-sm">Terms of Service</a>
+                    <a href="#" class="text-gray-500 hover:text-teal-400 text-sm">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    </main>
+    </div>
+
+    <!-- JavaScript -->
+    <script type="module">
+        // Set active menu item based on current page
+        const currentPath = window.location.pathname;
+        const navItems = document.querySelectorAll('.nav-item');
+        
+        navItems.forEach(item => {
+            const itemPath = item.getAttribute('href');
+            if (currentPath === '/' && itemPath === '/') {
+                item.classList.add('active');
+            } else if (currentPath !== '/' && itemPath !== '/' && currentPath.includes(itemPath)) {
+                item.classList.add('active');
+            }
+        });
+
+        // Mobile menu functionality
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        const mainContent = document.getElementById('main-content');
+        const header = document.querySelector('header');
+        let isMenuOpen = false;
+        
+        menuToggle.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            
+            if (isMenuOpen) {
+                // Open menu
+                navMenu.classList.remove('hidden');
+                navMenu.classList.remove('translate-x-full');
+                mainContent.classList.add('pushed');
+                header.classList.add('pushed');
+                document.body.style.overflow = 'hidden';
+                menuToggle.innerHTML = `
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                `;
+            } else {
+                // Close menu
+                navMenu.classList.add('translate-x-full');
+                setTimeout(() => navMenu.classList.add('hidden'), 300);
+                mainContent.classList.remove('pushed');
+                header.classList.remove('pushed');
+                document.body.style.overflow = '';
+                menuToggle.innerHTML = `
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

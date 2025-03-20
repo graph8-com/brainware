@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join as a Founder | Brainware</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <link rel="icon" href="images/brainware-icon.svg?v=1">
+</head>
+<body class="bg-dark-bg">
+    <div class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="fixed w-full z-50 transition-transform duration-300">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="flex items-center z-20">
+                <img src="images/brainware-logo.svg?v=1" alt="Brainware" class="h-7">
+            </a>
+            
+            <!-- Mobile menu button -->
+            <button id="menu-toggle" class="focus:outline-none z-20">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Mobile Navigation (hidden by default) -->
+        <div id="nav-menu" class="fixed top-0 right-0 h-screen bg-gradient-to-br from-dark-accent via-dark-bg to-dark-bg border-l border-gray-800 z-10 hidden transform transition-transform duration-300">
+            <nav class="h-full flex items-start pt-32">
+                <ul class="space-y-2 w-full">
+                    <li><a href="/" class="nav-item" data-page="home">Home</a></li>
+                    <li><a href="founders.html" class="nav-item" data-page="founders">Founders</a></li>
+                    <li><a href="builders.html" class="nav-item" data-page="builders">Builders</a></li>
+                    <li><a href="pe-partners.html" class="nav-item" data-page="pe">Private Equity</a></li>
+                    <li><a href="companies.html" class="nav-item" data-page="companies">Companies</a></li>
+                    <li><a href="about.html" class="nav-item" data-page="about">About</a></li>
+                    <li><a href="opinions.html" class="nav-item" data-page="opinions">Opinions</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content" class="flex-grow">
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl">
+                <h1 class="text-4xl md:text-6xl font-bold mb-8">
+                    Join Brainware as a Founder
+                    <span class="gradient-text">—</span>
+                </h1>
+                <p class="text-xl text-gray-400 mb-8">
+                    Lead and Scale a High-Growth Business
+                </p>
+                <div class="prose prose-lg prose-invert">
+                    <p class="text-gray-300">
+                        At <strong>Brainware.io</strong>, we don't just launch startups—we <strong>build high-growth, profitable companies that need the right leaders to take them to the next level.</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Philosophy -->
+    <section class="py-20 bg-dark-accent">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl">
+                <div class="mb-4 text-lg">—— A</div>
+                <h2 class="text-3xl font-bold mb-8">Our Core Philosophy</h2>
+                <div class="prose prose-lg prose-invert mb-12">
+                    <blockquote class="text-xl italic border-l-4 border-teal-400 pl-6">
+                        "Do Everything Yourself—At Least Once."
+                        <footer class="text-gray-400 mt-2">— Thomas Cornelius</footer>
+                    </blockquote>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-dark-bg p-6 rounded-lg border border-gray-800">
+                        <div class="flex items-center gap-4 mb-4">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <h3 class="text-xl font-bold">Leadership Through Action</h3>
+                        </div>
+                        <p class="text-gray-400">Leadership is earned through action, not just strategy. We expect you to get your hands dirty and push growth with your own hands.</p>
+                    </div>
+
+                    <div class="bg-dark-bg p-6 rounded-lg border border-gray-800">
+                        <div class="flex items-center gap-4 mb-4">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                            <h3 class="text-xl font-bold">Build First, Scale Later</h3>
+                        </div>
+                        <p class="text-gray-400">When you've done the work yourself, you'll know exactly what needs to be done, how to do it, and when to scale by hiring the right team.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What You Get -->
+    <section class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl">
+                <div class="mb-4 text-lg">—— B</div>
+                <h2 class="text-3xl font-bold mb-12">What You Get as a Brainware Founder</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-dark-accent p-8 rounded-xl border border-gray-800">
+                        <div class="w-12 h-12 bg-teal-900 rounded-lg flex items-center justify-center mb-6">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Competitive Compensation</h3>
+                        <ul class="space-y-3 text-gray-400">
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 text-teal-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                $10,000/month base salary
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 text-teal-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Performance bonuses up to $10K/month
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 text-teal-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                15% equity ownership
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 text-teal-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Profit-sharing once cash-flow positive
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-dark-accent p-8 rounded-xl border border-gray-800">
+                        <div class="w-12 h-12 bg-teal-900 rounded-lg flex items-center justify-center mb-6">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Clear Path to Success</h3>
+                        <ul class="space-y-3 text-gray-400">
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 text-teal-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Validated business model
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 text-teal-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Initial customers secured
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 text-teal-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Operational infrastructure in place
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 text-teal-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                PE exit strategy at $50M+ revenue
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who We're Looking For -->
+    <section class="py-20 bg-dark-accent">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl">
+                <div class="mb-4 text-lg">—— C</div>
+                <h2 class="text-3xl font-bold mb-12">Who We're Looking For</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-dark-bg p-6 rounded-lg border border-gray-800">
+                        <div class="flex items-center gap-4 mb-4">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                            <h3 class="text-xl font-bold">Sales & Revenue Growth</h3>
+                        </div>
+                        <p class="text-gray-400">You can sell, build relationships, and drive revenue from day one.</p>
+                    </div>
+
+                    <div class="bg-dark-bg p-6 rounded-lg border border-gray-800">
+                        <div class="flex items-center gap-4 mb-4">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                            </svg>
+                            <h3 class="text-xl font-bold">Technology & Product</h3>
+                        </div>
+                        <p class="text-gray-400">You can code, architect, or deeply understand product execution.</p>
+                    </div>
+
+                    <div class="bg-dark-bg p-6 rounded-lg border border-gray-800">
+                        <div class="flex items-center gap-4 mb-4">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
+                            </svg>
+                            <h3 class="text-xl font-bold">Marketing & Acquisition</h3>
+                        </div>
+                        <p class="text-gray-400">You know how to attract, convert, and retain customers at scale.</p>
+                    </div>
+
+                    <div class="bg-dark-bg p-6 rounded-lg border border-gray-800">
+                        <div class="flex items-center gap-4 mb-4">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                            </svg>
+                            <h3 class="text-xl font-bold">Operations & Scaling</h3>
+                        </div>
+                        <p class="text-gray-400">You can optimize processes, execute strategies, and push teams to peak performance.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Table -->
+    <section class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl">
+                <div class="mb-4 text-lg">—— D</div>
+                <h2 class="text-3xl font-bold mb-12">Why This is Better Than Starting from Scratch</h2>
+                <div class="bg-dark-accent rounded-xl overflow-hidden border border-gray-800">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-gray-700/50">
+                                <th class="text-left p-6 font-bold">Feature</th>
+                                <th class="text-left p-6 font-bold text-teal-400">Brainware.io Founders</th>
+                                <th class="text-left p-6 font-bold text-gray-500">Traditional Startup Founders</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-700/50 hover:bg-gray-800/50 transition-colors">
+                                <td class="p-6 font-medium">Funding</td>
+                                <td class="p-6 text-white">Brainware funds the business before transition</td>
+                                <td class="p-6 text-gray-400">Founders must raise or bootstrap</td>
+                            </tr>
+                            <tr class="border-b border-gray-700/50 hover:bg-gray-800/50 transition-colors">
+                                <td class="p-6 font-medium">Customers</td>
+                                <td class="p-6 text-white">First customers already secured</td>
+                                <td class="p-6 text-gray-400">Founders must validate market fit</td>
+                            </tr>
+                            <tr class="border-b border-gray-700/50 hover:bg-gray-800/50 transition-colors">
+                                <td class="p-6 font-medium">Salary & Profit</td>
+                                <td class="p-6 text-white">$10K/month + profit-sharing</td>
+                                <td class="p-6 text-gray-400">Founders often go unpaid</td>
+                            </tr>
+                            <tr class="border-b border-gray-700/50 hover:bg-gray-800/50 transition-colors">
+                                <td class="p-6 font-medium">Equity</td>
+                                <td class="p-6 text-white">Founders retain 45% collectively</td>
+                                <td class="p-6 text-gray-400">Founders face heavy VC dilution</td>
+                            </tr>
+                            <tr class="hover:bg-gray-800/50 transition-colors">
+                                <td class="p-6 font-medium">Exit Strategy</td>
+                                <td class="p-6 text-white">PE-backed, structured for high-value sale</td>
+                                <td class="p-6 text-gray-400">Uncertain, often VC-dependent</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Apply Section -->
+    <section class="py-20 bg-dark-accent">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl">
+                <h2 class="text-3xl font-bold mb-8">Ready to Build Something Great?</h2>
+                <p class="text-xl text-gray-400 mb-12">
+                    If you're a seasoned executive, operator, or subject matter expert ready to lead and scale a high-growth business, we want to hear from you.
+                </p>
+                <a href="#" class="inline-flex items-center px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors">
+                    Apply Now
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="md:col-span-1">
+                    <img src="images/brainware-logo.svg?v=1" alt="Brainware" class="h-7 mb-6">
+                    <p class="text-gray-500 mb-6">Empowering Founders to Create Wealth and Sustainable Jobs in the 4th Industrial Revolution.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-500 hover:text-teal-400">
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-teal-400">
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-6">Menu</h4>
+                    <ul class="space-y-4">
+                        <li><a href="/" class="text-gray-500 hover:text-teal-400">Home</a></li>
+                        <li><a href="about.html" class="text-gray-500 hover:text-teal-400">About Us</a></li>
+                        <li><a href="companies.html" class="text-gray-500 hover:text-teal-400">Companies</a></li>
+                        <li><a href="builders.html" class="text-gray-500 hover:text-teal-400">Builders</a></li>
+                        <li><a href="founders.html" class="text-gray-500 hover:text-teal-400">Founders</a></li>
+                        <li><a href="pe-partners.html" class="text-gray-500 hover:text-teal-400">Private Equity</a></li>
+                        <li><a href="opinions.html" class="text-gray-500 hover:text-teal-400">Opinions</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-6">Contact Us</h4>
+                    <ul class="space-y-4">
+                        <li class="text-gray-500">Location: Miami, FL</li>
+                        <li><a href="#" class="text-gray-500 hover:text-teal-400">Get in Touch</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 text-sm">© 2025 Brainware • All Rights Reserved</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-500 hover:text-teal-400 text-sm">Privacy Policy</a>
+                    <a href="#" class="text-gray-500 hover:text-teal-400 text-sm">Terms of Service</a>
+                    <a href="#" class="text-gray-500 hover:text-teal-400 text-sm">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    </main>
+    </div>
+
+    <!-- JavaScript -->
+    <script type="module">
+        // Set active menu item based on current page
+        const currentPath = window.location.pathname;
+        const navItems = document.querySelectorAll('.nav-item');
+        
+        navItems.forEach(item => {
+            const itemPath = item.getAttribute('href');
+            if (currentPath === '/' && itemPath === '/') {
+                item.classList.add('active');
+            } else if (currentPath !== '/' && itemPath !== '/' && currentPath.includes(itemPath)) {
+                item.classList.add('active');
+            }
+        });
+
+        // Mobile menu functionality
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        const mainContent = document.getElementById('main-content');
+        const header = document.querySelector('header');
+        let isMenuOpen = false;
+        
+        menuToggle.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            
+            if (isMenuOpen) {
+                // Open menu
+                navMenu.classList.remove('hidden');
+                navMenu.classList.remove('translate-x-full');
+                mainContent.classList.add('pushed');
+                header.classList.add('pushed');
+                document.body.style.overflow = 'hidden';
+                menuToggle.innerHTML = `
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                `;
+            } else {
+                // Close menu
+                navMenu.classList.add('translate-x-full');
+                setTimeout(() => navMenu.classList.add('hidden'), 300);
+                mainContent.classList.remove('pushed');
+                header.classList.remove('pushed');
+                document.body.style.overflow = '';
+                menuToggle.innerHTML = `
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

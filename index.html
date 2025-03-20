@@ -3,195 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brainware | Empowering Founders</title>
+    <title>Brainware - Building the Future of Business</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
     <link rel="icon" href="images/brainware-icon.svg?v=1">
 </head>
 <body class="bg-dark-bg">
-    <!-- Header -->
-    <header class="fixed w-full z-50">
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="fixed w-full z-50">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="index.html" class="flex items-center">
-                <img src="images/brainware-logo.svg?v=1" alt="Brainware" class="h-8">
+            <a href="/" class="flex items-center z-20">
+                <img src="images/brainware-logo.svg?v=1" alt="Brainware" class="h-7">
             </a>
             
-            <!-- Navigation - Desktop -->
-            <nav class="hidden md:flex space-x-10">
-                <a href="index.html" class="nav-link active">Home</a>
-                <a href="about.html" class="nav-link">About</a>
-                <a href="companies.html" class="nav-link">Companies</a>
-                <a href="opinions.html" class="nav-link">Opinions</a>
-            </nav>
-            
             <!-- Mobile menu button -->
-            <button class="md:hidden focus:outline-none">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <button id="menu-toggle" class="focus:outline-none z-20">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
             </button>
         </div>
         
-        <!-- Mobile Navigation (hidden by default) -->
-        <div class="hidden md:hidden bg-gray-900 px-6 py-4">
-            <a href="index.html" class="block py-2 text-white">Home</a>
-            <a href="about.html" class="block py-2 text-gray-400">About</a>
-            <a href="#" class="block py-2 text-gray-400">Companies</a>
-            <a href="#" class="block py-2 text-gray-400">Founders</a>
-            <a href="#" class="block py-2 text-gray-400">Blog</a>
-            <a href="#" class="block py-2 text-gray-400">Contact Us</a>
-        </div>
-    </header>
+        <!-- Full Screen Navigation Menu -->
+        <div id="nav-menu" class="fixed top-0 right-0 h-screen bg-gradient-to-br from-dark-accent via-dark-bg to-dark-bg border-l border-gray-800 z-10 hidden transform transition-transform duration-300">
+            <nav class="h-full flex items-start pt-32">
+                <ul class="space-y-2 w-full">
+                    <li><a href="/" class="nav-item" data-page="home">Home</a></li>
+                    <li><a href="founders.html" class="nav-item" data-page="founders">Founders</a></li>
+                    <li><a href="builders.html" class="nav-item" data-page="builders">Builders</a></li>
+                    <li><a href="pe-partners.html" class="nav-item" data-page="pe">Private Equity</a></li>
+                    <li><a href="companies.html" class="nav-item" data-page="companies">Companies</a></li>
+                    <li><a href="about.html" class="nav-item" data-page="about">About</a></li>
+                    <li><a href="opinions.html" class="nav-item" data-page="opinions">Opinions</a></li>
+                </ul>
+            </nav>
+            </div>
 
-    <!-- Hero Section -->
-    <section class="hero-section pt-32 pb-20 relative overflow-hidden">
-        <div class="network-bg absolute inset-0 z-0"></div>
+            <!-- Full Screen Navigation Menu -->
+            <div id="nav-menu" class="fixed top-0 right-0 w-64 h-screen bg-gradient-to-br from-dark-accent via-dark-bg to-dark-bg border-l border-gray-800 z-10 hidden transform transition-transform duration-300">
+                <nav class="h-full flex items-start pt-32">
+                    <ul class="space-y-6 w-full px-8">
+                        <li><a href="/" class="text-xl font-bold text-white hover:text-teal-400 transition-colors block">Home</a></li>
+                        <li><a href="founders.html" class="text-xl font-bold text-white hover:text-teal-400 transition-colors block">Founders</a></li>
+                        <li><a href="builders.html" class="text-xl font-bold text-white hover:text-teal-400 transition-colors block">Builders</a></li>
+                        <li><a href="pe-partners.html" class="text-xl font-bold text-white hover:text-teal-400 transition-colors block">Private Equity</a></li>
+                        <li><a href="companies.html" class="text-xl font-bold text-white hover:text-teal-400 transition-colors block">Companies</a></li>
+                        <li><a href="about.html" class="text-xl font-bold text-white hover:text-teal-400 transition-colors block">About</a></li>
+                        <li><a href="opinions.html" class="text-xl font-bold text-white hover:text-teal-400 transition-colors block">Opinions</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <main id="main-content" class="flex-grow">
+            <!-- Hero Section -->
+    <section class="hero-section min-h-screen relative flex items-center">
+        <div class="network-bg absolute inset-0"></div>
         <div class="container mx-auto px-6 relative z-10">
-            <div class="max-w-3xl mx-auto text-center">
-                <h1 class="text-5xl md:text-7xl font-bold leading-tight mb-10">
-                    Find the signal <br/>
-                    <span class="text-white">in the noise</span>
+            <div class="max-w-4xl">
+                <h1 class="text-5xl md:text-7xl font-bold mb-8 leading-tight">
+                    Building the Future <br>of Business
+                    <span class="gradient-text">—</span>
                 </h1>
-                <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
-                    Building companies that create wealth and sustainable jobs in the 4th Industrial Revolution.
+                <p class="text-xl md:text-2xl text-gray-400 mb-12 max-w-2xl">
+                    We build, scale, and transition high-growth, profitable businesses that create sustainable value in the 4th Industrial Revolution.
                 </p>
-                <div class="flex justify-center space-x-6">
-                    <a href="#" class="btn-primary">
-                        Meet Our Founders
+                <div class="flex flex-wrap gap-6">
+                    <a href="about.html" class="btn-primary">
+                        Learn More
+                    </a>
+                    <a href="companies.html" class="btn-outline">
+                        View Our Companies
                     </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Founder Profiles Section -->
-    <section class="py-20">
+    <!-- What We Do Section -->
+    <section class="py-20 bg-dark-accent">
         <div class="container mx-auto px-6">
-            <h2 class="text-3xl md:text-4xl font-bold mb-16">
-                Founder Stories
-            </h2>
-            
-            <div class="space-y-10">
-                <!-- Founder 1 -->
-                <div class="card p-8">
-                    <h3 class="text-2xl font-bold mb-3 arrow-prefix">John</h3>
-                    <p class="text-gray-500 mb-2">Brainware Founder since 2016</p>
-                    <p class="text-gray-500 mb-6">"Brainware helps companies get through the early stage quickly and into the growth phase."</p>
-                    <a href="#" class="text-teal-400">Read John's Story</a>
-                </div>
-                
-                <!-- Founder 2 -->
-                <div class="card p-8">
-                    <h3 class="text-2xl font-bold mb-3 arrow-prefix">Alex & Victor</h3>
-                    <p class="text-gray-500 mb-2">Brainware Founders since 2016</p>
-                    <p class="text-gray-500 mb-6">"Brainware allows Founders to focus on their business by providing operations and even sales services."</p>
-                    <a href="#" class="text-teal-400">Read Their Story</a>
-                </div>
-                
-                <!-- Founder 3 -->
-                <div class="card p-8">
-                    <h3 class="text-2xl font-bold mb-3 arrow-prefix">Robert</h3>
-                    <p class="text-gray-500 mb-2">Brainware Founder since 2020</p>
-                    <p class="text-gray-500 mb-6">"Brainware provides solid fundamental building blocks to build companies."</p>
-                    <a href="#" class="text-teal-400">Read Robert's Story</a>
-                </div>
-                
-                <!-- Founder 4 -->
-                <div class="card p-8">
-                    <h3 class="text-2xl font-bold mb-3 arrow-prefix">Casey</h3>
-                    <p class="text-gray-500 mb-2">Brainware Founder since 2016</p>
-                    <p class="text-gray-500 mb-6">"Collaboration with other Brainware companies creates insights and pushes all companies forward."</p>
-                    <a href="#" class="text-teal-400">Read Casey's Story</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div class="section-divider"></div>
-
-    <!-- Technology Awards Section -->
-    <section class="py-20">
-        <div class="container mx-auto px-6">
-            <h2 class="text-3xl md:text-4xl font-bold mb-16">
-                Category-Defining Technology
-            </h2>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                <div>
-                    <h3 class="text-2xl font-bold mb-3">Brainware Ranked No. 1 in Voice AI Technology</h3>
-                    <p class="text-gray-500 mb-4">— Voice Technology Research Group, 2025</p>
-                    <p class="text-gray-500 mb-4">"Brainware demonstrates clear technical superiority in voice recognition accuracy and processing speed, establishing itself as the market leader."</p>
-                    <p class="mb-6"><span class="text-teal-400">↳</span> <a href="#" class="text-teal-400">Read the Full Report</a></p>
+            <div class="max-w-4xl">
+                <div class="mb-4 text-lg">—— A</div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-12">What We Do</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="space-y-4">
+                        <div class="feature-icon">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold">Identify</h3>
+                        <p class="text-gray-400">We identify high-potential business opportunities in growing markets.</p>
+                    </div>
                     
-                    <h3 class="text-2xl font-bold mb-3">Top Voice Intelligence Platform</h3>
-                    <p class="text-gray-500 mb-4">— Enterprise Voice Summit, 2025</p>
-                    <p class="mb-6"><span class="text-teal-400">↳</span> <a href="#" class="text-teal-400">View Award Details</a></p>
-                </div>
-                
-                <div>
-                    <h3 class="text-2xl font-bold mb-3">Most Innovative AI Company</h3>
-                    <p class="text-gray-500 mb-4">— AI Breakthrough Awards</p>
-                    <p class="text-gray-500 mb-4">"Brainware has revolutionized how enterprises harness voice data, creating actionable intelligence from previously untapped sources of information."</p>
-                    <p class="mb-6"><span class="text-teal-400">↳</span> <a href="#" class="text-teal-400">See the Award</a></p>
+                    <div class="space-y-4">
+                        <div class="feature-icon">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold">Build</h3>
+                        <p class="text-gray-400">We build and validate businesses with real revenue and profitability.</p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="feature-icon">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold">Scale</h3>
+                        <p class="text-gray-400">We scale businesses to $50M+ in revenue before transitioning to PE firms.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <div class="section-divider"></div>
-
-    <!-- Features Section -->
+    <!-- Our Companies Section -->
     <section class="py-20">
         <div class="container mx-auto px-6">
-            <h2 class="text-3xl md:text-4xl font-bold mb-16">
-                What Makes Brainware Powerful
-            </h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-                <!-- Feature 1 -->
-                <div>
-                    <div class="mb-4 text-lg">—— A</div>
-                    <h3 class="text-2xl font-bold mb-3">Collaboration Platform</h3>
-                    <p class="text-gray-500 mb-6">Collaboration across Brainware companies reduces overall risks and speeds up time to market for our Founders.</p>
-                    <a href="#" class="text-teal-400">Explore Network</a>
-                </div>
-                
-                <!-- Feature 2 -->
-                <div>
-                    <div class="mb-4 text-lg">—— B</div>
-                    <h3 class="text-2xl font-bold mb-3">Foundational Building Blocks</h3>
-                    <p class="text-gray-500 mb-6">The initial Brainware operating entities have been developed into a platform providing the fundamental building blocks to build modern, data-driven companies.</p>
-                    <a href="#" class="text-teal-400">Explore Solutions</a>
-                </div>
-                
-                <!-- Feature 3 -->
-                <div>
-                    <div class="mb-4 text-lg">—— C</div>
-                    <h3 class="text-2xl font-bold mb-3">Accelerated Growth</h3>
-                    <p class="text-gray-500 mb-6">Brainware helps companies get through the early stage quickly and into the growth phase.</p>
-                    <a href="#" class="text-teal-400">Explore Growth</a>
-                </div>
-                
-                <!-- Feature 4 -->
-                <div>
-                    <div class="mb-4 text-lg">—— D</div>
-                    <h3 class="text-2xl font-bold mb-3">Operational Support</h3>
-                    <p class="text-gray-500 mb-6">Brainware allows Founders to focus on their business by providing operations and even sales services.</p>
-                    <a href="#" class="text-teal-400">Explore Support</a>
+            <div class="max-w-4xl">
+                <div class="mb-4 text-lg">—— B</div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-12">Our Companies</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <a href="companies.html" class="block group">
+                        <div class="bg-dark-accent p-8 rounded-xl border border-gray-800 hover:border-teal-400 transition-all">
+                            <div class="w-48 bg-black/30 p-6 rounded-lg border border-gray-800 mb-8">
+                                <img src="images/graph8-logo.svg" alt="Graph8" class="w-full group-hover:scale-105 transition-transform">
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">Graph8</h3>
+                            <p class="text-gray-400 mb-6">Data visualization platform helping businesses transform complex data into actionable insights.</p>
+                            <div class="flex items-center text-teal-400 group-hover:translate-x-2 transition-transform">
+                                <span class="mr-2">Learn More</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="companies.html" class="block group">
+                        <div class="bg-dark-accent p-8 rounded-xl border border-gray-800 hover:border-teal-400 transition-all">
+                            <div class="w-48 bg-black/30 p-6 rounded-lg border border-gray-800 mb-8">
+                                <img src="images/cience-logo.svg" alt="CIENCE" class="w-full group-hover:scale-105 transition-transform">
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">CIENCE</h3>
+                            <p class="text-gray-400 mb-6">B2B lead generation and data enrichment platform for scaling outbound sales.</p>
+                            <div class="flex items-center text-teal-400 group-hover:translate-x-2 transition-transform">
+                                <span class="mr-2">Learn More</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <div class="section-divider"></div>
+    <!-- For Builders Section -->
+    <section class="py-20 bg-dark-accent">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl">
+                <div class="mb-4 text-lg">—— C</div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-8">For Builders</h2>
+                <p class="text-xl text-gray-400 mb-12">Join us as an operating partner and build multiple successful companies.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-dark-bg p-6 rounded-lg border border-gray-800">
+                        <div class="flex items-center gap-4 mb-4">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <h3 class="text-xl font-bold">15% Equity</h3>
+                        </div>
+                        <p class="text-gray-400">Significant equity ownership in each venture you build.</p>
+                    </div>
 
-    <!-- Get Demo Section -->
+                    <div class="bg-dark-bg p-6 rounded-lg border border-gray-800">
+                        <div class="flex items-center gap-4 mb-4">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                            <h3 class="text-xl font-bold">$10K Monthly</h3>
+                        </div>
+                        <p class="text-gray-400">Competitive base salary plus performance bonuses.</p>
+                    </div>
+
+                    <div class="bg-dark-bg p-6 rounded-lg border border-gray-800">
+                        <div class="flex items-center gap-4 mb-4">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                            </svg>
+                            <h3 class="text-xl font-bold">Ready to Scale</h3>
+                        </div>
+                        <p class="text-gray-400">Take over a validated business with proven market fit.</p>
+                    </div>
+
+                    <div class="bg-dark-bg p-6 rounded-lg border border-gray-800">
+                        <div class="flex items-center gap-4 mb-4">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                            <h3 class="text-xl font-bold">Full Support</h3>
+                        </div>
+                        <p class="text-gray-400">Access to capital, resources, and operational expertise.</p>
+                    </div>
+                </div>
+                <div class="mt-12">
+                    <a href="builders.html" class="btn-primary">
+                        Learn More About Building
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- For PE Partners Section -->
     <section class="py-20">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4">Join Brainware</h2>
-            <p class="text-gray-500 mb-8">Become part of our founder community and build the future together.</p>
-            <a href="#" class="btn-primary inline-block">Contact Us</a>
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl">
+                <div class="mb-4 text-lg">—— D</div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-8">For Private Equity Partners</h2>
+                <p class="text-xl text-gray-400 mb-12">Acquire majority stakes in profitable, founder-led businesses.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-dark-accent p-6 rounded-lg border border-gray-800">
+                        <div class="w-12 h-12 bg-teal-900 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">$50M+ Revenue</h3>
+                        <p class="text-gray-400">Companies with proven business models and strong cash flows.</p>
+                    </div>
+
+                    <div class="bg-dark-accent p-6 rounded-lg border border-gray-800">
+                        <div class="w-12 h-12 bg-teal-900 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Clean Cap Tables</h3>
+                        <p class="text-gray-400">Simple ownership structure without complex preferences.</p>
+                    </div>
+
+                    <div class="bg-dark-accent p-6 rounded-lg border border-gray-800">
+                        <div class="w-12 h-12 bg-teal-900 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">Retained Leadership</h3>
+                        <p class="text-gray-400">Founders keep 45% equity and stay committed post-acquisition.</p>
+                    </div>
+                </div>
+                <div class="mt-12">
+                    <a href="pe-partners.html" class="btn-primary">
+                        Learn More About Investing
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest Opinions Section -->
+    <section class="py-20 bg-dark-accent">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl">
+                <div class="mb-4 text-lg">—— E</div>
+                <div class="flex justify-between items-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold">Latest Opinions</h2>
+                    <a href="opinions.html" class="text-teal-400 hover:text-teal-300 flex items-center">
+                        View All
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
+                    </a>
+                </div>
+                <div id="latest-posts" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Latest posts will be injected here -->
+                </div>
+            </div>
         </div>
     </section>
 
@@ -200,27 +296,31 @@
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                 <div class="md:col-span-1">
-                    <img src="images/brainware-logo.svg?v=1" alt="Brainware" class="h-8 mb-6">
+                    <img src="images/brainware-logo.svg?v=1" alt="Brainware" class="h-7 mb-6">
                     <p class="text-gray-500 mb-6">Empowering Founders to Create Wealth and Sustainable Jobs in the 4th Industrial Revolution.</p>
                     <div class="flex space-x-4">
                         <a href="#" class="text-gray-500 hover:text-teal-400">
                             <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/>
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                             </svg>
                         </a>
                         <a href="#" class="text-gray-500 hover:text-teal-400">
                             <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 10.016 10.016 0 01-3.127 1.195 4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.937 4.937 0 004.604 3.417 9.868 9.868 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63a9.936 9.936 0 002.46-2.548l-.047-.02z"/>
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                             </svg>
                         </a>
                     </div>
                 </div>
                 
                 <div>
-                    <h4 class="text-lg font-bold mb-6">Company</h4>
+                    <h4 class="text-lg font-bold mb-6">Menu</h4>
                     <ul class="space-y-4">
+                        <li><a href="/" class="text-gray-500 hover:text-teal-400">Home</a></li>
                         <li><a href="about.html" class="text-gray-500 hover:text-teal-400">About Us</a></li>
                         <li><a href="companies.html" class="text-gray-500 hover:text-teal-400">Companies</a></li>
+                        <li><a href="builders.html" class="text-gray-500 hover:text-teal-400">Builders</a></li>
+                        <li><a href="founders.html" class="text-gray-500 hover:text-teal-400">Founders</a></li>
+                        <li><a href="pe-partners.html" class="text-gray-500 hover:text-teal-400">Private Equity</a></li>
                         <li><a href="opinions.html" class="text-gray-500 hover:text-teal-400">Opinions</a></li>
                     </ul>
                 </div>
@@ -228,15 +328,14 @@
                 <div>
                     <h4 class="text-lg font-bold mb-6">Contact Us</h4>
                     <ul class="space-y-4">
-                        <li class="text-gray-500">Email: <a href="mailto:info@brainware.com" class="hover:text-teal-400">info@brainware.com</a></li>
-                        <li class="text-gray-500">Location: San Francisco, CA</li>
+                        <li class="text-gray-500">Location: Miami, FL</li>
                         <li><a href="#" class="text-gray-500 hover:text-teal-400">Get in Touch</a></li>
                     </ul>
                 </div>
             </div>
             
             <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-                <p class="text-gray-500 text-sm"> 2021 Brainware • All Rights Reserved</p>
+                <p class="text-gray-500 text-sm">© 2025 Brainware • All Rights Reserved</p>
                 <div class="flex space-x-6 mt-4 md:mt-0">
                     <a href="#" class="text-gray-500 hover:text-teal-400 text-sm">Privacy Policy</a>
                     <a href="#" class="text-gray-500 hover:text-teal-400 text-sm">Terms of Service</a>
@@ -245,18 +344,116 @@
             </div>
         </div>
     </footer>
+        </main>
+    </div>
 
     <!-- JavaScript -->
-    <script>
-        // Mobile menu toggle
-        document.querySelector('button').addEventListener('click', function() {
-            const mobileMenu = document.querySelector('.md\\:hidden.bg-gray-900');
-            if (mobileMenu.classList.contains('hidden')) {
-                mobileMenu.classList.remove('hidden');
-            } else {
-                mobileMenu.classList.add('hidden');
+    <script type="module">
+        (async () => {
+            try {
+                // Set active menu item based on current page
+                const currentPath = window.location.pathname;
+                const navItems = document.querySelectorAll('.nav-item');
+                
+                navItems.forEach(item => {
+                    const itemPath = item.getAttribute('href');
+                    if (currentPath === '/' && itemPath === '/') {
+                        item.classList.add('active');
+                    } else if (currentPath !== '/' && itemPath !== '/' && currentPath.includes(itemPath)) {
+                        item.classList.add('active');
+                    }
+                });
+
+                const { createClient } = await import('@supabase/supabase-js');
+                const { format } = await import('date-fns');
+
+                // Initialize Supabase client
+                const supabase = createClient(
+                    import.meta.env.VITE_SUPABASE_URL,
+                    import.meta.env.VITE_SUPABASE_ANON_KEY
+                );
+
+                // Mobile menu functionality
+                const menuToggle = document.getElementById('menu-toggle');
+                const navMenu = document.getElementById('nav-menu');
+                const mainContent = document.getElementById('main-content');
+                const header = document.querySelector('header');
+                let isMenuOpen = false;
+                
+                menuToggle.addEventListener('click', () => {
+                    isMenuOpen = !isMenuOpen;
+                    
+                    if (isMenuOpen) {
+                        // Open menu
+                        navMenu.classList.remove('hidden');
+                        navMenu.classList.remove('translate-x-full');
+                        mainContent.classList.add('pushed');
+                        header.classList.add('pushed');
+                        document.body.style.overflow = 'hidden';
+                        menuToggle.innerHTML = `
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        `;
+                    } else {
+                        // Close menu
+                        navMenu.classList.add('translate-x-full');
+                        setTimeout(() => navMenu.classList.add('hidden'), 300);
+                        mainContent.classList.remove('pushed');
+                        header.classList.remove('pushed');
+                        document.body.style.overflow = '';
+                        menuToggle.innerHTML = `
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        `;
+                    }
+                });
+
+                // Load latest posts
+                const { data: posts, error } = await supabase
+                    .from('posts')
+                    .select(`
+                        *,
+                        categories!posts_category_id_fkey (
+                            name,
+                            slug
+                        ),
+                        users (
+                            full_name,
+                            avatar_url
+                        )
+                    `)
+                    .eq('status', 'published')
+                    .order('published_at', { ascending: false })
+                    .limit(2);
+
+                if (error) throw error;
+
+                if (posts && posts.length > 0) {
+                    document.getElementById('latest-posts').innerHTML = posts.map(post => `
+                        <a href="post.html?slug=${post.slug}" class="block group">
+                            <article class="bg-dark-bg p-6 rounded-lg border border-gray-800 hover:border-teal-400 transition-all h-full">
+                                <div class="flex items-center mb-4">
+                                    <img src="${post.users.avatar_url || 'https://via.placeholder.com/32'}" 
+                                         alt="${post.users.full_name}"
+                                         class="w-8 h-8 rounded-full mr-3">
+                                    <span class="text-gray-400">${post.users.full_name}</span>
+                                </div>
+                                <h3 class="text-xl font-bold mb-2 group-hover:text-teal-400 line-clamp-2">${post.title}</h3>
+                                <p class="text-gray-400 mb-4 line-clamp-2">${post.excerpt}</p>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-500">${format(new Date(post.published_at), 'MMM d, yyyy')}</span>
+                                    ${post.categories ? `<span class="text-teal-400">${post.categories.name}</span>` : ''}
+                                </div>
+                            </article>
+                        </a>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading posts:', error);
             }
-        });
+        })();
     </script>
 </body>
 </html>

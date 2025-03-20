@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Title | Brainware Opinions</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <link rel="icon" href="images/brainware-icon.svg?v=1">
+</head>
+<body class="bg-dark-bg">
+    <!-- Header -->
+    <header class="fixed w-full z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="flex items-center">
+                <img src="images/brainware-logo-dark.svg" alt="Brainware" class="h-7">
+            </a>
+            
+            <!-- Navigation - Desktop -->
+            <nav class="hidden md:flex space-x-10">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="companies.html" class="nav-link">Companies</a>
+                <a href="opinions.html" class="nav-link active">Opinions</a>
+            </nav>
+            
+            <!-- Mobile menu button -->
+            <div class="md:hidden">
+                <button type="button" class="text-gray-400 hover:text-white">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Post Header -->
+    <section class="pt-32 pb-12 relative">
+        <div class="container mx-auto px-6">
+            <div class="max-w-3xl mx-auto">
+                <div class="mb-8">
+                    <a href="opinions.html" class="text-teal-400 hover:text-teal-300 flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        Back to Opinions
+                    </a>
+                </div>
+                <div id="post-header">
+                    <!-- Post header content will be injected here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Post Content -->
+    <section class="py-12">
+        <div class="container mx-auto px-6">
+            <div class="max-w-3xl mx-auto">
+                <div id="post-content" class="prose prose-lg prose-invert">
+                    <!-- Post content will be injected here -->
+                </div>
+                
+                <!-- Author Info -->
+                <div class="mt-16 pt-8 border-t border-gray-800">
+                    <div id="author-info" class="flex items-center">
+                        <!-- Author info will be injected here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Posts -->
+    <section class="py-12 bg-dark-accent">
+        <div class="container mx-auto px-6">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-2xl font-bold mb-8">More Opinions</h2>
+                <div id="related-posts" class="grid gap-8">
+                    <!-- Related posts will be injected here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="md:col-span-1">
+                    <img src="images/brainware-logo-dark.svg" alt="Brainware" class="h-7 mb-6">
+                    <p class="text-gray-500 mb-6">Empowering Founders to Create Wealth and Sustainable Jobs in the 4th Industrial Revolution.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-500 hover:text-teal-400">
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-teal-400">
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-6">Menu</h4>
+                    <ul class="space-y-4">
+                        <li><a href="index.html" class="text-gray-500 hover:text-teal-400">Home</a></li>
+                        <li><a href="about.html" class="text-gray-500 hover:text-teal-400">About Us</a></li>
+                        <li><a href="companies.html" class="text-gray-500 hover:text-teal-400">Companies</a></li>
+                        <li><a href="opinions.html" class="text-gray-500 hover:text-teal-400">Opinions</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-6">Contact Us</h4>
+                    <ul class="space-y-4">
+                        <li class="text-gray-500">Location: Miami, FL</li>
+                        <li><a href="#" class="text-gray-500 hover:text-teal-400">Get in Touch</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 text-sm">© 2025 Brainware • All Rights Reserved</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-500 hover:text-teal-400 text-sm">Privacy Policy</a>
+                    <a href="#" class="text-gray-500 hover:text-teal-400 text-sm">Terms of Service</a>
+                    <a href="#" class="text-gray-500 hover:text-teal-400 text-sm">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script type="module">
+        (async function() {
+            const { createClient } = await import('@supabase/supabase-js');
+            const { marked } = await import('marked');
+            const { format } = await import('date-fns');
+
+            // Initialize Supabase client
+            const supabase = createClient(
+                import.meta.env.VITE_SUPABASE_URL,
+                import.meta.env.VITE_SUPABASE_ANON_KEY
+            );
+
+            // Helper function to handle errors
+            function handleError(error) {
+                console.error('Error:', error);
+                document.getElementById('post-header').innerHTML = `
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                        <h2 class="text-xl font-bold mb-2">Error Loading Post</h2>
+                        <p>Unable to load the post content. Please try again later.</p>
+                        <p class="text-sm mt-2">${error.message || 'Unknown error occurred'}</p>
+                    </div>
+                `;
+                document.getElementById('post-content').innerHTML = '';
+                document.getElementById('author-info').innerHTML = '';
+                document.getElementById('related-posts').innerHTML = '';
+            }
+
+            // Get post slug from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const slug = urlParams.get('slug');
+
+            if (!slug) {
+                handleError(new Error('No post slug provided'));
+                return;
+            }
+
+            async function loadPost() {
+                try {
+                    // Fetch post data
+                    const { data: post, error } = await supabase
+                        .from('posts')
+                        .select(`
+                            *,
+                            categories!posts_category_id_fkey (
+                                name,
+                                slug
+                            ),
+                            users (
+                                id,
+                                full_name,
+                                avatar_url
+                            )
+                        `)
+                        .eq('slug', slug)
+                        .eq('status', 'published')
+                        .single();
+
+                    if (error) {
+                        throw error;
+                    }
+
+                    if (!post) {
+                        throw new Error('Post not found');
+                    }
+
+                    // Update page title
+                    document.title = `${post.title} | Brainware Opinions`;
+
+                    // Render post header
+                    document.getElementById('post-header').innerHTML = `
+                    <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6">${post.title}</h1>
+                    ${post.excerpt ? `<p class="text-xl text-gray-400 mb-8">${post.excerpt}</p>` : ''}
+                    <div class="flex items-center text-gray-500 text-sm">
+                        <span>${format(new Date(post.published_at), 'MMMM d, yyyy')}</span>
+                        <span class="mx-2">•</span>
+                        <span>${post.categories ? post.categories.name : 'Uncategorized'}</span>
+                    </div>
+                `;
+
+                    // Render post content
+                    document.getElementById('post-content').innerHTML = marked(post.content || '');
+
+                    // Render author info
+                    document.getElementById('author-info').innerHTML = `
+                    <img src="${post.users.avatar_url || 'https://via.placeholder.com/64'}" 
+                         alt="${post.users.full_name}"
+                         class="w-16 h-16 rounded-full mr-4">
+                    <div>
+                        <h3 class="font-bold">${post.users.full_name}</h3>
+                        <p class="text-gray-500">Author</p>
+                    </div>
+                `;
+
+                    // Fetch related posts
+                const { data: relatedPosts } = await supabase
+                    .from('posts')
+                    .select(`
+                        title,
+                        slug,
+                        excerpt,
+                        published_at,
+                        categories!posts_category_id_fkey (
+                            name
+                        )
+                    `)
+                    .eq('status', 'published')
+                    .neq('slug', slug)
+                    .limit(3);
+
+                    // Render related posts
+                document.getElementById('related-posts').innerHTML = relatedPosts.map(relatedPost => `
+                    <a href="post.html?slug=${relatedPost.slug}" class="block group">
+                        <article class="bg-dark-bg p-6 rounded-lg border border-gray-800 transition-all duration-300 hover:border-teal-400">
+                            <h3 class="text-xl font-bold mb-2 group-hover:text-teal-400">${relatedPost.title}</h3>
+                            <p class="text-gray-500 mb-4">${relatedPost.excerpt}</p>
+                            <div class="flex items-center justify-between">
+                                <time class="text-sm text-gray-500">${format(new Date(relatedPost.published_at), 'MMMM d, yyyy')}</time>
+                                ${relatedPost.categories ? `<span class="text-sm text-gray-500">${relatedPost.categories.name}</span>` : ''}
+                            </div>
+                        </article>
+                    </a>
+                `).join('');
+                } catch (error) {
+                    handleError(error);
+                }
+            }
+
+            // Load post data when the page loads
+            await loadPost();
+        })().catch(console.error);
+    </script>
+</body>
+</html>
