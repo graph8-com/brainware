@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80" width="240" height="80">
+  <style>
+    .text { fill: #ffffff; font-family: 'Inter', sans-serif; font-weight: 700; }
+    .icon { fill: #0ea5e9; }
+  </style>
+  <g transform="translate(0, 25)">
+    <path class="icon" d="M28.5,0 L37,15 L20,15 L28.5,0 Z" />
+    <path class="icon" d="M45,18 L53.5,33 L36.5,33 L45,18 Z" />
+    <path class="icon" d="M12,18 L20.5,33 L3.5,33 L12,18 Z" />
+    <text x="65" y="25" class="text" font-size="30">Armatic</text>
+  </g>
+</svg>
