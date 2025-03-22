@@ -1,4 +1,0 @@
-# Brainware Founder Applications
-# This file contains all founder applications submitted through the website form.
-# Format: Timestamp, Name, Email, Country, Note
-# --------------------------------------------------------------
