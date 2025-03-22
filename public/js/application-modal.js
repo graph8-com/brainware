@@ -92,36 +92,35 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Track the application submission with Jitsu
                 try {
-                    // First identify the user to ensure userId is set before tracking
+                    console.log('Starting Jitsu tracking process...');
+                    // Prioritize window.jitsu direct API if available
                     if (window.jitsu) {
-                        console.log('Identifying user before tracking...');
-                        // Use email as the userId for consistent user identification
+                        console.log('Using window.jitsu for tracking');
+                        // First identify the user
                         window.jitsu.push(["identify", email, {
                             email,
                             name,
                             country,
                             application_source: 'founders_page'
                         }]);
+                        console.log('User identified with email:', email);
                         
-                        // Short delay to ensure identification is processed before tracking
-                        setTimeout(() => {
-                            // Then track the event with the same user identity
-                            console.log('About to track application with Jitsu...');
-                            window.jitsu.push(["track", "application_submitted", {
-                                timestamp,
-                                name,
-                                email,
-                                country,
-                                note,
-                                page_url: window.location.href,
-                                page_title: document.title,
-                                application_source: 'founders_page'
-                            }]);
-                            console.log('Application tracked with Jitsu');
-                        }, 300);
-                    } else if (window.analytics) {
-                        // Fallback to analytics.js if available
-                        console.log('Using analytics object for tracking...');
+                        // Immediately track the event
+                        window.jitsu.push(["track", "application_submitted", {
+                            timestamp,
+                            name,
+                            email,
+                            country,
+                            note,
+                            page_url: window.location.href,
+                            page_title: document.title,
+                            application_source: 'founders_page'
+                        }]);
+                        console.log('Application submission tracked with Jitsu');
+                    } 
+                    // Fallback to analytics object if jitsu isn't available
+                    else if (window.analytics) {
+                        console.log('Using analytics object for tracking');
                         window.analytics.identify(email, {
                             email,
                             name,
@@ -138,11 +137,13 @@ document.addEventListener('DOMContentLoaded', function() {
                             page_url: window.location.href,
                             page_title: document.title
                         });
-                    } else {
-                        console.error('No valid tracking method available');
+                        console.log('Application tracked with analytics object');
+                    } 
+                    else {
+                        console.error('No valid tracking method available - neither window.jitsu nor window.analytics exist');
                     }
-                } catch (jitsuError) {
-                    console.error('Error tracking with Jitsu:', jitsuError);
+                } catch (trackingError) {
+                    console.error('Error during tracking:', trackingError);
                 }
                 
                 // Also try to save via server as a backup
