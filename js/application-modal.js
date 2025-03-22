@@ -114,16 +114,37 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (window.jitsu) {
                         try {
                             console.log('Trying fallback with window.jitsu...');
-                            window.jitsu.push(["track", "application_submitted", {
-                                timestamp,
-                                name,
-                                email,
-                                country,
-                                note,
-                                page_url: window.location.href,
-                                page_title: document.title
-                            }]);
-                            console.log('Application tracked with window.jitsu method');
+                            // Ensure jitsu.push is available before calling it
+                            if (typeof window.jitsu.push === 'function') {
+                                window.jitsu.push(["track", "application_submitted", {
+                                    timestamp,
+                                    name,
+                                    email,
+                                    country,
+                                    note,
+                                    page_url: window.location.href,
+                                    page_title: document.title,
+                                    application_source: 'founders_page'
+                                }]);
+                                console.log('Application tracked with window.jitsu method');
+                            } else {
+                                // Direct tracking with jitsu.track if available
+                                if (typeof window.jitsu.track === 'function') {
+                                    window.jitsu.track("application_submitted", {
+                                        timestamp,
+                                        name,
+                                        email,
+                                        country,
+                                        note,
+                                        page_url: window.location.href,
+                                        page_title: document.title,
+                                        application_source: 'founders_page'
+                                    });
+                                    console.log('Application tracked with window.jitsu.track method');
+                                } else {
+                                    console.error('No valid jitsu tracking method available');
+                                }
+                            }
                         } catch (e) {
                             console.error('Error using fallback jitsu method:', e);
                         }
@@ -131,70 +152,84 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 
                 // Also try to save via server as a backup
-                fetch('http://localhost:8080/save_application', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams({
-                        name,
-                        email,
-                        country,
-                        note
-                    }).toString()
-                })
-                .then(response => {
-                    console.log('Server response:', response.status);
-                })
-                .catch(error => {
-                    console.error('Server error:', error);
-                });
-                
-                // Create download for the applications.txt file
-                const allFormattedData = applications.map(app => app.formattedText).join('');
-                const blob = new Blob([allFormattedData], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                
-                // Add a new hidden download element to the form
-                let downloadBtn = document.getElementById('download-applications');
-                if (!downloadBtn) {
-                    downloadBtn = document.createElement('a');
-                    downloadBtn.id = 'download-applications';
-                    downloadBtn.className = 'hidden';
-                    downloadBtn.textContent = 'Download Applications';
-                    downloadBtn.download = 'applications.txt';
-                    applicationForm.appendChild(downloadBtn);
+                try {
+                    // Determine the correct server URL based on environment
+                    const serverUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                        ? 'http://localhost:8080/save_application'
+                        : '/save_application'; // Use relative URL in production
+                        
+                    console.log(`Submitting to server: ${serverUrl}`);
+                    
+                    fetch(serverUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            name,
+                            email,
+                            country,
+                            note
+                        }).toString()
+                    })
+                    .then(response => {
+                        console.log('Server response:', response.status);
+                    })
+                    .catch(error => {
+                        console.error('Server error:', error);
+                    });
+                    
+                    // Create download for the applications.txt file
+                    const allFormattedData = applications.map(app => app.formattedText).join('');
+                    const blob = new Blob([allFormattedData], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    
+                    // Add a new hidden download element to the form
+                    let downloadBtn = document.getElementById('download-applications');
+                    if (!downloadBtn) {
+                        downloadBtn = document.createElement('a');
+                        downloadBtn.id = 'download-applications';
+                        downloadBtn.className = 'hidden';
+                        downloadBtn.textContent = 'Download Applications';
+                        downloadBtn.download = 'applications.txt';
+                        applicationForm.appendChild(downloadBtn);
+                    }
+                    
+                    // Update the download link
+                    downloadBtn.href = url;
+                    
+                    // Show success message with download option
+                    messageElement.innerHTML = `
+                        <p class="mb-2">Application submitted successfully!</p>
+                        <p class="text-sm mb-3">Your application has been sent to Brainware. You can also:</p>
+                        <div class="flex space-x-3">
+                            <button id="show-download" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 rounded-md text-sm transition-colors">
+                                Download Applications
+                            </button>
+                            <a href="view-applications.html" target="_blank" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-md text-sm transition-colors inline-flex items-center">
+                                View Applications
+                            </a>
+                        </div>
+                    `;
+                    messageElement.classList.remove('text-red-500', 'text-white');
+                    messageElement.classList.add('text-green-500');
+                    
+                    // Add event listener to the download button
+                    document.getElementById('show-download').addEventListener('click', function() {
+                        downloadBtn.click();
+                    });
+                    
+                    // Reset form after success (8 seconds delay)
+                    setTimeout(() => {
+                        applicationForm.reset();
+                    }, 8000);
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    messageElement.textContent = 'An error occurred while processing your application. Please try again.';
+                    messageElement.classList.remove('text-green-500', 'text-white');
+                    messageElement.classList.add('text-red-500');
                 }
-                
-                // Update the download link
-                downloadBtn.href = url;
-                
-                // Show success message with download option
-                messageElement.innerHTML = `
-                    <p class="mb-2">Application submitted successfully!</p>
-                    <p class="text-sm mb-3">Your application has been sent to Brainware. You can also:</p>
-                    <div class="flex space-x-3">
-                        <button id="show-download" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 rounded-md text-sm transition-colors">
-                            Download Applications
-                        </button>
-                        <a href="view-applications.html" target="_blank" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-md text-sm transition-colors inline-flex items-center">
-                            View Applications
-                        </a>
-                    </div>
-                `;
-                messageElement.classList.remove('text-red-500', 'text-white');
-                messageElement.classList.add('text-green-500');
-                
-                // Add event listener to the download button
-                document.getElementById('show-download').addEventListener('click', function() {
-                    downloadBtn.click();
-                });
-                
-                // Reset form after success (8 seconds delay)
-                setTimeout(() => {
-                    applicationForm.reset();
-                }, 8000);
-                
             } catch (error) {
                 console.error('Error:', error);
                 messageElement.textContent = 'An error occurred while processing your application. Please try again.';
