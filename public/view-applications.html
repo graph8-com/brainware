@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Applications - Brainware</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-dark-bg text-white">
+    <div class="min-h-screen flex flex-col">
+        <header class="py-6 border-b border-gray-800">
+            <div class="container mx-auto px-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <a href="index.html" class="inline-block">
+                            <img src="images/brainware-logo.svg?v=1" alt="Brainware" class="h-7">
+                        </a>
+                    </div>
+                    
+                    <div>
+                        <a href="index.html" class="text-gray-400 hover:text-white transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <main class="flex-grow py-16">
+            <div class="container mx-auto px-6">
+                <div class="max-w-5xl mx-auto">
+                    <h1 class="text-3xl font-bold mb-8">Founder Applications</h1>
+                    
+                    <div class="mb-6 flex space-x-4">
+                        <button id="download-btn" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 rounded-md text-sm transition-colors">
+                            Download as applications.txt
+                        </button>
+                        <button id="clear-btn" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-md text-sm transition-colors">
+                            Clear All Applications
+                        </button>
+                    </div>
+                    
+                    <div id="no-applications-message" class="hidden bg-gray-800 rounded-lg p-8 text-center">
+                        <p class="text-gray-400 text-lg">No applications found.</p>
+                        <a href="founders.html" class="mt-4 inline-block text-teal-400 hover:text-teal-300">
+                            Return to Founders page
+                        </a>
+                    </div>
+                    
+                    <div id="applications-container" class="space-y-6">
+                        <!-- Applications will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="py-8 border-t border-gray-800">
+            <div class="container mx-auto px-6">
+                <div class="text-center text-gray-500 text-sm">
+                    &copy; 2025 Brainware. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Scripts -->
+    <script async src="https://events.flow.graph8.com/p.js" data-write-key="X7tbGBo0MEBYTMJzi6Bu7kdH0VNFuS2q:BOismoy8s94Ey0yUcKgz8PTACMFJ3WN1"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const applicationsContainer = document.getElementById('applications-container');
+            const noApplicationsMessage = document.getElementById('no-applications-message');
+            const downloadBtn = document.getElementById('download-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            
+            // Load applications from localStorage
+            function loadApplications() {
+                try {
+                    const applications = JSON.parse(localStorage.getItem('brainware_applications') || '[]');
+                    
+                    if (applications.length === 0) {
+                        noApplicationsMessage.classList.remove('hidden');
+                        applicationsContainer.classList.add('hidden');
+                        return;
+                    }
+                    
+                    noApplicationsMessage.classList.add('hidden');
+                    applicationsContainer.classList.remove('hidden');
+                    
+                    // Clear the container
+                    applicationsContainer.innerHTML = '';
+                    
+                    // Sort applications by timestamp (newest first)
+                    applications.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    
+                    // Add each application to the container
+                    applications.forEach((app, index) => {
+                        const date = new Date(app.timestamp);
+                        const formattedDate = date.toLocaleString();
+                        
+                        const applicationElement = document.createElement('div');
+                        applicationElement.className = 'bg-gray-800 rounded-lg p-6 border border-gray-700';
+                        applicationElement.innerHTML = `
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-semibold mb-2">${app.name}</h3>
+                                <span class="text-sm text-gray-500">${formattedDate}</span>
+                            </div>
+                            <div class="mb-4">
+                                <p class="text-teal-400">${app.email}</p>
+                                <p class="text-gray-400">Country: ${app.country}</p>
+                            </div>
+                            <div class="border-t border-gray-700 pt-4">
+                                <h4 class="text-sm font-semibold mb-2 text-gray-300">Why are you the right founder?</h4>
+                                <p class="text-gray-400 whitespace-pre-line">${app.note}</p>
+                            </div>
+                        `;
+                        
+                        applicationsContainer.appendChild(applicationElement);
+                    });
+                    
+                    // Update download button
+                    updateDownloadButton(applications);
+                    
+                } catch (error) {
+                    console.error('Error loading applications:', error);
+                    noApplicationsMessage.classList.remove('hidden');
+                    applicationsContainer.classList.add('hidden');
+                }
+            }
+            
+            // Update download button
+            function updateDownloadButton(applications) {
+                if (!applications || applications.length === 0) {
+                    downloadBtn.disabled = true;
+                    downloadBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    return;
+                }
+                
+                const allFormattedData = applications.map(app => app.formattedText).join('');
+                const blob = new Blob([allFormattedData], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                
+                downloadBtn.onclick = function() {
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'applications.txt';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                };
+                
+                downloadBtn.disabled = false;
+                downloadBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+            
+            // Clear all applications
+            clearBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to clear all applications? This cannot be undone.')) {
+                    localStorage.removeItem('brainware_applications');
+                    loadApplications();
+                }
+            });
+            
+            // Load applications on page load
+            loadApplications();
+        });
+    </script>
+</body>
+</html>

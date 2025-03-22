@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Brainware</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <link rel="icon" href="images/brainware-icon.svg?v=1">
+</head>
+<body class="bg-dark-bg">
+    <!-- Header -->
+    <header class="fixed w-full z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="flex items-center">
+                <img src="images/brainware-logo.svg?v=1" alt="Brainware" class="h-7">
+            </a>
+            
+            <div class="flex items-center space-x-4">
+                <button id="logout-button" class="text-gray-400 hover:text-white hidden">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Login Form -->
+    <div id="login-section" class="min-h-screen flex items-center justify-center">
+        <div class="bg-dark-accent p-8 rounded-lg shadow-lg max-w-md w-full">
+            <h2 class="text-2xl font-bold mb-6">Admin Login</h2>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Email</label>
+                    <input type="email" id="email" class="w-full bg-gray-800 border border-gray-700 rounded px-4 py-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Password</label>
+                    <input type="password" id="password" class="w-full bg-gray-800 border border-gray-700 rounded px-4 py-2">
+                </div>
+                <button type="submit" class="w-full bg-teal-500 text-white rounded py-2 hover:bg-teal-600">
+                    Login
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-section" class="pt-32 pb-20 hidden">
+        <div class="container mx-auto px-6">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-3xl font-bold">Blog Management</h1>
+                <div class="flex gap-4">
+                    <a href="categories.html" class="text-gray-400 hover:text-white px-4 py-2 border border-gray-700 rounded">
+                        Categories
+                    </a>
+                    <a href="edit-post.html" class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600 ml-4">
+                        New Post
+                    </a>
+                </div>
+            </div>
+
+            <!-- Posts Table -->
+            <div class="bg-dark-accent rounded-lg overflow-hidden">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-gray-800">
+                            <th class="text-left p-4">Title</th>
+                            <th class="text-left p-4">Category</th>
+                            <th class="text-left p-4">Status</th>
+                            <th class="text-left p-4">Published</th>
+                            <th class="text-left p-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="posts-table-body">
+                        <!-- Posts will be injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Post Editor Modal -->
+    <div id="post-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-dark-accent p-8 rounded-lg shadow-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold" id="modal-title">New Post</h2>
+                <button id="close-modal" class="text-gray-400 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <form id="post-form" class="space-y-6">
+                <input type="hidden" id="post-id">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Title</label>
+                    <input type="text" id="post-title" class="w-full bg-gray-800 border border-gray-700 rounded px-4 py-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Slug</label>
+                    <input type="text" id="post-slug" class="w-full bg-gray-800 border border-gray-700 rounded px-4 py-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Category</label>
+                    <select id="post-category" class="w-full bg-gray-800 border border-gray-700 rounded px-4 py-2">
+                        <!-- Categories will be injected here -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Excerpt</label>
+                    <textarea id="post-excerpt" rows="3" class="w-full bg-gray-800 border border-gray-700 rounded px-4 py-2"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Content (Markdown)</label>
+                    <textarea id="post-content" rows="10" class="w-full bg-gray-800 border border-gray-700 rounded px-4 py-2 font-mono"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Featured Image URL</label>
+                    <input type="text" id="post-image" class="w-full bg-gray-800 border border-gray-700 rounded px-4 py-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Status</label>
+                    <select id="post-status" class="w-full bg-gray-800 border border-gray-700 rounded px-4 py-2">
+                        <option value="draft">Draft</option>
+                        <option value="published">Published</option>
+                    </select>
+                </div>
+                <div class="flex justify-end space-x-4">
+                    <button type="button" id="delete-post" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 hidden">
+                        Delete
+                    </button>
+                    <button type="submit" class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script async src="https://events.flow.graph8.com/p.js" data-write-key="X7tbGBo0MEBYTMJzi6Bu7kdH0VNFuS2q:BOismoy8s94Ey0yUcKgz8PTACMFJ3WN1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+    <!-- JavaScript -->
+    <script type="module">
+        import { createClient } from '@supabase/supabase-js';
+        import { format } from 'date-fns';
+
+        // Initialize Supabase client
+        const supabase = createClient(
+            import.meta.env.VITE_SUPABASE_URL,
+            import.meta.env.VITE_SUPABASE_ANON_KEY
+        );
+
+        // DOM Elements
+        const loginSection = document.getElementById('login-section');
+        const adminSection = document.getElementById('admin-section');
+        const loginForm = document.getElementById('login-form');
+        const logoutButton = document.getElementById('logout-button');
+
+        // Check authentication status
+        supabase.auth.onAuthStateChange((event, session) => {
+            if (session) {
+                loginSection.classList.add('hidden');
+                adminSection.classList.remove('hidden');
+                logoutButton.classList.remove('hidden');
+                loadPosts();
+                loadCategories();
+            } else {
+                loginSection.classList.remove('hidden');
+                adminSection.classList.add('hidden');
+                logoutButton.classList.add('hidden');
+            }
+        });
+
+        // Login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const { error } = await supabase.auth.signInWithPassword({
+                email,
+                password
+            });
+
+            if (error) {
+                alert('Login failed: ' + error.message);
+            }
+        });
+
+        // Logout
+        logoutButton.addEventListener('click', async () => {
+            await supabase.auth.signOut();
+        });
+
+        // Load posts
+        async function loadPosts() {
+            const { data: posts, error } = await supabase
+                .from('posts')
+                .select(`
+                    *,
+                    categories!posts_category_id_fkey (
+                        name
+                    )
+                `)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Error loading posts:', error);
+                return;
+            }
+
+            const tableBody = document.getElementById('posts-table-body');
+            tableBody.innerHTML = posts.map(post => `
+                <tr class="border-b border-gray-800" data-id="${post.id}">
+                    <td class="p-4">${post.title}</td>
+                    <td class="p-4">${post.categories ? post.categories.name : 'Uncategorized'}</td>
+                    <td class="p-4">
+                        <span class="px-2 py-1 rounded text-sm ${
+                            post.status === 'published' ? 'bg-green-900 text-green-200' : 'bg-gray-800 text-gray-200'
+                        }">
+                            ${post.status}
+                        </span>
+                    </td>
+                    <td class="p-4">${post.published_at ? format(new Date(post.published_at), 'MMM d, yyyy') : '-'}</td>
+                    <td class="p-4">
+                        <a href="edit-post.html?id=${post.id}" class="text-teal-400 hover:text-teal-300">Edit</a>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Load categories
+        async function loadCategories() {
+            const { data: categories, error } = await supabase
+                .from('categories')
+                .select('*')
+                .order('name');
+
+            if (error) {
+                console.error('Error loading categories:', error);
+                return;
+            }
+
+            const categorySelect = document.getElementById('post-category');
+            categorySelect.innerHTML = `
+                <option value="">Select a category</option>
+                ${categories.map(category => `
+                    <option value="${category.id}">${category.name}</option>
+                `).join('')}
+            `;
+        }
+
+        // Auto-generate slug from title
+        document.getElementById('post-title').addEventListener('input', (e) => {
+            const slug = e.target.value
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/(^-|-$)/g, '');
+            document.getElementById('post-slug').value = slug;
+        });
+    </script>
+</body>
+</html>

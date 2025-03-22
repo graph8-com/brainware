@@ -93,10 +93,11 @@ const server = http.createServer((req, res) => {
   let filePath = '';
   
   if (url.pathname === '/' || url.pathname === '/index.html') {
-    filePath = path.join(__dirname, 'index.html');
+    filePath = path.join(__dirname, 'public', 'index.html');
   } else {
     // Remove leading slash and normalize path
-    filePath = path.join(__dirname, path.normalize(url.pathname.substring(1)));
+    // Check first in public directory, then in root if not found
+    filePath = path.join(__dirname, 'public', path.normalize(url.pathname.substring(1)));
   }
   
   // Get the file extension
