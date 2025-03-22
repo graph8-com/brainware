@@ -364,7 +364,7 @@
                     <div class="flex space-x-4">
                         <a href="https://www.linkedin.com/company/brainwarevc" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-teal-400" aria-label="LinkedIn">
                             <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.761 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
                             </svg>
                         </a>
                         <a href="https://x.com/graph8tc" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-teal-400" aria-label="X (Twitter)">
@@ -409,45 +409,115 @@
 
     <!-- Scripts -->
     <script src="js/menu.js" defer></script>
-    <script async src="https://events.flow.graph8.com/p.js" data-write-key="X7tbGBo0MEBYTMJzi6Bu7kdH0VNFuS2q:BOismoy8s94Ey0yUcKgz8PTACMFJ3WN1"></script>
-    <!-- Initialize Jitsu first -->
+    
+    <!-- Jitsu/Graph8 Tracking Implementation -->
     <script>
-        window.jitsu = window.jitsu || (function(){return {push:function(){}}})();
+      // Create a global reference to store the graph8 instance
+      window.graph8 = null;
+      
+      // Function that will be called when Jitsu loads
+      window.graph8Loaded = function(instance) {
+        console.log("✅ Graph8/Jitsu loaded and ready");
+        // Store the instance globally for access in other scripts
+        window.graph8 = instance;
+        
+        // Wait for DOM to be fully loaded
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', attachFormListener);
+        } else {
+          // DOM already loaded, attach listener directly
+          attachFormListener();
+        }
+      };
+      
+      function attachFormListener() {
+        // Use a small delay to ensure modal has initialized
+        setTimeout(function() {
+          const form = document.getElementById("application-form");
+          
+          if (!form) {
+            console.warn("⚠️ Form not found - will try again in 1 second");
+            // Try again in 1 second - modal might be dynamically added
+            setTimeout(attachFormListener, 1000);
+            return;
+          }
+          
+          console.log("✅ Form found, attaching submit listener");
+          
+          form.addEventListener("submit", function() {
+            // Get form values at submission time
+            const nameField = document.getElementById("name");
+            const emailField = document.getElementById("email");
+            const countryField = document.getElementById("country");
+            const noteField = document.getElementById("note");
+            
+            // Validate fields exist
+            if (!nameField || !emailField || !countryField || !noteField) {
+              console.warn("⚠️ Form fields not found:", {
+                name: !!nameField,
+                email: !!emailField,
+                country: !!countryField,
+                note: !!noteField
+              });
+              return;
+            }
+            
+            // Get values
+            const name = nameField.value || "";
+            const email = emailField.value || "";
+            const country = countryField.value || "";
+            const note = noteField.value || "";
+            
+            console.log("📝 Form values captured:", {
+              name,
+              email,
+              country,
+              note: note.substring(0, 10) + (note.length > 10 ? "..." : "")
+            });
+            
+            // Only track if graph8 instance is available
+            if (window.graph8) {
+              try {
+                // Identify user
+                window.graph8.identify(email, {
+                  email,
+                  name,
+                  country,
+                  application_source: "founders_page"
+                });
+                
+                // Track submission
+                window.graph8.track("application_submitted", {
+                  name,
+                  email,
+                  country,
+                  note,
+                  page_url: window.location.href,
+                  page_title: document.title,
+                  application_source: "founders_page",
+                  submitted_at: new Date().toISOString()
+                });
+                
+                console.log("✅ Form submitted and tracked with Jitsu");
+              } catch (error) {
+                console.error("❌ Error tracking with Jitsu:", error);
+              }
+            } else {
+              console.warn("⚠️ Graph8/Jitsu not ready - tracking skipped");
+            }
+          });
+        }, 500);
+      }
     </script>
     
-    <!-- Identify users on form submission -->
+    <!-- Load Jitsu with onload callback -->
+    <script async src="https://events.flow.graph8.com/p.js" 
+      data-write-key="X7tbGBo0MEBYTMJzi6Bu7kdH0VNFuS2q:BOismoy8s94Ey0yUcKgz8PTACMFJ3WN1"
+      data-onload="graph8Loaded"></script>
+    
+    <!-- Initialize jitsu as fallback -->
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const form = document.getElementById("application-form");
-
-        if (form) {
-          form.addEventListener("submit", function (e) {
-            const name = document.getElementById("name")?.value || "";
-            const email = document.getElementById("email")?.value || "";
-            const country = document.getElementById("country")?.value || "";
-            const note = document.getElementById("note")?.value || "";
-
-            const pageTitle = document.title;
-            const pageUrl = window.location.href;
-            const pagePath = window.location.pathname;
-
-            // De-anonymize user using flush pattern
-            window.jitsu = window.jitsu || [];
-            window.jitsu.push(["identify", email, {
-              email,
-              name,
-              country,
-              application_source: "founders_page"
-            }]);
-
-            // Flush the identify call to ensure it completes first
-            window.jitsu.push(["flush", function() {
-              console.log("Identity flushed for user:", email);
-              // Track event handling is in application-modal.js
-            }]);
-          });
-        }
-      });
+      window.jitsu = window.jitsu || (function(){return {push:function(){}}})();
     </script>
     
     <script src="js/application-modal.js" defer></script>

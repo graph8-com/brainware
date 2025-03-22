@@ -90,61 +90,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Save back to localStorage
                 localStorage.setItem('brainware_applications', JSON.stringify(applications));
                 
-                // Track the application submission with Jitsu
-                try {
-                    // Using Jitsu's flush API to ensure identification completes before tracking
-                    if (window.jitsu) {
-                        console.log('Identifying user before tracking...');
-                        // Step 1: Identify the user with email as userId
-                        window.jitsu.push(["identify", email, {
-                            email,
-                            name, 
-                            country,
-                            application_source: 'founders_page'
-                        }]);
-                        
-                        // Step 2: Flush the identify call and then track the submission
-                        window.jitsu.push(["flush", function() {
-                            window.jitsu.push(["track", "application_submitted", {
-                                timestamp,
-                                name,
-                                email,
-                                country,
-                                note,
-                                page_url: window.location.href,
-                                page_title: document.title,
-                                application_source: 'founders_page',
-                                submitted_at: new Date().toISOString()
-                            }]);
-                            console.log('Application tracked with Jitsu after identity flush');
-                        }]);
-                    } else if (window.analytics) {
-                        // Fallback to analytics.js if available
-                        console.log('Using analytics object for tracking...');
-                        window.analytics.identify(email, {
-                            email,
-                            name,
-                            country,
-                            application_source: 'founders_page'
-                        });
-                        
-                        window.analytics.track('application_submitted', {
-                            timestamp,
-                            name,
-                            email,
-                            country,
-                            note,
-                            page_url: window.location.href,
-                            page_title: document.title,
-                            application_source: 'founders_page',
-                            submitted_at: new Date().toISOString()
-                        });
-                    } else {
-                        console.error('No valid tracking method available');
-                    }
-                } catch (jitsuError) {
-                    console.error('Error tracking with Jitsu:', jitsuError);
-                }
+                // Track the application submission with Jitsu using a robust multi-provider approach
+                trackFormSubmission({
+                    name,
+                    email, 
+                    country,
+                    note,
+                    page_url: window.location.href,
+                    page_title: document.title,
+                    application_source: 'founders_page',
+                    submitted_at: new Date().toISOString()
+                });
                 
                 // Also try to save via server as a backup
                 try {
@@ -222,5 +178,109 @@ document.addEventListener('DOMContentLoaded', function() {
                 messageElement.classList.add('text-red-500');
             }
         });
+    }
+
+    function trackFormSubmission(eventData) {
+        // Try immediate tracking first
+        if (tryTrackEvent(eventData)) return;
+        
+        // If immediate tracking failed, try again after 1 second
+        console.log('⏱️ First tracking attempt failed, retrying in 1 second...');
+        setTimeout(() => {
+            if (tryTrackEvent(eventData)) return;
+            
+            // If still failed, try one more time after 2 more seconds (3 seconds total)
+            console.log('⏱️ Second tracking attempt failed, retrying in 2 seconds...');
+            setTimeout(() => {
+                if (tryTrackEvent(eventData)) return;
+                
+                // If all attempts failed, store in localStorage for potential future replay
+                console.warn('❌ All tracking attempts failed, storing event in localStorage');
+                storeUnsentEvent(eventData);
+            }, 2000);
+        }, 1000);
+    }
+
+    function tryTrackEvent(eventData) {
+        // Try to track using graph8 (preferred method from graph8Loaded)
+        if (window.graph8) {
+            try {
+                // First identify the user
+                window.graph8.identify(eventData.email, {
+                    email: eventData.email,
+                    name: eventData.name,
+                    country: eventData.country,
+                    application_source: eventData.application_source
+                });
+                
+                // Then track the event
+                window.graph8.track("application_submitted", eventData);
+                console.log('✅ Application tracked with graph8 method');
+                return true;
+            } catch (e) {
+                console.error('❌ Error tracking with graph8:', e);
+            }
+        }
+        
+        // Fallback to analytics.js
+        if (window.analytics) {
+            try {
+                window.analytics.identify(eventData.email, {
+                    email: eventData.email,
+                    name: eventData.name,
+                    country: eventData.country,
+                    application_source: eventData.application_source
+                });
+                
+                window.analytics.track('application_submitted', eventData);
+                console.log('✅ Application tracked with analytics.js method');
+                return true;
+            } catch (e) {
+                console.error('❌ Error tracking with analytics.js:', e);
+            }
+        }
+        
+        // Last-resort fallback to jitsu.push
+        if (window.jitsu && typeof window.jitsu.push === 'function') {
+            try {
+                // Identify user first
+                window.jitsu.push(["identify", eventData.email, {
+                    email: eventData.email,
+                    name: eventData.name,
+                    country: eventData.country,
+                    application_source: eventData.application_source
+                }]);
+                
+                // Then track the event
+                window.jitsu.push(["track", "application_submitted", eventData]);
+                console.log('✅ Application tracked with jitsu.push method');
+                return true;
+            } catch (e) {
+                console.error('❌ Error tracking with jitsu.push:', e);
+            }
+        }
+        
+        // If we got here, all tracking methods failed
+        return false;
+    }
+
+    function storeUnsentEvent(eventData) {
+        try {
+            // Get existing unsent events
+            const unsentEvents = JSON.parse(localStorage.getItem('brainware_unsent_events') || '[]');
+            
+            // Add new event
+            unsentEvents.push({
+                eventType: 'application_submitted',
+                eventData,
+                timestamp: new Date().toISOString()
+            });
+            
+            // Store back in localStorage
+            localStorage.setItem('brainware_unsent_events', JSON.stringify(unsentEvents));
+            console.log('💾 Unsent event stored in localStorage for potential future replay');
+        } catch (e) {
+            console.error('❌ Error storing unsent event:', e);
+        }
     }
 });
