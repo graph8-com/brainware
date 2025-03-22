@@ -90,17 +90,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Save back to localStorage
                 localStorage.setItem('brainware_applications', JSON.stringify(applications));
                 
-                // Track the application submission with Jitsu using a robust multi-provider approach
-                trackFormSubmission({
-                    name,
-                    email, 
-                    country,
-                    note,
-                    page_url: window.location.href,
-                    page_title: document.title,
-                    application_source: 'founders_page',
-                    submitted_at: new Date().toISOString()
-                });
+                // Note: Form tracking is now entirely handled by the graph8Loaded script
+                // Do not attempt any tracking here to avoid duplicate events
                 
                 // Also try to save via server as a backup
                 try {
@@ -126,44 +117,68 @@ document.addEventListener('DOMContentLoaded', function() {
                         })
                         .then(response => {
                             console.log('Server response:', response.status);
+                            if (response.status === 200) {
+                                console.log('✅ Application saved to server');
+                            } else {
+                                console.warn('⚠️ Server error:', response.status, response.statusText);
+                                console.log('Application saved to localStorage as fallback');
+                            }
+                            
+                            // Show success message
+                            const toastNotification = document.createElement('div');
+                            toastNotification.className = 'fixed bottom-4 right-4 bg-teal-600 text-white py-4 px-6 rounded-lg shadow-lg z-50 flex items-center';
+                            toastNotification.innerHTML = `
+                                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <div>
+                                    <p class="font-medium">Thank you for your application!</p>
+                                    <p class="text-sm opacity-90">We'll be in touch soon.</p>
+                                </div>
+                            `;
+                            document.body.appendChild(toastNotification);
+                            
+                            // Close the modal after short delay (allow time for tracking)
+                            setTimeout(() => {
+                                closeModal();
+                                toastNotification.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                                setTimeout(() => {
+                                    document.body.removeChild(toastNotification);
+                                }, 500);
+                            }, 1500);
                         })
                         .catch(error => {
                             console.error('Server error:', error);
+                            messageElement.textContent = 'An error occurred while processing your application. Please try again.';
+                            messageElement.classList.remove('text-green-500', 'text-white');
+                            messageElement.classList.add('text-red-500');
                         });
                     } else {
                         console.log('Server submission disabled in production environment - using localStorage only');
-                    }
-                    
-                    // Create download for the applications.txt file
-                    const allFormattedData = applications.map(app => app.formattedText).join('');
-                    
-                    // Show a simple thank you message in a toast notification
-                    const toastNotification = document.createElement('div');
-                    toastNotification.className = 'fixed bottom-4 right-4 bg-teal-600 text-white py-4 px-6 rounded-lg shadow-lg z-50 flex items-center';
-                    toastNotification.innerHTML = `
-                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        <div>
-                            <p class="font-medium">Thank you for your application!</p>
-                            <p class="text-sm opacity-90">We'll be in touch soon.</p>
-                        </div>
-                    `;
-                    document.body.appendChild(toastNotification);
-                    
-                    // Close the modal
-                    closeModal();
-                    
-                    // Reset form
-                    applicationForm.reset();
-                    
-                    // Remove toast notification after 5 seconds
-                    setTimeout(() => {
-                        toastNotification.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                        
+                        // Show success message
+                        const toastNotification = document.createElement('div');
+                        toastNotification.className = 'fixed bottom-4 right-4 bg-teal-600 text-white py-4 px-6 rounded-lg shadow-lg z-50 flex items-center';
+                        toastNotification.innerHTML = `
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <div>
+                                <p class="font-medium">Thank you for your application!</p>
+                                <p class="text-sm opacity-90">We'll be in touch soon.</p>
+                            </div>
+                        `;
+                        document.body.appendChild(toastNotification);
+                        
+                        // Close the modal after short delay (allow time for tracking)
                         setTimeout(() => {
-                            document.body.removeChild(toastNotification);
-                        }, 500);
-                    }, 5000);
+                            closeModal();
+                            toastNotification.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                            setTimeout(() => {
+                                document.body.removeChild(toastNotification);
+                            }, 500);
+                        }, 1500);
+                    }
                     
                 } catch (error) {
                     console.error('Error:', error);

@@ -410,114 +410,101 @@
     <!-- Scripts -->
     <script src="js/menu.js" defer></script>
     
-    <!-- Jitsu/Graph8 Tracking Implementation -->
+    <!-- Jitsu/Graph8 Tracking Implementation (Fixed and Complete) -->
     <script>
-      // Create a global reference to store the graph8 instance
       window.graph8 = null;
-      
-      // Function that will be called when Jitsu loads
+
+      // Called when Jitsu loads
       window.graph8Loaded = function(instance) {
-        console.log("✅ Graph8/Jitsu loaded and ready");
-        // Store the instance globally for access in other scripts
         window.graph8 = instance;
-        
-        // Wait for DOM to be fully loaded
+        console.log("✅ Graph8/Jitsu loaded and ready");
+
+        // Restore user traits if previously stored
+        const storedTraits = localStorage.getItem('graph8_traits');
+        if (storedTraits) {
+          const traits = JSON.parse(storedTraits);
+          window.graph8.identify(traits.email, traits);
+          console.log("✅ Traits restored from localStorage:", traits);
+        }
+
+        // Attach listener immediately if DOM is ready
         if (document.readyState === 'loading') {
           document.addEventListener('DOMContentLoaded', attachFormListener);
         } else {
-          // DOM already loaded, attach listener directly
           attachFormListener();
         }
       };
-      
+
+      // Attach form listener
       function attachFormListener() {
-        // Use a small delay to ensure modal has initialized
         setTimeout(function() {
           const form = document.getElementById("application-form");
-          
           if (!form) {
-            console.warn("⚠️ Form not found - will try again in 1 second");
-            // Try again in 1 second - modal might be dynamically added
+            console.warn("⚠️ Form not found - retrying...");
             setTimeout(attachFormListener, 1000);
             return;
           }
-          
-          console.log("✅ Form found, attaching submit listener");
-          
-          form.addEventListener("submit", function() {
-            // Get form values at submission time
+
+          form.addEventListener("submit", function(event) {
+            event.preventDefault(); // <-- CRITICAL FIX to prevent reload
+
             const nameField = document.getElementById("name");
             const emailField = document.getElementById("email");
             const countryField = document.getElementById("country");
             const noteField = document.getElementById("note");
-            
-            // Validate fields exist
-            if (!nameField || !emailField || !countryField || !noteField) {
-              console.warn("⚠️ Form fields not found:", {
-                name: !!nameField,
-                email: !!emailField,
-                country: !!countryField,
-                note: !!noteField
-              });
+
+            if (!nameField.value || !emailField.value || !countryField.value || !noteField.value) {
+              console.warn("⚠️ Required form fields are missing or empty.");
               return;
             }
-            
-            // Get values
-            const name = nameField.value || "";
-            const email = emailField.value || "";
-            const country = countryField.value || "";
-            const note = noteField.value || "";
-            
-            console.log("📝 Form values captured:", {
-              name,
-              email,
-              country,
-              note: note.substring(0, 10) + (note.length > 10 ? "..." : "")
-            });
-            
-            // Only track if graph8 instance is available
+
+            const traits = {
+              email: emailField.value.trim(),
+              name: nameField.value.trim(),
+              country: countryField.value.trim(),
+              application_source: "founders_page"
+            };
+
+            const trackProperties = {
+              ...traits,
+              note: noteField.value.trim(),
+              page_url: window.location.href,
+              page_title: document.title,
+              submitted_at: new Date().toISOString()
+            };
+
             if (window.graph8) {
               try {
-                // Identify user
-                window.graph8.identify(email, {
-                  email,
-                  name,
-                  country,
-                  application_source: "founders_page"
-                });
-                
-                // Track submission
-                window.graph8.track("application_submitted", {
-                  name,
-                  email,
-                  country,
-                  note,
-                  page_url: window.location.href,
-                  page_title: document.title,
-                  application_source: "founders_page",
-                  submitted_at: new Date().toISOString()
-                });
-                
-                console.log("✅ Form submitted and tracked with Jitsu");
+                window.graph8.identify(traits.email, traits);
+                window.graph8.track("application_submitted", trackProperties);
+                localStorage.setItem('graph8_traits', JSON.stringify(traits)); // <-- CRITICAL FIX for persistence
+
+                console.log("✅ Form tracked with Jitsu:", trackProperties);
+
+                // After successful tracking, optionally submit form to your backend
+                setTimeout(() => {
+                  form.submit();  // if you're handling server-side submission
+                }, 250);
+
               } catch (error) {
-                console.error("❌ Error tracking with Jitsu:", error);
+                console.error("❌ Error tracking form:", error);
               }
             } else {
-              console.warn("⚠️ Graph8/Jitsu not ready - tracking skipped");
+              console.warn("⚠️ Graph8/Jitsu not ready. Skipping tracking.");
             }
           });
         }, 500);
       }
     </script>
-    
-    <!-- Load Jitsu with onload callback -->
+
+    <!-- Load Jitsu (keep unchanged) -->
     <script async src="https://events.flow.graph8.com/p.js" 
       data-write-key="X7tbGBo0MEBYTMJzi6Bu7kdH0VNFuS2q:BOismoy8s94Ey0yUcKgz8PTACMFJ3WN1"
       data-onload="graph8Loaded"></script>
-    
-    <!-- Initialize jitsu as fallback -->
+
+    <!-- Initialize fallback jitsu (keep unchanged) -->
     <script>
-      window.jitsu = window.jitsu || (function(){return {push:function(){}}})();
+      window.jitsu = window.jitsu || { push: () => {} };
     </script>
     
     <script src="js/application-modal.js" defer></script>
