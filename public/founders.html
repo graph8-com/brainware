@@ -414,6 +414,38 @@
     <script>
         window.jitsu = window.jitsu || (function(){return {push:function(){}}})();
     </script>
+    
+    <!-- Identify users on form submission -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("application-form");
+
+        if (form) {
+          form.addEventListener("submit", function (e) {
+            const name = document.getElementById("name")?.value || "";
+            const email = document.getElementById("email")?.value || "";
+            const country = document.getElementById("country")?.value || "";
+            const note = document.getElementById("note")?.value || "";
+
+            const pageTitle = document.title;
+            const pageUrl = window.location.href;
+            const pagePath = window.location.pathname;
+
+            // De-anonymize user
+            window.jitsu = window.jitsu || [];
+            window.jitsu.push(["identify", email, {
+              email,
+              name,
+              country,
+              application_source: "founders_page"
+            }]);
+
+            // Track form submission is handled in application-modal.js
+          });
+        }
+      });
+    </script>
+    
     <script src="js/application-modal.js" defer></script>
     <script src="js/cursor-effect.js"></script>
 </body>

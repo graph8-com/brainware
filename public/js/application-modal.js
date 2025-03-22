@@ -156,73 +156,63 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Determine the correct server URL based on environment
                     const serverUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
                         ? 'http://localhost:8080/save_application'
-                        : '/save_application'; // Use relative URL in production
+                        : null; // Disable server submission in production for now
                         
-                    console.log(`Submitting to server: ${serverUrl}`);
-                    
-                    fetch(serverUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: new URLSearchParams({
-                            name,
-                            email,
-                            country,
-                            note
-                        }).toString()
-                    })
-                    .then(response => {
-                        console.log('Server response:', response.status);
-                    })
-                    .catch(error => {
-                        console.error('Server error:', error);
-                    });
+                    if (serverUrl) {
+                        console.log(`Submitting to server: ${serverUrl}`);
+                        
+                        fetch(serverUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: new URLSearchParams({
+                                name,
+                                email,
+                                country,
+                                note
+                            }).toString()
+                        })
+                        .then(response => {
+                            console.log('Server response:', response.status);
+                        })
+                        .catch(error => {
+                            console.error('Server error:', error);
+                        });
+                    } else {
+                        console.log('Server submission disabled in production environment - using localStorage only');
+                    }
                     
                     // Create download for the applications.txt file
                     const allFormattedData = applications.map(app => app.formattedText).join('');
-                    const blob = new Blob([allFormattedData], { type: 'text/plain' });
-                    const url = URL.createObjectURL(blob);
                     
-                    // Add a new hidden download element to the form
-                    let downloadBtn = document.getElementById('download-applications');
-                    if (!downloadBtn) {
-                        downloadBtn = document.createElement('a');
-                        downloadBtn.id = 'download-applications';
-                        downloadBtn.className = 'hidden';
-                        downloadBtn.textContent = 'Download Applications';
-                        downloadBtn.download = 'applications.txt';
-                        applicationForm.appendChild(downloadBtn);
-                    }
-                    
-                    // Update the download link
-                    downloadBtn.href = url;
-                    
-                    // Show success message with download option
-                    messageElement.innerHTML = `
-                        <p class="mb-2">Application submitted successfully!</p>
-                        <p class="text-sm mb-3">Your application has been sent to Brainware. You can also:</p>
-                        <div class="flex space-x-3">
-                            <button id="show-download" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 rounded-md text-sm transition-colors">
-                                Download Applications
-                            </button>
-                            <a href="view-applications.html" target="_blank" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-md text-sm transition-colors inline-flex items-center">
-                                View Applications
-                            </a>
+                    // Show a simple thank you message in a toast notification
+                    const toastNotification = document.createElement('div');
+                    toastNotification.className = 'fixed bottom-4 right-4 bg-teal-600 text-white py-4 px-6 rounded-lg shadow-lg z-50 flex items-center';
+                    toastNotification.innerHTML = `
+                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <div>
+                            <p class="font-medium">Thank you for your application!</p>
+                            <p class="text-sm opacity-90">We'll be in touch soon.</p>
                         </div>
                     `;
-                    messageElement.classList.remove('text-red-500', 'text-white');
-                    messageElement.classList.add('text-green-500');
+                    document.body.appendChild(toastNotification);
                     
-                    // Add event listener to the download button
-                    document.getElementById('show-download').addEventListener('click', function() {
-                        downloadBtn.click();
-                    });
+                    // Close the modal
+                    closeModal();
                     
-                    // Reset form after success (8 seconds delay)
+                    // Reset form
+                    applicationForm.reset();
+                    
+                    // Remove toast notification after 5 seconds
                     setTimeout(() => {
-                        applicationForm.reset();
-                    }, 8000);
+                        toastNotification.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                        setTimeout(() => {
+                            document.body.removeChild(toastNotification);
+                        }, 500);
+                    }, 5000);
                     
                 } catch (error) {
                     console.error('Error:', error);
