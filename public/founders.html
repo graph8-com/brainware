@@ -431,7 +431,7 @@
             const pageUrl = window.location.href;
             const pagePath = window.location.pathname;
 
-            // De-anonymize user
+            // De-anonymize user using flush pattern
             window.jitsu = window.jitsu || [];
             window.jitsu.push(["identify", email, {
               email,
@@ -440,7 +440,11 @@
               application_source: "founders_page"
             }]);
 
-            // Track form submission is handled in application-modal.js
+            // Flush the identify call to ensure it completes first
+            window.jitsu.push(["flush", function() {
+              console.log("Identity flushed for user:", email);
+              // Track event handling is in application-modal.js
+            }]);
           });
         }
       });

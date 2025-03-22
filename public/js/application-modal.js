@@ -91,10 +91,43 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('brainware_applications', JSON.stringify(applications));
                 
                 // Track the application submission with Jitsu
-                // Using the global analytics object that Jitsu creates
-                if (window.analytics) {
-                    try {
-                        console.log('About to track application with Jitsu...');
+                try {
+                    // Using Jitsu's flush API to ensure identification completes before tracking
+                    if (window.jitsu) {
+                        console.log('Identifying user before tracking...');
+                        // Step 1: Identify the user with email as userId
+                        window.jitsu.push(["identify", email, {
+                            email,
+                            name, 
+                            country,
+                            application_source: 'founders_page'
+                        }]);
+                        
+                        // Step 2: Flush the identify call and then track the submission
+                        window.jitsu.push(["flush", function() {
+                            window.jitsu.push(["track", "application_submitted", {
+                                timestamp,
+                                name,
+                                email,
+                                country,
+                                note,
+                                page_url: window.location.href,
+                                page_title: document.title,
+                                application_source: 'founders_page',
+                                submitted_at: new Date().toISOString()
+                            }]);
+                            console.log('Application tracked with Jitsu after identity flush');
+                        }]);
+                    } else if (window.analytics) {
+                        // Fallback to analytics.js if available
+                        console.log('Using analytics object for tracking...');
+                        window.analytics.identify(email, {
+                            email,
+                            name,
+                            country,
+                            application_source: 'founders_page'
+                        });
+                        
                         window.analytics.track('application_submitted', {
                             timestamp,
                             name,
@@ -102,53 +135,15 @@ document.addEventListener('DOMContentLoaded', function() {
                             country,
                             note,
                             page_url: window.location.href,
-                            page_title: document.title
+                            page_title: document.title,
+                            application_source: 'founders_page',
+                            submitted_at: new Date().toISOString()
                         });
-                        console.log('Application tracked with Jitsu - event sent successfully');
-                    } catch (jitsuError) {
-                        console.error('Error tracking with Jitsu:', jitsuError);
+                    } else {
+                        console.error('No valid tracking method available');
                     }
-                } else {
-                    console.error('Jitsu analytics object not available - make sure Jitsu script is loaded');
-                    // Fallback to using window.jitsu if available (newer method)
-                    if (window.jitsu) {
-                        try {
-                            console.log('Trying fallback with window.jitsu...');
-                            // Ensure jitsu.push is available before calling it
-                            if (typeof window.jitsu.push === 'function') {
-                                window.jitsu.push(["track", "application_submitted", {
-                                    timestamp,
-                                    name,
-                                    email,
-                                    country,
-                                    note,
-                                    page_url: window.location.href,
-                                    page_title: document.title,
-                                    application_source: 'founders_page'
-                                }]);
-                                console.log('Application tracked with window.jitsu method');
-                            } else {
-                                // Direct tracking with jitsu.track if available
-                                if (typeof window.jitsu.track === 'function') {
-                                    window.jitsu.track("application_submitted", {
-                                        timestamp,
-                                        name,
-                                        email,
-                                        country,
-                                        note,
-                                        page_url: window.location.href,
-                                        page_title: document.title,
-                                        application_source: 'founders_page'
-                                    });
-                                    console.log('Application tracked with window.jitsu.track method');
-                                } else {
-                                    console.error('No valid jitsu tracking method available');
-                                }
-                            }
-                        } catch (e) {
-                            console.error('Error using fallback jitsu method:', e);
-                        }
-                    }
+                } catch (jitsuError) {
+                    console.error('Error tracking with Jitsu:', jitsuError);
                 }
                 
                 // Also try to save via server as a backup
