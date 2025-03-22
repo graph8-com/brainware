@@ -11,7 +11,10 @@
 </head>
 <body class="bg-dark-bg">
     <div class="min-h-screen flex flex-col">
-    <!-- Header -->
+        <!-- Full-page cursor animation container -->
+        <div id="cursor-animation-container" class="fixed inset-0 w-full h-full pointer-events-none z-0"></div>
+        
+        <!-- Header -->
     <header class="fixed w-full z-50 transition-transform duration-300">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="/" class="flex items-center z-20">
@@ -311,6 +314,8 @@
                 
                 <p class="mb-6 text-gray-300">Please fill out this form to apply and tell us why you're the right founder for Brainware.</p>
                 
+                <p class="mb-6 text-sm text-gray-400"><a href="view-applications.html" class="text-teal-400 hover:underline" target="_blank">View Submitted Applications</a></p>
+                
                 <form id="application-form" class="space-y-4">
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-200 mb-1">Full Name *</label>
@@ -363,7 +368,7 @@
                             </svg>
                         </a>
                         <a href="https://x.com/graph8tc" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-teal-400" aria-label="X (Twitter)">
-                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                             </svg>
                         </a>
@@ -404,6 +409,8 @@
 
     <!-- Scripts -->
     <script src="js/menu.js" defer></script>
+    <script async src="https://events.flow.graph8.com/p.js" data-write-key="X7tbGBo0MEBYTMJzi6Bu7kdH0VNFuS2q:BOismoy8s94Ey0yUcKgz8PTACMFJ3WN1"></script>
     <script src="js/application-modal.js" defer></script>
+    <script src="js/cursor-effect.js"></script>
 </body>
 </html>

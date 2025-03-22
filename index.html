@@ -11,6 +11,9 @@
 </head>
 <body class="bg-dark-bg">
     <div class="min-h-screen flex flex-col">
+        <!-- Full-page cursor animation container -->
+        <div id="cursor-animation-container" class="fixed inset-0 w-full h-full pointer-events-none z-0"></div>
+        
         <!-- Header -->
         <header class="fixed w-full z-50 transition-transform duration-300">
             <div class="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -33,8 +36,8 @@
                         <li><a href="/" class="nav-item" data-page="home">Home</a></li>
                         <li><a href="founders.html" class="nav-item" data-page="founders">Founders</a></li>
                         <li><a href="builders.html" class="nav-item" data-page="builders">Builders</a></li>
-                        <li><a href="companies.html" class="nav-item" data-page="companies">Companies</a></li>
                         <li><a href="pe-partners.html" class="nav-item" data-page="pe">Private Equity</a></li>
+                        <li><a href="companies.html" class="nav-item" data-page="companies">Companies</a></li>
                         <li><a href="about.html" class="nav-item" data-page="about">About</a></li>
                     </ul>
                 </nav>
@@ -66,7 +69,7 @@
                 </div>
                 <div class="w-full md:w-1/2 relative">
                     <div class="bg-[#0E0E0E] rounded-xl overflow-hidden" id="lottie-container" style="height: 500px;">
-                        <!-- Fallback image -->
+                        <!-- Fallback image (only shown if animation fails) -->
                         <img src="images/sphere-placeholder.svg" alt="Animated sphere" class="w-full h-full object-cover" style="display: none;" id="fallback-image">
                     </div>
                 </div>
@@ -181,8 +184,8 @@
                             <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
                             </svg>
-                            <h3 class="text-xl font-bold">$10K Monthly+</h3>
                         </div>
+                        <h3 class="text-xl font-bold">$10K Monthly+</h3>
                         <p class="text-gray-400">Competitive base salary plus performance bonuses and profit share.</p>
                     </div>
 
@@ -439,7 +442,17 @@
 
     <!-- JavaScript -->
     <script src="js/menu.js" defer></script>
+    <script async src="https://events.flow.graph8.com/p.js" data-write-key="X7tbGBo0MEBYTMJzi6Bu7kdH0VNFuS2q:BOismoy8s94Ey0yUcKgz8PTACMFJ3WN1"></script>
+    <script>
+      window.jitsu = window.jitsu || [];
+      window.jitsu.push(["track", "page_view", {
+        path: window.location.pathname,
+        referrer: document.referrer,
+        title: document.title
+      }]);
+    </script>
     <script src="js/application-modal.js" defer></script>
+    <script src="js/cursor-effect.js"></script>
     <script type="module">
         (async () => {
             try {
@@ -476,7 +489,7 @@
                     header.classList.toggle('pushed');
                 });
                 
-                // Create a colored background div with animated effect instead of Lottie
+                // Create a colored background div with animated effect for the hero section
                 const lottieContainer = document.getElementById('lottie-container');
                 if (lottieContainer) {
                     // Create a canvas element for particle animation
@@ -660,14 +673,10 @@
                 }
             } catch (error) {
                 console.error('Error in script:', error);
-                // Show fallback image if animation fails
-                const fallbackImage = document.getElementById('fallback-image');
-                if (fallbackImage) {
-                    fallbackImage.style.display = 'block';
-                }
             }
         })();
     </script>
+    
     <!-- Supabase Script -->
     <script type="module">
         (async () => {
@@ -725,6 +734,14 @@
                 console.error('Error loading posts:', error);
             }
         })();
+    </script>
+    <script>
+      window.jitsu = window.jitsu || [];
+      window.jitsu.push(["track", "manual_page_test", {
+        title: document.title,
+        path: window.location.pathname,
+        timestamp: new Date().toISOString()
+      }]);
     </script>
 </body>
 </html>
