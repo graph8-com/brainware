@@ -58,6 +58,16 @@
                         At Brainware, we don't just launch startups—we systematically build scalable, profitable businesses. This requires exceptional operating partners—entrepreneurs who have the vision, execution ability, and business acumen to start companies, build them to profitability, and transition leadership to a strong management team.
                     </p>
                 </div>
+                
+                <!-- Apply Now Button -->
+                <div class="mt-8">
+                    <a href="#" class="apply-now-btn inline-flex items-center px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors">
+                        Apply Now
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -139,7 +149,7 @@
                         <div class="flex-shrink-0">
                             <div class="w-12 h-12 bg-dark-accent rounded-lg flex items-center justify-center">
                                 <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m-9 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                                 </svg>
                             </div>
                         </div>
@@ -242,8 +252,8 @@
                 <p class="text-gray-400 mb-8">
                     If you are a seasoned entrepreneur, operator, or business strategist looking to build multiple successful companies with the backing of a proven model, Brainware is the ideal place for you.
                 </p>
-                <a href="mailto:info@brainware.io" class="inline-flex items-center px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors" onclick="window.location.href='mailto:info@brainware.io'; return false;">
-                    Contact Us
+                <a href="#" class="apply-now-btn inline-flex items-center px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors">
+                    Apply Now
                     <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                     </svg>
@@ -266,8 +276,8 @@
                             </svg>
                         </a>
                         <a href="https://x.com/graph8tc" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-teal-400" aria-label="X (Twitter)">
-                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                             </svg>
                         </a>
                     </div>
@@ -315,9 +325,7 @@
                     </svg>
                 </button>
                 
-                <h2 class="text-2xl font-bold text-white mb-6">Apply Now</h2>
-                
-                <p class="mb-6 text-gray-300">Please fill out this form to apply and tell us why you're the right founder for Brainware.</p>
+                <p class="mb-6 text-gray-300">Apply to become a Builder at Brainware.</p>
                 
                 <form id="application-form" class="space-y-4">
                     <div>
@@ -333,22 +341,19 @@
                     </div>
                     
                     <div>
-                        <label for="country" class="block text-sm font-medium text-gray-200 mb-1">Country *</label>
-                        <input type="text" id="country" name="country" required
-                            class="w-full px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400">
-                    </div>
-                    
-                    <div>
-                        <label for="note" class="block text-sm font-medium text-gray-200 mb-1">Why are you the right founder? *</label>
+                        <label for="note" class="block text-sm font-medium text-gray-200 mb-1">What made you a builder? *</label>
                         <textarea id="note" name="note" rows="4" required
                             class="w-full px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400 resize-none"></textarea>
                     </div>
+                    
+                    <!-- Hidden Role Field -->
+                    <input type="hidden" id="role" name="role" value="Builder">
                     
                     <div id="form-message" class="hidden py-2 font-medium text-white"></div>
                     
                     <div class="flex justify-end">
                         <button type="submit"
-                            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-teal-500 hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-400 focus:ring-offset-gray-900">
+                            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-teal-500 hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-400 focus:ring-offset-gray-900 transition-all duration-200">
                             Submit Application
                         </button>
                     </div>
@@ -447,9 +452,105 @@
         });
     </script>
 
-    <!-- Scripts -->
+    <!-- Jitsu/Graph8 Tracking Implementation (Fixed and Complete) -->
+    <script>
+      window.graph8 = null;
+
+      // Called when Jitsu loads
+      window.graph8Loaded = function(instance) {
+        window.graph8 = instance;
+        console.log("✅ Graph8/Jitsu loaded and ready");
+
+        // Restore user traits if previously stored
+        const storedTraits = localStorage.getItem('graph8_traits');
+        if (storedTraits) {
+          const traits = JSON.parse(storedTraits);
+          window.graph8.identify(traits.email, traits);
+          console.log("✅ Traits restored from localStorage:", traits);
+        }
+
+        // Attach listener immediately if DOM is ready
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', attachFormListener);
+        } else {
+          attachFormListener();
+        }
+      };
+
+      // Attach form listener
+      function attachFormListener() {
+        setTimeout(function() {
+          const form = document.getElementById("application-form");
+          if (!form) {
+            console.warn("⚠️ Form not found - retrying...");
+            setTimeout(attachFormListener, 1000);
+            return;
+          }
+
+          form.addEventListener("submit", function(event) {
+            event.preventDefault(); // <-- CRITICAL FIX to prevent reload
+
+            const nameField = document.getElementById("name");
+            const emailField = document.getElementById("email");
+            const noteField = document.getElementById("note");
+            const roleField = document.getElementById("role");
+
+            if (!nameField.value || !emailField.value || !noteField.value) {
+              console.warn("⚠️ Required form fields are missing or empty.");
+              return;
+            }
+
+            const traits = {
+              email: emailField.value.trim(),
+              name: nameField.value.trim(),
+              role: roleField.value.trim(),
+              application_source: "builders_page"
+            };
+
+            const trackProperties = {
+              ...traits,
+              note: noteField.value.trim(),
+              page_url: window.location.href,
+              page_title: document.title,
+              submitted_at: new Date().toISOString()
+            };
+
+            if (window.graph8) {
+              try {
+                window.graph8.identify(traits.email, traits);
+                window.graph8.track("application_submitted", trackProperties);
+                localStorage.setItem('graph8_traits', JSON.stringify(traits)); // <-- CRITICAL FIX for persistence
+
+                console.log("✅ Form tracked with Jitsu:", trackProperties);
+
+                // After successful tracking, optionally submit form to your backend
+                setTimeout(() => {
+                  form.submit();  // if you're handling server-side submission
+                }, 250);
+
+              } catch (error) {
+                console.error("❌ Error tracking form:", error);
+              }
+            } else {
+              console.warn("⚠️ Graph8/Jitsu not ready. Skipping tracking.");
+            }
+          });
+        }, 500);
+      }
+    </script>
+
+    <!-- Load Jitsu (keep unchanged) -->
+    <script async src="https://events.flow.graph8.com/p.js" 
+      data-write-key="X7tbGBo0MEBYTMJzi6Bu7kdH0VNFuS2q:BOismoy8s94Ey0yUcKgz8PTACMFJ3WN1"
+      data-onload="graph8Loaded"></script>
+
+    <!-- Initialize fallback jitsu (keep unchanged) -->
+    <script>
+      window.jitsu = window.jitsu || { push: () => {} };
+    </script>
+    
     <script src="js/menu.js" defer></script>
-    <script async src="https://events.flow.graph8.com/p.js" data-write-key="X7tbGBo0MEBYTMJzi6Bu7kdH0VNFuS2q:BOismoy8s94Ey0yUcKgz8PTACMFJ3WN1"></script>
+    <script src="js/application-modal.js" defer></script>
     <script src="js/cursor-effect.js"></script>
 </body>
 </html>

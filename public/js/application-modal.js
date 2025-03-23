@@ -55,13 +55,17 @@ document.addEventListener('DOMContentLoaded', function() {
             // Get form data
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
-            const country = document.getElementById('country').value.trim();
-            const note = document.getElementById('note').value.trim();
+            // Handle either company field (PE partners) or country field (other pages)
+            const country = document.getElementById('country')?.value.trim() || '';
+            const company = document.getElementById('company')?.value.trim() || '';
+            const note = document.getElementById('note')?.value.trim() || '';
+            const role = document.getElementById('role')?.value.trim() || 'Unknown'; // Get role or default to Unknown
             
-            console.log("Form data being submitted:", { name, email, country, note });
+            console.log("Form data being submitted:", { name, email, country, company, note, role });
             
-            // Client-side validation
-            if (!name || !email || !country) {
+            // Client-side validation - check required fields based on which form is being used
+            const isCompanyForm = document.getElementById('company') !== null;
+            if (!name || !email || (isCompanyForm && !company) || (!isCompanyForm && !country)) {
                 messageElement.textContent = 'Please fill in all required fields.';
                 messageElement.classList.remove('text-white', 'text-green-500');
                 messageElement.classList.add('text-red-500');
@@ -70,7 +74,9 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Format data for text file and email
             const timestamp = new Date().toISOString();
-            const formattedData = `Timestamp: ${timestamp}\nName: ${name}\nEmail: ${email}\nCountry: ${country}\nNote: ${note}\n------------------------------------------------------\n\n`;
+            // Use company field if available, otherwise use country
+            const locationOrCompany = company || country;
+            const formattedData = `Timestamp: ${timestamp}\nName: ${name}\nEmail: ${email}\n${company ? 'Company' : 'Country'}: ${locationOrCompany}${note ? '\nNote: ' + note : ''}\nRole: ${role}\n------------------------------------------------------\n\n`;
             
             // Save application to localStorage as a backup
             try {
@@ -83,7 +89,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     name,
                     email,
                     country,
+                    company,
                     note,
+                    role, // Add role field to stored application
                     formattedText: formattedData
                 });
                 
@@ -111,8 +119,10 @@ document.addEventListener('DOMContentLoaded', function() {
                             body: new URLSearchParams({
                                 name,
                                 email,
-                                country,
-                                note
+                                country: country || '',
+                                company: company || '',
+                                note,
+                                role
                             }).toString()
                         })
                         .then(response => {
@@ -192,6 +202,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 messageElement.classList.remove('text-green-500', 'text-white');
                 messageElement.classList.add('text-red-500');
             }
+            
+            const eventData = {
+                name,
+                email,
+                country,
+                company,
+                note,
+                role,
+                timestamp: new Date().toISOString(),
+                page_url: window.location.href,
+                page_title: document.title,
+                application_source: window.location.pathname.includes('founders') ? 'founders_page' : 
+                                    window.location.pathname.includes('builders') ? 'builders_page' : 
+                                    window.location.pathname.includes('pe-partners') ? 'pe_partners_page' : 'landing_page'
+            };
+            
+            trackFormSubmission(eventData);
         });
     }
 
@@ -225,6 +252,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     email: eventData.email,
                     name: eventData.name,
                     country: eventData.country,
+                    company: eventData.company,
+                    role: eventData.role, // Include role in identify call
                     application_source: eventData.application_source
                 });
                 
@@ -244,6 +273,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     email: eventData.email,
                     name: eventData.name,
                     country: eventData.country,
+                    company: eventData.company,
+                    role: eventData.role, // Include role in identify call
                     application_source: eventData.application_source
                 });
                 
@@ -263,6 +294,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     email: eventData.email,
                     name: eventData.name,
                     country: eventData.country,
+                    company: eventData.company,
+                    role: eventData.role, // Include role in identify call
                     application_source: eventData.application_source
                 }]);
                 

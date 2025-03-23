@@ -1,0 +1,126 @@
+/* Blog-specific styles with Brainware's minimalist aesthetic */
+
+/* Post cards */
+.post-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.post-card img {
+  transition: transform 0.5s ease;
+}
+
+.post-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Category filters */
+.category-filter {
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.category-filter.active {
+  color: #50E3C2; /* Teal accent color */
+  border-color: #50E3C2;
+}
+
+/* Page transitions */
+#posts-grid {
+  transition: opacity 0.3s ease;
+}
+
+/* Typography enhancements */
+.prose h2 {
+  color: #fff;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.prose h3 {
+  color: #fff;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+}
+
+.prose p {
+  margin-bottom: 1.25rem;
+  line-height: 1.7;
+}
+
+.prose a {
+  color: #50E3C2;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.prose a:hover {
+  color: #6ee7cc;
+}
+
+.prose ul, .prose ol {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+.prose blockquote {
+  border-left: 4px solid #50E3C2;
+  padding-left: 1rem;
+  font-style: italic;
+  color: #a0aec0;
+  margin: 1.5rem 0;
+}
+
+.prose code {
+  color: #50E3C2;
+  background: rgba(80, 227, 194, 0.1);
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
+
+.prose pre {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.prose pre code {
+  background: transparent;
+  padding: 0;
+  color: #e2e8f0;
+}
+
+/* Featured post gradient overlay */
+.featured-post-overlay {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.1) 100%);
+}
+
+/* Post metadata styling */
+.post-meta {
+  font-size: 0.875rem;
+  color: #a0aec0;
+}
+
+/* Image captions */
+.image-caption {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #a0aec0;
+  margin-top: 0.5rem;
+  font-style: italic;
+}

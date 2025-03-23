@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Authors - Brainware Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="/images/brainware-icon.svg?v=1">
+    <script src="/admin/js/auth.js"></script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+        .author-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .author-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+        .notification {
+            transform: translateY(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .notification.show {
+            transform: translateY(0);
+        }
+        .author-image-preview {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .author-image-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+        }
+        .author-image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .author-image-container:hover .author-image-overlay {
+            opacity: 1;
+        }
+        .loading-spinner {
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-top: 3px solid #38b2ac;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .gradient-border:focus {
+            border-color: transparent;
+            box-shadow: 0 0 0 2px #0d9488, 0 0 0 4px #14b8a6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Notification -->
+    <div id="notification" class="fixed top-0 left-0 right-0 z-50 notification">
+        <div class="max-w-md mx-auto mt-4 bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center justify-between">
+            <div class="flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path id="notification-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span id="notification-message">Operation successful</span>
+            </div>
+            <button id="close-notification" class="text-white">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-gray-900 to-gray-800 border-b border-gray-700">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <h1 class="text-xl font-medium">Brainware Admin</h1>
+                <nav class="flex space-x-4">
+                    <a href="/admin/index.html" class="text-gray-300 hover:text-white transition-colors">Dashboard</a>
+                    <a href="/admin/new-post.html" class="text-gray-300 hover:text-white transition-colors">New Post</a>
+                    <a href="/admin/categories.html" class="text-gray-300 hover:text-white transition-colors">Categories</a>
+                    <a href="/admin/authors.html" class="text-white transition-colors">Authors</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-medium">Manage Authors</h2>
+            <button id="add-author-btn" class="bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-4 py-2 rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-colors">
+                Add New Author
+            </button>
+        </div>
+
+        <!-- Authors List -->
+        <div id="authors-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Authors will be loaded here dynamically -->
+        </div>
+
+        <!-- Author Form Modal -->
+        <div id="author-form" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden flex items-center justify-center">
+            <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-6 border border-gray-700 max-w-md w-full">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 id="form-title" class="text-xl font-medium">Add New Author</h3>
+                    <button id="cancel-edit-btn" class="text-gray-400 hover:text-white">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <form id="author-edit-form" class="space-y-4">
+                    <input type="hidden" id="author-id-input">
+                    
+                    <div class="author-image-container mb-4">
+                        <img id="author-image-preview" class="author-image-preview bg-gray-700" src="/images/default-avatar.png" alt="Author headshot">
+                        <div class="author-image-overlay">
+                            <label for="author-image-input" class="cursor-pointer p-2 rounded-full bg-teal-500 hover:bg-teal-600">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4H19v1a2 2 0 01-2 2V19H5a2 2 0 01-2-2V7z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                            </label>
+                            <input id="author-image-input" type="file" accept="image/*" class="hidden">
+                        </div>
+                        <div id="image-upload-loading" class="absolute inset-0 bg-black bg-opacity-70 rounded-full flex items-center justify-center hidden">
+                            <div class="loading-spinner"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="author-name-input" class="block text-sm font-medium text-gray-400 mb-1">Name</label>
+                        <input type="text" id="author-name-input" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white gradient-border focus:outline-none" placeholder="Author's full name" required>
+                    </div>
+
+                    <div>
+                        <label for="author-slug-input" class="block text-sm font-medium text-gray-400 mb-1">Slug</label>
+                        <input type="text" id="author-slug-input" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white gradient-border focus:outline-none" placeholder="author-slug" required>
+                        <p class="text-xs text-gray-500 mt-1">Used in URLs, auto-generated from name</p>
+                    </div>
+
+                    <div>
+                        <label for="author-title-input" class="block text-sm font-medium text-gray-400 mb-1">Title</label>
+                        <input type="text" id="author-title-input" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white gradient-border focus:outline-none" placeholder="e.g. CEO & Founder">
+                    </div>
+
+                    <div>
+                        <label for="author-bio-input" class="block text-sm font-medium text-gray-400 mb-1">Bio</label>
+                        <textarea id="author-bio-input" rows="3" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white gradient-border focus:outline-none" placeholder="Author's bio"></textarea>
+                    </div>
+
+                    <div>
+                        <label for="author-password-input" class="block text-sm font-medium text-gray-400 mb-1">Admin Password</label>
+                        <input type="password" id="author-password-input" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white gradient-border focus:outline-none" placeholder="Password for admin login">
+                        <p class="text-xs text-gray-500 mt-1">Simple password for author to access admin area</p>
+                    </div>
+
+                    <div class="flex justify-end space-x-3 pt-2">
+                        <button type="button" id="cancel-form-btn" class="px-4 py-2 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit" class="bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-4 py-2 rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-colors">
+                            Save Author
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM Elements
+        const authorsList = document.getElementById('authors-list');
+        const addAuthorBtn = document.getElementById('add-author-btn');
+        const authorForm = document.getElementById('author-form');
+        const authorEditForm = document.getElementById('author-edit-form');
+        const formTitle = document.getElementById('form-title');
+        const authorIdInput = document.getElementById('author-id-input');
+        const authorNameInput = document.getElementById('author-name-input');
+        const authorSlugInput = document.getElementById('author-slug-input');
+        const authorTitleInput = document.getElementById('author-title-input');
+        const authorBioInput = document.getElementById('author-bio-input');
+        const authorPasswordInput = document.getElementById('author-password-input');
+        const authorImageInput = document.getElementById('author-image-input');
+        const authorImagePreview = document.getElementById('author-image-preview');
+        const imageUploadLoading = document.getElementById('image-upload-loading');
+        const cancelEditBtn = document.getElementById('cancel-edit-btn');
+        const cancelFormBtn = document.getElementById('cancel-form-btn');
+        const notification = document.getElementById('notification');
+        const notificationMessage = document.getElementById('notification-message');
+        const closeNotification = document.getElementById('close-notification');
+
+        // Load authors
+        async function loadAuthors() {
+            try {
+                const response = await fetch('/api/authors');
+                if (!response.ok) {
+                    showNotification('Failed to load authors from API', 'error');
+                    return { authors: [] };
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Error loading authors:', error);
+                showNotification('Failed to load authors', 'error');
+                return { authors: [] };
+            }
+        }
+
+        // Display authors
+        async function displayAuthors() {
+            const data = await loadAuthors();
+            authorsList.innerHTML = '';
+            
+            if (!data.authors || data.authors.length === 0) {
+                authorsList.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <p class="text-gray-400">No authors found. Add your first author to get started.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            data.authors.forEach(author => {
+                const authorCard = document.createElement('div');
+                authorCard.className = 'author-card bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-6 border border-gray-700';
+                
+                // Default image if none exists
+                const imageUrl = author.image ? author.image : '/images/default-avatar.png';
+                
+                authorCard.innerHTML = `
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center">
+                            <img src="${imageUrl}" alt="${author.name}" class="w-12 h-12 rounded-full object-cover mr-4">
+                            <div>
+                                <h3 class="font-medium text-lg">${author.name}</h3>
+                                <span class="text-sm text-gray-400">${author.title || ''}</span>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="edit-author p-1 text-gray-400 hover:text-teal-400" data-id="${author.slug}">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2V7z"></path>
+                                </svg>
+                            </button>
+                            <button class="delete-author p-1 text-gray-400 hover:text-red-400" data-id="${author.slug}">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 text-sm line-clamp-2">${author.bio || 'No bio provided.'}</p>
+                `;
+                authorsList.appendChild(authorCard);
+            });
+            
+            // Add event listeners to edit and delete buttons
+            document.querySelectorAll('.edit-author').forEach(button => {
+                button.addEventListener('click', () => editAuthor(button.dataset.id));
+            });
+            
+            document.querySelectorAll('.delete-author').forEach(button => {
+                button.addEventListener('click', () => deleteAuthor(button.dataset.id));
+            });
+        }
+
+        // Save authors
+        async function saveAuthors(authors) {
+            try {
+                const response = await fetch('/api/authors', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ authors })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to save authors');
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('Authors saved successfully', 'success');
+                    authorForm.classList.add('hidden');
+                    loadAuthors();
+                } else {
+                    throw new Error(result.message || 'Failed to save authors');
+                }
+            } catch (error) {
+                console.error('Error saving authors:', error);
+                showNotification('Failed to save authors: ' + error.message, 'error');
+            }
+        }
+
+        // Upload author image
+        async function uploadAuthorImage(file) {
+            try {
+                imageUploadLoading.classList.remove('hidden');
+                
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                const response = await fetch('/api/upload-author-image', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to upload image');
+                }
+                
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.message || 'Failed to upload image');
+                }
+                
+                return data.url;
+            } catch (error) {
+                console.error('Error uploading image:', error);
+                showNotification('Failed to upload image: ' + error.message, 'error');
+                throw error;
+            } finally {
+                imageUploadLoading.classList.add('hidden');
+            }
+        }
+
+        // Add new author
+        function showAddAuthorForm() {
+            formTitle.textContent = 'Add New Author';
+            authorIdInput.value = '';
+            authorNameInput.value = '';
+            authorSlugInput.value = '';
+            authorTitleInput.value = '';
+            authorBioInput.value = '';
+            authorPasswordInput.value = '';
+            authorImagePreview.src = '/images/default-avatar.png';
+            authorForm.classList.remove('hidden');
+            authorNameInput.focus();
+        }
+
+        // Edit author
+        async function editAuthor(slug) {
+            const data = await loadAuthors();
+            const author = data.authors.find(a => a.slug === slug);
+            
+            if (!author) {
+                showNotification('Author not found', 'error');
+                return;
+            }
+            
+            formTitle.textContent = 'Edit Author';
+            authorIdInput.value = author.slug;
+            authorNameInput.value = author.name;
+            authorSlugInput.value = author.slug;
+            authorTitleInput.value = author.title || '';
+            authorBioInput.value = author.bio || '';
+            authorPasswordInput.value = author.password || '';
+            
+            if (author.image) {
+                authorImagePreview.src = author.image;
+            } else {
+                authorImagePreview.src = '/images/default-avatar.png';
+            }
+            
+            authorForm.classList.remove('hidden');
+        }
+
+        // Delete author
+        async function deleteAuthor(slug) {
+            if (!confirm('Are you sure you want to delete this author?')) {
+                return;
+            }
+            
+            try {
+                const data = await loadAuthors();
+                const updatedAuthors = data.authors.filter(author => author.slug !== slug);
+                
+                await saveAuthors(updatedAuthors);
+                
+                showNotification('Author deleted successfully');
+                displayAuthors();
+            } catch (error) {
+                console.error('Error deleting author:', error);
+                showNotification('Failed to delete author', 'error');
+            }
+        }
+
+        // Generate slug from name
+        function generateSlug(name) {
+            return name.toLowerCase()
+                .replace(/[^\w\s-]/g, '') // Remove special characters
+                .replace(/\s+/g, '-') // Replace spaces with hyphens
+                .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
+                .trim();
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            notificationMessage.textContent = message;
+            notification.className = 'fixed top-0 left-0 right-0 z-50 notification show';
+            
+            if (type === 'error') {
+                notification.querySelector('div').className = 'max-w-md mx-auto mt-4 bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center justify-between';
+                notification.querySelector('svg path').setAttribute('d', 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z');
+            } else {
+                notification.querySelector('div').className = 'max-w-md mx-auto mt-4 bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center justify-between';
+                notification.querySelector('svg path').setAttribute('d', 'M5 13l4 4L19 7');
+            }
+            
+            setTimeout(() => {
+                notification.className = 'fixed top-0 left-0 right-0 z-50 notification';
+            }, 3000);
+        }
+
+        // Event Listeners
+        addAuthorBtn.addEventListener('click', showAddAuthorForm);
+        cancelEditBtn.addEventListener('click', () => authorForm.classList.add('hidden'));
+        cancelFormBtn.addEventListener('click', () => authorForm.classList.add('hidden'));
+        closeNotification.addEventListener('click', () => notification.className = 'fixed top-0 left-0 right-0 z-50 notification');
+
+        // Handle author name input to generate slug
+        authorNameInput.addEventListener('input', () => {
+            if (!authorIdInput.value) { // Only auto-generate for new authors
+                authorSlugInput.value = generateSlug(authorNameInput.value);
+            }
+        });
+
+        // Handle image upload
+        authorImageInput.addEventListener('change', async (e) => {
+            if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                
+                // Preview the image
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    authorImagePreview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+                
+                try {
+                    // Upload the image
+                    const imagePath = await uploadAuthorImage(file);
+                    authorImagePreview.dataset.uploaded = imagePath;
+                    showNotification('Image uploaded successfully');
+                } catch (error) {
+                    // Error is already handled in uploadAuthorImage
+                }
+            }
+        });
+
+        // Handle form submission
+        authorEditForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = authorNameInput.value.trim();
+            const slug = authorSlugInput.value.trim();
+            const title = authorTitleInput.value.trim();
+            const bio = authorBioInput.value.trim();
+            const password = authorPasswordInput.value.trim();
+            
+            if (!name || !slug) {
+                showNotification('Name and slug are required', 'error');
+                return;
+            }
+            
+            try {
+                const data = await loadAuthors();
+                const authors = data.authors || [];
+                const isEditing = authorIdInput.value !== '';
+                
+                // Check if slug is already used (for new authors)
+                if (!isEditing && authors.some(author => author.slug === slug)) {
+                    showNotification('This slug is already in use', 'error');
+                    return;
+                }
+                
+                let updatedAuthors;
+                const newAuthor = {
+                    name,
+                    slug,
+                    title,
+                    bio,
+                    password
+                };
+                
+                // Add image path if uploaded
+                if (authorImagePreview.dataset.uploaded) {
+                    newAuthor.image = authorImagePreview.dataset.uploaded;
+                } else if (authorImagePreview.src && !authorImagePreview.src.includes('default-avatar.png')) {
+                    // Keep existing image if editing
+                    newAuthor.image = authorImagePreview.src;
+                }
+                
+                if (isEditing) {
+                    // Update existing author
+                    updatedAuthors = authors.map(author => 
+                        author.slug === authorIdInput.value ? { ...newAuthor } : author
+                    );
+                } else {
+                    // Add new author
+                    updatedAuthors = [...authors, newAuthor];
+                }
+                
+                await saveAuthors(updatedAuthors);
+                
+                showNotification(isEditing ? 'Author updated successfully' : 'Author added successfully');
+                authorForm.classList.add('hidden');
+                displayAuthors();
+            } catch (error) {
+                console.error('Error saving author:', error);
+                showNotification('Failed to save author', 'error');
+            }
+        });
+
+        // Initialize
+        displayAuthors();
+    </script>
+</body>
+</html>

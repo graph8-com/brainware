@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Brainware Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="/images/brainware-icon.svg?v=1">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: white;
+            min-height: 100vh;
+            background-color: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .gradient-border:focus {
+            border-color: transparent;
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.5);
+        }
+        
+        .login-card {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.8) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .login-button {
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+            transition: all 0.2s ease;
+        }
+        
+        .login-button:hover {
+            background: linear-gradient(135deg, #0284c7 0%, #0891b2 100%);
+            transform: translateY(-1px);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            z-index: 50;
+            font-weight: 500;
+            max-width: 300px;
+            animation: fadeInOut 3s;
+        }
+        
+        .notification.success {
+            background: linear-gradient(135deg, #34D399 0%, #059669 100%);
+        }
+        
+        .notification.error {
+            background: linear-gradient(135deg, #F87171 0%, #DC2626 100%);
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(-10px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card w-full max-w-md p-8 rounded-xl shadow-xl">
+        <div class="text-center mb-8">
+            <img src="/images/brainware-logo.svg" alt="Brainware" class="h-12 mx-auto mb-6">
+            <h1 class="text-2xl font-semibold">Admin Login</h1>
+            <p class="text-gray-400 mt-2">Enter your credentials to access the admin area</p>
+        </div>
+        
+        <form id="login-form" class="space-y-6">
+            <div>
+                <label for="author" class="block text-sm font-medium text-gray-400 mb-1">Author</label>
+                <select id="author" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white gradient-border focus:outline-none">
+                    <option value="">Select your author profile</option>
+                    <!-- Authors will be loaded dynamically -->
+                </select>
+            </div>
+            
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-400 mb-1">Password</label>
+                <input type="password" id="password" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white gradient-border focus:outline-none" placeholder="Enter your password">
+            </div>
+            
+            <button type="submit" class="login-button w-full py-2 px-4 rounded-lg text-white font-medium">
+                Login
+            </button>
+        </form>
+    </div>
+    
+    <script>
+        // DOM Elements
+        const loginForm = document.getElementById('login-form');
+        const authorSelect = document.getElementById('author');
+        const passwordInput = document.getElementById('password');
+        
+        // Load authors for the dropdown
+        async function loadAuthors() {
+            try {
+                const response = await fetch('/api/authors');
+                if (!response.ok) {
+                    throw new Error('Failed to load authors');
+                }
+                
+                const data = await response.json();
+                
+                if (!data.authors || !Array.isArray(data.authors)) {
+                    throw new Error('Invalid authors data format');
+                }
+                
+                // Keep the first option
+                authorSelect.innerHTML = '<option value="">Select your author profile</option>';
+                
+                // Add authors to dropdown
+                data.authors.forEach(author => {
+                    const option = document.createElement('option');
+                    option.value = author.slug;
+                    option.textContent = author.name;
+                    authorSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading authors:', error);
+                showNotification('Failed to load authors: ' + error.message, 'error');
+            }
+        }
+        
+        // Handle login form submission
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const authorSlug = authorSelect.value;
+            const password = passwordInput.value;
+            
+            if (!authorSlug || !password) {
+                showNotification('Please select an author and enter a password', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ authorSlug, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Store login info in localStorage
+                    localStorage.setItem('brainware_author', authorSlug);
+                    localStorage.setItem('brainware_auth', data.token);
+                    
+                    showNotification('Login successful', 'success');
+                    
+                    // Redirect to admin dashboard
+                    setTimeout(() => {
+                        window.location.href = '/admin/index.html';
+                    }, 1000);
+                } else {
+                    throw new Error(data.message || 'Invalid credentials');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showNotification('Login failed: ' + error.message, 'error');
+            }
+        });
+        
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            // Add to DOM
+            document.body.appendChild(notification);
+            
+            // Remove after animation
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAuthors();
+        });
+    </script>
+</body>
+</html>

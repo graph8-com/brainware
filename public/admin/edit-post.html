@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Post | Brainware Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.1/purify.min.js"></script>
+    <link href="/css/styles.css" rel="stylesheet">
+    <link rel="icon" href="/images/brainware-icon.svg?v=1">
+    <script src="/admin/js/auth.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: white;
+            min-height: 100vh;
+            background-color: #0f172a;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            z-index: 50;
+            font-weight: 500;
+            max-width: 300px;
+            z-index: 50;
+            animation: fadeInOut 3s;
+        }
+        
+        .notification.success {
+            background: linear-gradient(135deg, #34D399 0%, #059669 100%);
+        }
+        
+        .notification.error {
+            background: linear-gradient(135deg, #F87171 0%, #DC2626 100%);
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(-10px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-20px); }
+        }
+        
+        .toolbar-btn {
+            padding: 0.375rem;
+            border-radius: 0.375rem;
+            transition: all 0.15s ease;
+            color: #d1d5db;
+        }
+        
+        .toolbar-btn:hover {
+            background-color: #374151;
+            color: white;
+        }
+        
+        .toolbar-btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.5);
+        }
+        
+        .editor-container {
+            padding: 1rem;
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 0 0 0.5rem 0.5rem;
+            color: #e5e7eb;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+            min-height: 600px;
+        }
+        
+        .editor-container:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.5);
+        }
+        
+        /* Floating toolbar - Ghost-like feature */
+        .floating-toolbar {
+            position: absolute;
+            display: none;
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 0.5rem;
+            z-index: 100;
+        }
+        
+        .floating-toolbar.visible {
+            display: flex;
+            gap: 0.5rem;
+            animation: fadeIn 0.2s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Slash menu - Ghost-like feature */
+        .slash-menu {
+            position: absolute;
+            display: none;
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 0.5rem;
+            z-index: 100;
+            width: 240px;
+        }
+        
+        .slash-menu.visible {
+            display: block;
+            animation: fadeIn 0.2s ease-out;
+        }
+        
+        .slash-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+        
+        .slash-menu-item:hover {
+            background-color: #374151;
+        }
+        
+        .slash-menu-item-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5eead4;
+        }
+        
+        .slash-menu-item-text {
+            flex: 1;
+        }
+        
+        .slash-menu-item-title {
+            font-weight: 500;
+            color: #e5e7eb;
+        }
+        
+        .slash-menu-item-description {
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+        
+        .debug-section pre {
+            background-color: #1f2937;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-size: 0.875rem;
+            color: #e5e7eb;
+        }
+        
+        .metadata-sidebar {
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+            border: 1px solid #334155;
+            padding: 1rem;
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+        
+        .metadata-field {
+            margin-bottom: 1.25rem;
+        }
+        
+        .metadata-label {
+            display: block;
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-bottom: 0.375rem;
+        }
+        
+        .editor-main {
+            height: auto;
+            min-height: calc(100vh - 10rem);
+            display: flex;
+            flex-direction: row;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .editor-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .save-button {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+            z-index: 40;
+        }
+        
+        .save-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 20px -3px rgba(0, 0, 0, 0.35);
+        }
+        
+        .save-button:active {
+            transform: translateY(0);
+        }
+        
+        /* Preview styling */
+        .preview-content {
+            color: #e5e7eb;
+            max-width: none;
+        }
+        
+        .preview-content h1, 
+        .preview-content h2, 
+        .preview-content h3, 
+        .preview-content h4 {
+            color: #2dd4bf;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .preview-content h1 {
+            font-size: 1.875rem;
+            line-height: 2.25rem;
+        }
+        
+        .preview-content h2 {
+            font-size: 1.5rem;
+            line-height: 2rem;
+        }
+        
+        .preview-content h3 {
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+        }
+        
+        .preview-content a {
+            color: #5eead4;
+            text-decoration: underline;
+        }
+        
+        .preview-content strong {
+            color: white;
+            font-weight: 600;
+        }
+        
+        .preview-content img {
+            max-width: 100%;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .preview-content code {
+            background-color: #1f2937;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+        }
+        
+        .preview-content pre {
+            background-color: #1f2937;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow: auto;
+            margin: 1rem 0;
+        }
+        
+        .preview-content blockquote {
+            border-left: 4px solid #14b8a6;
+            padding-left: 1rem;
+            font-style: italic;
+            margin: 1rem 0;
+        }
+        
+        .preview-content ul,
+        .preview-content ol {
+            padding-left: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .preview-content ul {
+            list-style-type: disc;
+        }
+        
+        .preview-content ol {
+            list-style-type: decimal;
+        }
+        
+        .preview-heading {
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .preview-paragraph {
+            margin-bottom: 1rem;
+        }
+        
+        .preview-link {
+            text-decoration: underline;
+        }
+        
+        .preview-blockquote {
+            border-left: 4px solid #14b8a6;
+            padding-left: 1rem;
+            font-style: italic;
+            margin: 1rem 0;
+        }
+        
+        .preview-code-block {
+            background-color: #1f2937;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow: auto;
+            margin: 1rem 0;
+        }
+        
+        .preview-code {
+            background-color: #1f2937;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+        }
+        
+        .preview-list {
+            padding-left: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .preview-list-item {
+            margin-bottom: 0.5rem;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Preview styles */
+        .preview-container {
+            color: #f8f9fa;
+            line-height: 1.6;
+        }
+        
+        .preview-container h1, 
+        .preview-container h2, 
+        .preview-container h3, 
+        .preview-container h4, 
+        .preview-container h5, 
+        .preview-container h6 {
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            line-height: 1.25;
+        }
+        
+        .preview-container h1 { font-size: 2rem; }
+        .preview-container h2 { font-size: 1.75rem; }
+        .preview-container h3 { font-size: 1.5rem; }
+        .preview-container h4 { font-size: 1.25rem; }
+        .preview-container h5 { font-size: 1.1rem; }
+        .preview-container h6 { font-size: 1rem; }
+        
+        .preview-container p {
+            margin-bottom: 1rem;
+        }
+        
+        .preview-container a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        
+        .preview-container a:hover {
+            text-decoration: underline;
+        }
+        
+        .preview-container ul, 
+        .preview-container ol {
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+        }
+        
+        .preview-container ul li, 
+        .preview-container ol li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .preview-container blockquote {
+            border-left: 4px solid #4b5563;
+            padding-left: 1rem;
+            margin-left: 0;
+            margin-right: 0;
+            font-style: italic;
+            color: #9ca3af;
+        }
+        
+        .preview-container pre {
+            background-color: #1e293b;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+        
+        .preview-container code {
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 0.875rem;
+            background-color: rgba(30, 41, 59, 0.5);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+        }
+        
+        .preview-container pre code {
+            background-color: transparent;
+            padding: 0;
+            border-radius: 0;
+            color: #e2e8f0;
+        }
+        
+        .preview-container img {
+            max-width: 100%;
+            border-radius: 0.375rem;
+            margin: 1rem 0;
+        }
+        
+        .preview-container hr {
+            border: 0;
+            border-top: 1px solid #4b5563;
+            margin: 2rem 0;
+        }
+        
+        .preview-container table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+        
+        .preview-container th, 
+        .preview-container td {
+            border: 1px solid #4b5563;
+            padding: 0.5rem;
+        }
+        
+        .preview-container th {
+            background-color: #1e293b;
+        }
+        
+        /* Fade in and out animations for preview area */
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .fade-out {
+            animation: fadeOut 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto px-6 py-8 max-w-6xl">
+        <div class="flex justify-between items-center mb-6">
+            <div class="flex items-center space-x-4">
+                <a href="/admin/posts.html" class="flex items-center bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white py-2 px-4 rounded-lg transition-all duration-200">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Back to Posts
+                </a>
+                <h1 class="text-2xl font-semibold text-white">
+                    <span id="editor-mode">Create</span> Blog Post
+                </h1>
+            </div>
+            <div class="flex space-x-3">
+                <button id="toggle-preview-btn" class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    </svg>
+                    Preview
+                </button>
+                <button id="save-button" class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center">
+                    <i class="fas fa-save mr-2"></i> Save Post
+                </button>
+            </div>
+        </div>
+        
+        <!-- Debug area for monitoring API calls and errors -->
+        <div id="debug-output" class="mb-8 p-4 bg-gray-800 rounded-lg text-xs font-mono overflow-auto max-h-60"></div>
+
+        <div class="editor-main flex flex-row">
+            <div class="editor-column">
+                <form id="post-form" class="space-y-6">
+                    <div class="form-group">
+                        <label for="post-title" class="block text-lg font-medium text-white mb-2">Title</label>
+                        <input type="text" id="post-title" class="w-full p-3 rounded-lg bg-white bg-opacity-10 border border-gray-700 text-white" placeholder="Enter post title">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="post-slug" class="block text-lg font-medium text-white mb-2">Slug</label>
+                        <input type="text" id="post-slug" class="w-full p-3 rounded-lg bg-white bg-opacity-10 border border-gray-700 text-white" placeholder="enter-post-slug">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="post-excerpt" class="block text-lg font-medium text-white mb-2">Excerpt</label>
+                        <textarea id="post-excerpt" class="w-full p-3 rounded-lg bg-white bg-opacity-10 border border-gray-700 text-white" rows="3" placeholder="Brief excerpt for the post"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="post-content" class="block text-lg font-medium text-white mb-2">Content</label>
+                        
+                        <!-- Editor toolbar -->
+                        <div class="editor-toolbar bg-gray-800 border border-gray-700 rounded-t p-2 flex flex-wrap gap-1 justify-between">
+                            <div class="toolbar-left flex flex-wrap gap-1">
+                                <button type="button" class="toolbar-btn" data-action="bold" title="Bold">
+                                    <i class="fas fa-bold"></i>
+                                </button>
+                                <button type="button" class="toolbar-btn" data-action="italic" title="Italic">
+                                    <i class="fas fa-italic"></i>
+                                </button>
+                                <button type="button" class="toolbar-btn" data-action="heading" title="Heading">
+                                    <i class="fas fa-heading"></i>
+                                </button>
+                                <button type="button" class="toolbar-btn" data-action="link" title="Link">
+                                    <i class="fas fa-link"></i>
+                                </button>
+                                <button type="button" class="toolbar-btn" id="image-upload-btn" title="Image">
+                                    <i class="fas fa-image"></i>
+                                </button>
+                                <button type="button" class="toolbar-btn" data-action="unordered-list" title="Bullet List">
+                                    <i class="fas fa-list-ul"></i>
+                                </button>
+                                <button type="button" class="toolbar-btn" data-action="ordered-list" title="Numbered List">
+                                    <i class="fas fa-list-ol"></i>
+                                </button>
+                                <button type="button" class="toolbar-btn" data-action="code" title="Code">
+                                    <i class="fas fa-code"></i>
+                                </button>
+                                <button type="button" class="toolbar-btn" data-action="blockquote" title="Blockquote">
+                                    <i class="fas fa-quote-left"></i>
+                                </button>
+                            </div>
+                            <div class="toolbar-right">
+                                <button type="button" id="toolbar-preview-btn" class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-4 py-1 rounded-md text-sm flex items-center transition-all duration-300">
+                                    <i class="fas fa-eye mr-2"></i> Preview
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <textarea id="post-content" class="editor-container w-full rounded-t-none" rows="15" placeholder="Write your post content in Markdown format"></textarea>
+                    </div>
+                </form>
+                
+                <!-- Preview Area -->
+                <div id="preview-area" class="mt-8 bg-white bg-opacity-5 p-6 rounded-lg border border-gray-700 hidden">
+                    <h2 class="text-xl font-semibold text-white mb-4">Preview</h2>
+                    <div class="preview-container">
+                        <h1 id="preview-title" class="text-2xl font-bold text-white mb-4"></h1>
+                        <div id="preview-content" class="prose prose-invert max-w-none"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="metadata-sidebar">
+                <div class="metadata-field">
+                    <label for="post-category" class="metadata-label">Category</label>
+                    <select id="post-category" class="w-full p-3 rounded-lg bg-white bg-opacity-10 border border-gray-700 text-white">
+                        <option value="">Select a category</option>
+                        <!-- Categories will be loaded dynamically -->
+                    </select>
+                </div>
+                <div class="metadata-field">
+                    <label for="post-author" class="metadata-label">Author</label>
+                    <select id="post-author" class="w-full p-3 rounded-lg bg-white bg-opacity-10 border border-gray-700 text-white">
+                        <option value="">Select an author</option>
+                        <!-- Authors will be loaded dynamically -->
+                    </select>
+                </div>
+                <div class="metadata-field">
+                    <label for="post-date" class="metadata-label">Date</label>
+                    <input type="date" id="post-date" class="w-full p-3 rounded-lg bg-white bg-opacity-10 border border-gray-700 text-white">
+                </div>
+                <div class="metadata-field">
+                    <label for="post-cover-image" class="metadata-label">Cover Image URL</label>
+                    <input type="text" id="post-cover-image" class="w-full bg-gray-800 border border-gray-700 rounded p-2 text-gray-200" placeholder="URL for cover image">
+                </div>
+                <div class="metadata-field">
+                    <label class="metadata-label">Upload Cover Image</label>
+                    <div class="flex gap-2">
+                        <input type="file" id="cover-image-upload" accept="image/*" class="hidden">
+                        <button type="button" id="cover-upload-btn" class="bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700 rounded px-3 py-2 flex items-center gap-2 transition-colors">
+                            <i class="fas fa-cloud-upload-alt"></i> Choose Image
+                        </button>
+                        <span id="cover-upload-status" class="text-gray-400 self-center text-sm"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Debug area for troubleshooting -->
+        <div id="debug-area" class="mt-8 bg-gray-900 p-4 rounded-lg">
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-lg font-semibold text-teal-400">Debug Information</h3>
+                <button id="clear-debug-btn" class="text-xs text-gray-400 hover:text-white px-2 py-1 bg-gray-800 rounded">Clear</button>
+            </div>
+            <div id="debug-output" class="text-sm font-mono text-gray-300 max-h-48 overflow-y-auto p-2 bg-gray-800 rounded"></div>
+        </div>
+
+    </div>
+
+    <script>
+        // Improved log function with timestamps and better formatting
+        function log(message, type = 'info') {
+            const debugOutput = document.getElementById('debug-output');
+            if (!debugOutput) return;
+            
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            
+            // Set appropriate styling based on log type
+            let typeClass = '';
+            let typeIcon = '';
+            
+            switch (type) {
+                case 'success':
+                    typeClass = 'text-green-400';
+                    typeIcon = '✓';
+                    break;
+                case 'error':
+                    typeClass = 'text-red-400';
+                    typeIcon = '✗';
+                    break;
+                case 'warning':
+                    typeClass = 'text-yellow-400';
+                    typeIcon = '⚠';
+                    break;
+                default:
+                    typeClass = 'text-blue-400';
+                    typeIcon = 'ℹ';
+            }
+            
+            logEntry.className = `py-1 border-b border-gray-700 ${typeClass}`;
+            logEntry.innerHTML = `<span class="text-gray-500">[${timestamp}]</span> <span class="font-bold">${typeIcon}</span> ${message}`;
+            
+            // Add to top for most recent logs to be easily visible
+            debugOutput.insertBefore(logEntry, debugOutput.firstChild);
+            
+            // Also log to console for easier debugging
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        // Core post loading function
+        async function loadPost(slug) {
+            try {
+                log(`Loading post: ${slug}`);
+                
+                const response = await fetch(`/api/posts/${slug}.json`);
+                if (!response.ok) {
+                    throw new Error(`Failed to load post (status: ${response.status})`);
+                }
+                
+                const post = await response.json();
+                log(`Post data received: title="${post.title || 'N/A'}", content length=${post.content?.length || 0}`, 'success');
+                
+                // Set basic fields
+                document.getElementById('post-title').value = post.title || '';
+                document.getElementById('post-slug').value = post.slug || '';
+                document.getElementById('post-excerpt').value = post.excerpt || '';
+                
+                // Set content with direct DOM manipulation to ensure it works
+                const contentField = document.getElementById('post-content');
+                if (contentField && post.content) {
+                    // First attempt - direct assignment
+                    contentField.value = post.content;
+                    log(`Content set via value property: ${contentField.value.length} chars`, 'success');
+                    
+                    // If that didn't work, try setting innerHTML of a temporary element and then extract
+                    if (contentField.value.length === 0 && post.content.length > 0) {
+                        log('Direct value assignment failed, trying alternative method', 'warning');
+                        
+                        // Create a temporary textarea to hold the content
+                        const temp = document.createElement('textarea');
+                        temp.style.display = 'none';
+                        temp.innerHTML = post.content;
+                        document.body.appendChild(temp);
+                        
+                        // Copy from temp to the actual field
+                        contentField.value = temp.value;
+                        document.body.removeChild(temp);
+                        
+                        log(`Content set via temp element: ${contentField.value.length} chars`, 
+                            contentField.value.length > 0 ? 'success' : 'error');
+                        
+                        // If still not working, try with a timeout
+                        if (contentField.value.length === 0) {
+                            scheduleContentRetry(post.content);
+                        }
+                    }
+                } else {
+                    log('Content field not found or post has no content', 'error');
+                }
+                
+                // Set metadata fields if they exist
+                if (post.category) {
+                    const categorySelect = document.getElementById('post-category');
+                    if (categorySelect) {
+                        for (let i = 0; i < categorySelect.options.length; i++) {
+                            if (categorySelect.options[i].value === post.category) {
+                                categorySelect.selectedIndex = i;
+                                break;
+                            }
+                        }
+                    }
+                }
+                
+                if (post.author) {
+                    const authorSelect = document.getElementById('post-author');
+                    if (authorSelect) {
+                        for (let i = 0; i <authorSelect.options.length; i++) {
+                            if (authorSelect.options[i].value === post.author) {
+                                authorSelect.selectedIndex = i;
+                                break;
+                            }
+                        }
+                    }
+                }
+                
+                if (post.date) {
+                    const dateField = document.getElementById('post-date');
+                    if (dateField) {
+                        const date = new Date(post.date);
+                        dateField.value = date.toISOString().split('T')[0];
+                    }
+                }
+                
+                if (post.coverImage) {
+                    const coverImageField = document.getElementById('post-cover-image');
+                    if (coverImageField) coverImageField.value = post.coverImage;
+                }
+                
+                notify('Post loaded successfully', 'success');
+                
+            } catch (error) {
+                log(`Error loading post: ${error.message}`, 'error');
+                notify(`Error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Retry content setting with exponential backoff
+        let retryAttempt = 0;
+        function scheduleContentRetry(content) {
+            if (retryAttempt >= 5) return;
+            
+            retryAttempt++;
+            const delay = Math.pow(2, retryAttempt) * 100; // Exponential backoff
+            
+            log(`Scheduling content retry #${retryAttempt} in ${delay}ms`, 'warning');
+            
+            setTimeout(() => {
+                const contentField = document.getElementById('post-content');
+                if (contentField) {
+                    // Try direct assignment again
+                    contentField.value = content;
+                    
+                    // Try setting via innerText as a fallback
+                    if (contentField.value.length === 0) {
+                        contentField.innerText = content;
+                    }
+                    
+                    log(`Retry #${retryAttempt}: Content length now ${contentField.value.length}`, 
+                        contentField.value.length > 0 ? 'success' : 'warning');
+                    
+                    if (contentField.value.length === 0 && content.length > 0) {
+                        scheduleContentRetry(content);
+                    }
+                }
+            }, delay);
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Log initialization
+            log('Initializing editor page...', 'info');
+            
+            // Load categories and authors
+            loadCategories();
+            loadAuthors();
+            
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const postSlug = urlParams.get('slug');
+            
+            if (postSlug) {
+                log(`Loading existing post: ${postSlug}`, 'info');
+                loadPost(postSlug);
+            } else {
+                log('Creating new post', 'info');
+                // Set up for new post
+                document.querySelector('h1').textContent = 'Create New Post';
+                document.title = 'Create New Post | Brainware Admin';
+            }
+            
+            // Set up the editor
+            setupEditor();
+            
+            // Set up image uploads
+            setupImageUploads();
+            
+            // Set up preview functionality
+            setupPreviewToggle();
+            
+            // Log initialization complete
+            log('Editor initialization complete', 'success');
+            
+            // Check for preview buttons
+            const headerToggleBtn = document.getElementById('toggle-preview-btn');
+            const toolbarToggleBtn = document.getElementById('toolbar-preview-btn');
+            
+            if (headerToggleBtn) {
+                log('Header preview button found', 'success');
+            } else {
+                log('Header preview button NOT found', 'error');
+            }
+            
+            if (toolbarToggleBtn) {
+                log('Toolbar preview button found', 'success');
+            } else {
+                log('Toolbar preview button NOT found', 'error');
+            }
+            
+            // Check preview area
+            const previewArea = document.getElementById('preview-area');
+            if (previewArea) {
+                log('Preview area found', 'success');
+            } else {
+                log('Preview area NOT found', 'error');
+            }
+            
+            // Clear debug button functionality
+            const clearDebugBtn = document.getElementById('clear-debug-btn');
+            if (clearDebugBtn) {
+                clearDebugBtn.addEventListener('click', function() {
+                    const debugOutput = document.getElementById('debug-output');
+                    if (debugOutput) {
+                        debugOutput.innerHTML = '';
+                    }
+                });
+            }
+        });
+        
+        // Handle image uploads
+        function setupImageUploads() {
+            // Cover image upload
+            const coverUploadBtn = document.getElementById('cover-upload-btn');
+            const coverImageUpload = document.getElementById('cover-image-upload');
+            const coverUploadStatus = document.getElementById('cover-upload-status');
+            const coverImageField = document.getElementById('post-cover-image');
+            
+            if (coverUploadBtn && coverImageUpload) {
+                coverUploadBtn.addEventListener('click', () => {
+                    coverImageUpload.click();
+                });
+                
+                coverImageUpload.addEventListener('change', async (e) => {
+                    if (!e.target.files.length) return;
+                    
+                    const file = e.target.files[0];
+                    if (!file.type.startsWith('image/')) {
+                        notify('Please select an image file', 'error');
+                        return;
+                    }
+                    
+                    try {
+                        coverUploadStatus.textContent = 'Uploading...';
+                        log(`Starting cover image upload: ${file.name} (${file.size} bytes)`, 'info');
+                        
+                        // Create form data with proper boundary
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        
+                        const response = await fetch('/api/upload-image', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+                        }
+                        
+                        const result = await response.json();
+                        log(`Server response: ${JSON.stringify(result)}`, result.success ? 'success' : 'error');
+                        
+                        if (result.success) {
+                            coverUploadStatus.textContent = 'Uploaded!';
+                            coverImageField.value = result.url;
+                            log(`Cover image uploaded: ${result.url}`, 'success');
+                            
+                            // Show a beautiful success notification
+                            const notification = document.createElement('div');
+                            notification.className = 'fixed top-4 right-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white p-4 rounded-lg shadow-lg z-50 flex items-center';
+                            notification.innerHTML = `
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Image uploaded successfully
+                            `;
+                            document.body.appendChild(notification);
+                            setTimeout(() => notification.remove(), 3000);
+                        } else {
+                            throw new Error(result.message || 'Upload failed');
+                        }
+                    } catch (error) {
+                        coverUploadStatus.textContent = 'Failed';
+                        log(`Cover image upload error: ${error.message}`, 'error');
+                        notify('Failed to upload image: ' + error.message, 'error');
+                    }
+                });
+            }
+            
+            // Inline image upload
+            const imageUploadBtn = document.getElementById('image-upload-btn');
+            if (imageUploadBtn) {
+                // Create a hidden file input for inline images
+                const inlineImageUpload = document.createElement('input');
+                inlineImageUpload.type = 'file';
+                inlineImageUpload.accept = 'image/*';
+                inlineImageUpload.style.display = 'none';
+                document.body.appendChild(inlineImageUpload);
+                
+                imageUploadBtn.addEventListener('click', () => {
+                    inlineImageUpload.click();
+                });
+                
+                inlineImageUpload.addEventListener('change', async (e) => {
+                    if (!e.target.files.length) return;
+                    
+                    const file = e.target.files[0];
+                    if (!file.type.startsWith('image/')) {
+                        notify('Please select an image file', 'error');
+                        return;
+                    }
+                    
+                    try {
+                        // Show elegant loading notification with gradient background
+                        const loadingNotification = document.createElement('div');
+                        loadingNotification.className = 'fixed top-4 right-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 rounded-lg shadow-lg z-50 flex items-center';
+                        loadingNotification.innerHTML = `
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Uploading image...
+                        `;
+                        document.body.appendChild(loadingNotification);
+                        
+                        log(`Starting inline image upload: ${file.name} (${file.size} bytes)`, 'info');
+                        
+                        // Create form data with proper boundary
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        
+                        const response = await fetch('/api/upload-image', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        
+                        // Remove loading notification
+                        loadingNotification.remove();
+                        
+                        if (!response.ok) {
+                            throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+                        }
+                        
+                        const result = await response.json();
+                        log(`Server response: ${JSON.stringify(result)}`, result.success ? 'success' : 'error');
+                        
+                        if (result.success) {
+                            // Insert markdown image at cursor position
+                            const contentField = document.getElementById('post-content');
+                            const cursorPos = contentField.selectionStart;
+                            const imageMarkdown = `![${file.name}](${result.url})`;
+                            
+                            contentField.value = 
+                                contentField.value.substring(0, cursorPos) + 
+                                imageMarkdown + 
+                                contentField.value.substring(contentField.selectionEnd);
+                            
+                            // Move cursor after the inserted image markdown
+                            contentField.selectionStart = cursorPos + imageMarkdown.length;
+                            contentField.selectionEnd = cursorPos + imageMarkdown.length;
+                            contentField.focus();
+                            
+                            log(`Inline image uploaded and inserted: ${result.url}`, 'success');
+                            
+                            // Show success notification with beautiful gradient
+                            const notification = document.createElement('div');
+                            notification.className = 'fixed top-4 right-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white p-4 rounded-lg shadow-lg z-50 flex items-center';
+                            notification.innerHTML = `
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Image inserted at cursor position
+                            `;
+                            document.body.appendChild(notification);
+                            setTimeout(() => notification.remove(), 3000);
+                        } else {
+                            throw new Error(result.message || 'Upload failed');
+                        }
+                    } catch (error) {
+                        log(`Inline image upload error: ${error.message}`, 'error');
+                        
+                        // Show error notification with gradient styling
+                        const errorNotification = document.createElement('div');
+                        errorNotification.className = 'fixed top-4 right-4 bg-gradient-to-r from-red-500 to-red-600 text-white p-4 rounded-lg shadow-lg z-50 flex items-center';
+                        errorNotification.innerHTML = `
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            ${error.message}
+                        `;
+                        document.body.appendChild(errorNotification);
+                        setTimeout(() => errorNotification.remove(), 4000);
+                    }
+                });
+            }
+        }
+        
+        // Set up the editor
+        function setupEditor() {
+            const postTitle = document.getElementById('post-title');
+            const postSlug = document.getElementById('post-slug');
+            const postContent = document.getElementById('post-content');
+            
+            // Auto-generate slug from title
+            if (postTitle && postSlug) {
+                postTitle.addEventListener('blur', function() {
+                    if (!postSlug.value && postTitle.value) {
+                        postSlug.value = postTitle.value
+                            .toLowerCase()
+                            .replace(/[^\w\s-]/g, '')
+                            .replace(/\s+/g, '-');
+                    }
+                });
+            }
+            
+            // Set up toolbar buttons
+            const toolbarButtons = document.querySelectorAll('.toolbar-btn');
+            toolbarButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = this.getAttribute('data-action');
+                    if (!action || !postContent) return;
+                    
+                    const start = postContent.selectionStart;
+                    const end = postContent.selectionEnd;
+                    const selectedText = postContent.value.substring(start, end);
+                    
+                    let replacement = '';
+                    
+                    switch (action) {
+                        case 'bold':
+                            replacement = `**${selectedText || 'bold text'}**`;
+                            break;
+                        case 'italic':
+                            replacement = `*${selectedText || 'italic text'}*`;
+                            break;
+                        case 'heading':
+                            replacement = `## ${selectedText || 'Heading'}`;
+                            break;
+                        case 'link':
+                            replacement = `[${selectedText || 'link text'}](url)`;
+                            break;
+                        case 'unordered-list':
+                            replacement = selectedText.split('\n').map(line => `- ${line}`).join('\n');
+                            if (!selectedText) replacement = "- List item";
+                            break;
+                        case 'ordered-list':
+                            replacement = selectedText.split('\n').map((line, i) => `${i+1}. ${line}`).join('\n');
+                            if (!selectedText) replacement = "1. List item";
+                            break;
+                        case 'code':
+                            replacement = selectedText.includes('\n') ? 
+                                          `\`\`\`\n${selectedText || 'code'}\n\`\`\`` : 
+                                          `\`${selectedText || 'code'}\``;
+                            break;
+                        case 'blockquote':
+                            replacement = selectedText.split('\n').map(line => `> ${line}`).join('\n');
+                            if (!selectedText) replacement = "> Quote";
+                            break;
+                    }
+                    
+                    if (replacement) {
+                        postContent.value = 
+                            postContent.value.substring(0, start) + 
+                            replacement + 
+                            postContent.value.substring(end);
+                        
+                        postContent.focus();
+                    }
+                });
+            });
+            
+            // Save button functionality
+            const saveButton = document.getElementById('save-button');
+            if (saveButton) {
+                saveButton.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    
+                    if (!postTitle.value || !postSlug.value || !postContent.value) {
+                        notify('Please fill in all required fields', 'error');
+                        return;
+                    }
+                    
+                    try {
+                        saveButton.disabled = true;
+                        saveButton.textContent = 'Saving...';
+                        
+                        const postData = {
+                            title: postTitle.value,
+                            slug: postSlug.value,
+                            excerpt: document.getElementById('post-excerpt').value,
+                            content: postContent.value,
+                            category: document.getElementById('post-category')?.value,
+                            author: document.getElementById('post-author')?.value,
+                            date: document.getElementById('post-date')?.value,
+                            coverImage: document.getElementById('post-cover-image')?.value,
+                            lastModified: new Date().toISOString()
+                        };
+                        
+                        // Store author for future use
+                        if (postData.author) {
+                            localStorage.setItem('brainware_author', postData.author);
+                        }
+                        
+                        log(`Saving post: ${postData.title}, content length: ${postData.content.length}`);
+                        
+                        // Show saving indicator with subtle animation
+                        saveButton.innerHTML = `
+                            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Saving...
+                        `;
+                        
+                        // Try both API endpoints to ensure compatibility
+                        let response;
+                        try {
+                            response = await fetch('/api/posts', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(postData)
+                            });
+                            
+                            if (!response.ok) {
+                                log('First endpoint failed, trying fallback endpoint', 'warning');
+                                response = await fetch('/api/save-post', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(postData)
+                                });
+                            }
+                        } catch (error) {
+                            log(`Network error, trying fallback endpoint: ${error.message}`, 'warning');
+                            response = await fetch('/api/save-post', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(postData)
+                            });
+                        }
+                        
+                        if (!response.ok) {
+                            throw new Error(`Server error: ${response.status} ${response.statusText}`);
+                        }
+                        
+                        const result = await response.json();
+                        log(`Save response: ${JSON.stringify(result)}`, result.success ? 'success' : 'error');
+                        
+                        if (result.success) {
+                            // Track successful save with analytics if available
+                            if (window.analytics) {
+                                try {
+                                    analytics.track('Post Saved', {
+                                        title: postData.title,
+                                        slug: postData.slug,
+                                        contentLength: postData.content.length,
+                                        isNew: !params.get('slug')
+                                    });
+                                } catch (e) {
+                                    console.error('Analytics error:', e);
+                                }
+                            }
+                            
+                            // Show success notification with clean, minimalist design
+                            const notification = document.createElement('div');
+                            notification.className = 'fixed top-4 right-4 bg-gradient-to-r from-teal-500 to-emerald-600 text-white p-4 rounded-lg shadow-lg z-50 flex items-center space-x-3';
+                            notification.innerHTML = `
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <div class="flex flex-col">
+                                    <span class="font-medium">${result.message || 'Post saved successfully'}</span>
+                                    <span class="text-sm opacity-90">The post list is being updated...</span>
+                                </div>
+                            `;
+                            
+                            // Add a view posts button
+                            const viewPostsBtn = document.createElement('a');
+                            viewPostsBtn.href = '/admin/posts.html';
+                            viewPostsBtn.className = 'ml-3 px-3 py-1 bg-white bg-opacity-20 hover:bg-opacity-30 rounded text-sm transition-all';
+                            viewPostsBtn.textContent = 'View All Posts';
+                            notification.appendChild(viewPostsBtn);
+                            
+                            document.body.appendChild(notification);
+                            
+                            // Remove notification after 5 seconds
+                            setTimeout(() => {
+                                notification.classList.add('fade-out');
+                                setTimeout(() => notification.remove(), 300);
+                            }, 5000);
+                            
+                            // Update button to show success state
+                            saveButton.innerHTML = `
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Saved
+                            `;
+                            saveButton.classList.remove('from-blue-500', 'to-indigo-600');
+                            saveButton.classList.add('from-green-500', 'to-teal-600');
+                            
+                            // Reset button after 2 seconds
+                            setTimeout(() => {
+                                saveButton.innerHTML = 'Save Post';
+                                saveButton.classList.remove('from-green-500', 'to-teal-600');
+                                saveButton.classList.add('from-blue-500', 'to-indigo-600');
+                            }, 2000);
+                        } else {
+                            throw new Error(result.message || 'Failed to save post');
+                        }
+                    } catch (error) {
+                        log(`Error saving post: ${error.message}`, 'error');
+                        notify(`Error: ${error.message}`, 'error');
+                    } finally {
+                        saveButton.disabled = false;
+                        saveButton.textContent = 'Save Post';
+                    }
+                });
+            }
+        }
+        
+        // Set up preview toggle functionality
+        function setupPreviewToggle() {
+            // Get DOM elements
+            const headerToggleBtn = document.getElementById('toggle-preview-btn');
+            const toolbarToggleBtn = document.getElementById('toolbar-preview-btn');
+            const previewArea = document.getElementById('preview-area');
+            const previewTitle = document.getElementById('preview-title');
+            const previewContent = document.getElementById('preview-content');
+            const postContent = document.getElementById('post-content');
+            const postTitle = document.getElementById('post-title');
+            
+            // Track preview state
+            let previewVisible = false;
+            
+            // Log element status for debugging
+            log('Preview setup: Header button found: ' + !!headerToggleBtn, headerToggleBtn ? 'success' : 'error');
+            log('Preview setup: Toolbar button found: ' + !!toolbarToggleBtn, toolbarToggleBtn ? 'success' : 'error');
+            log('Preview setup: Preview area found: ' + !!previewArea, previewArea ? 'success' : 'error');
+            log('Preview setup: Content editor found: ' + !!postContent, postContent ? 'success' : 'error');
+            
+            // Function to toggle preview state
+            function togglePreview() {
+                log('Toggle preview clicked. Current state: ' + (previewVisible ? 'visible' : 'hidden'), 'info');
+                previewVisible = !previewVisible;
+                
+                if (previewVisible) {
+                    // Update preview content
+                    updatePreview();
+                    log('Updating preview content', 'info');
+                    
+                    // Show preview area with a smooth transition
+                    previewArea.classList.remove('hidden');
+                    previewArea.classList.add('fade-in');
+                    log('Preview area shown', 'success');
+                    
+                    // Change button text for both buttons
+                    const newIcon = '<i class="fas fa-edit mr-2"></i> Edit';
+                    if (headerToggleBtn) {
+                        headerToggleBtn.innerHTML = newIcon;
+                        headerToggleBtn.classList.remove('from-blue-500', 'to-indigo-600', 'hover:from-blue-600', 'hover:to-indigo-700');
+                        headerToggleBtn.classList.add('from-green-500', 'to-teal-600', 'hover:from-green-600', 'hover:to-teal-700');
+                    }
+                    if (toolbarToggleBtn) {
+                        toolbarToggleBtn.innerHTML = newIcon;
+                        toolbarToggleBtn.classList.remove('from-blue-500', 'to-indigo-600', 'hover:from-blue-600', 'hover:to-indigo-700');
+                        toolbarToggleBtn.classList.add('from-green-500', 'to-teal-600', 'hover:from-green-600', 'hover:to-teal-700');
+                    }
+                } else {
+                    // Hide preview area with a smooth transition
+                    previewArea.classList.add('fade-out');
+                    setTimeout(() => {
+                        previewArea.classList.add('hidden');
+                        previewArea.classList.remove('fade-out');
+                    }, 300);
+                    log('Preview area hidden', 'info');
+                    
+                    // Change button text back for both buttons
+                    const newIcon = '<i class="fas fa-eye mr-2"></i> Preview';
+                    if (headerToggleBtn) {
+                        headerToggleBtn.innerHTML = newIcon;
+                        headerToggleBtn.classList.remove('from-green-500', 'to-teal-600', 'hover:from-green-600', 'hover:to-teal-700');
+                        headerToggleBtn.classList.add('from-blue-500', 'to-indigo-600', 'hover:from-blue-600', 'hover:to-indigo-700');
+                    }
+                    if (toolbarToggleBtn) {
+                        toolbarToggleBtn.innerHTML = newIcon;
+                        toolbarToggleBtn.classList.remove('from-green-500', 'to-teal-600', 'hover:from-green-600', 'hover:to-teal-700');
+                        toolbarToggleBtn.classList.add('from-blue-500', 'to-indigo-600', 'hover:from-blue-600', 'hover:to-indigo-700');
+                    }
+                }
+            }
+            
+            // Add click event to both buttons
+            if (headerToggleBtn) {
+                headerToggleBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    log('Header preview button clicked', 'info');
+                    togglePreview();
+                });
+                log('Added click event to header preview button', 'success');
+            }
+            
+            if (toolbarToggleBtn) {
+                toolbarToggleBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    log('Toolbar preview button clicked', 'info');
+                    togglePreview();
+                });
+                log('Added click event to toolbar preview button', 'success');
+            }
+            
+            // Update preview when content changes (with debounce)
+            let debounceTimeout;
+            if (postContent) {
+                postContent.addEventListener('input', () => {
+                    if (previewVisible) {
+                        log('Content changed, updating preview (debounced)', 'info');
+                        clearTimeout(debounceTimeout);
+                        debounceTimeout = setTimeout(updatePreview, 500);
+                    }
+                });
+            } else {
+                log('Post content element not found, cannot add input listener', 'error');
+            }
+            
+            if (postTitle) {
+                postTitle.addEventListener('input', () => {
+                    if (previewVisible) {
+                        log('Title changed, updating preview', 'info');
+                        previewTitle.textContent = postTitle.value || 'Untitled Post';
+                    }
+                });
+            } else {
+                log('Post title element not found, cannot add input listener', 'error');
+            }
+            
+            // Function to update preview content
+            function updatePreview() {
+                try {
+                    // Get content and parse markdown
+                    const content = postContent.value || '*No content yet*';
+                    log('Updating preview with content length: ' + content.length, 'info');
+                    
+                    // Configure marked options
+                    marked.setOptions({
+                        highlight: function(code, lang) {
+                            if (lang && hljs.getLanguage(lang)) {
+                                try {
+                                    return hljs.highlight(code, { language: lang }).value;
+                                } catch (error) {
+                                    log('Error highlighting code: ' + error.message, 'warning');
+                                    return code;
+                                }
+                            } else {
+                                try {
+                                    return hljs.highlightAuto(code).value;
+                                } catch (error) {
+                                    log('Error auto-highlighting code: ' + error.message, 'warning');
+                                    return code;
+                                }
+                            }
+                        },
+                        breaks: true,
+                        gfm: true
+                    });
+                    
+                    // Parse markdown and sanitize HTML
+                    const html = DOMPurify.sanitize(marked.parse(content));
+                    
+                    // Update preview content
+                    previewContent.innerHTML = html;
+                    previewTitle.textContent = postTitle.value || 'Untitled Post';
+                    
+                    // Apply syntax highlighting to code blocks
+                    document.querySelectorAll('pre code').forEach((block) => {
+                        try {
+                            hljs.highlightElement(block);
+                        } catch (error) {
+                            log('Error highlighting code block: ' + error.message, 'warning');
+                            console.error('Highlight error:', error);
+                        }
+                    });
+                    
+                    log('Preview updated successfully', 'success');
+                } catch (error) {
+                    log('Error updating preview: ' + error.message, 'error');
+                    console.error('Preview update error:', error);
+                }
+            }
+        }
+        
+        // Function to load categories
+        async function loadCategories() {
+            try {
+                log('Loading categories...', 'info');
+                
+                const response = await fetch('/api/categories');
+                if (!response.ok) {
+                    throw new Error(`Failed to load categories (status: ${response.status})`);
+                }
+                
+                const data = await response.json();
+                
+                if (!data.categories || !Array.isArray(data.categories)) {
+                    throw new Error('Invalid categories data format');
+                }
+                
+                const categorySelect = document.getElementById('post-category');
+                
+                // Keep the first "Select a category" option
+                categorySelect.innerHTML = '<option value="">Select a category</option>';
+                
+                // Add categories to dropdown
+                data.categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.slug;
+                    option.textContent = category.name;
+                    categorySelect.appendChild(option);
+                });
+                
+                log(`Loaded ${data.categories.length} categories`, 'success');
+            } catch (error) {
+                log(`Error loading categories: ${error.message}`, 'error');
+                notify(`Error loading categories: ${error.message}`, 'error');
+            }
+        }
+        
+        // Function to load authors
+        async function loadAuthors() {
+            try {
+                log('Loading authors...', 'info');
+                
+                const response = await fetch('/api/authors');
+                if (!response.ok) {
+                    throw new Error(`Failed to load authors (status: ${response.status})`);
+                }
+                
+                const data = await response.json();
+                
+                if (!data.authors || !Array.isArray(data.authors)) {
+                    throw new Error('Invalid authors data format');
+                }
+                
+                const authorSelect = document.getElementById('post-author');
+                
+                // Keep the first "Select an author" option
+                authorSelect.innerHTML = '<option value="">Select an author</option>';
+                
+                // Add authors to dropdown
+                data.authors.forEach(author => {
+                    const option = document.createElement('option');
+                    option.value = author.slug;
+                    option.textContent = author.name;
+                    authorSelect.appendChild(option);
+                });
+                
+                log(`Loaded ${data.authors.length} authors`, 'success');
+            } catch (error) {
+                log(`Error loading authors: ${error.message}`, 'error');
+                notify(`Error loading authors: ${error.message}`, 'error');
+            }
+        }
+        
+        function notify(message, type = 'info') {
+            // Create a beautiful notification with gradient background
+            const notification = document.createElement('div');
+            
+            // Set appropriate styling based on notification type
+            let gradientClass = '';
+            let icon = '';
+            
+            switch (type) {
+                case 'success':
+                    gradientClass = 'bg-gradient-to-r from-green-500 to-emerald-600';
+                    icon = '<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
+                    break;
+                case 'error':
+                    gradientClass = 'bg-gradient-to-r from-red-500 to-red-600';
+                    icon = '<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+                    break;
+                case 'warning':
+                    gradientClass = 'bg-gradient-to-r from-yellow-500 to-amber-600';
+                    icon = '<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>';
+                    break;
+                default:
+                    gradientClass = 'bg-gradient-to-r from-blue-500 to-indigo-600';
+                    icon = '<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+            }
+            
+            notification.className = `fixed top-4 right-4 ${gradientClass} text-white p-4 rounded-lg shadow-lg z-50 flex items-center`;
+            notification.innerHTML = `${icon} ${message}`;
+            
+            document.body.appendChild(notification);
+            
+            // Add subtle entrance animation
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateY(-20px)';
+            notification.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateY(0)';
+            }, 10);
+            
+            // Remove after delay with exit animation
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateY(-20px)';
+                
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

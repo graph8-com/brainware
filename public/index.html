@@ -8,6 +8,32 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
     <link rel="icon" href="images/brainware-icon.svg?v=1">
+    <style>
+        /* Line clamp utility for truncating text */
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        /* Aspect ratio utility for blog post images */
+        .aspect-w-16 {
+            position: relative;
+            padding-bottom: calc(9 / 16 * 100%);
+        }
+        
+        .aspect-w-16 > img {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            object-fit: cover;
+        }
+    </style>
 </head>
 <body class="bg-dark-bg">
     <div class="min-h-screen flex flex-col">
@@ -33,7 +59,7 @@
             <div id="nav-menu" class="fixed top-0 right-0 h-screen bg-gradient-to-br from-dark-accent via-dark-bg to-dark-bg border-l border-gray-800 z-10 hidden translate-x-full transform transition-transform duration-300">
                 <nav class="h-full flex items-start pt-32">
                     <ul class="space-y-2 w-full">
-                        <li><a href="/" class="nav-item" data-page="home">Home</a></li>
+                        <li><a href="/" class="nav-item active" data-page="home">Home</a></li>
                         <li><a href="founders.html" class="nav-item" data-page="founders">Founders</a></li>
                         <li><a href="builders.html" class="nav-item" data-page="builders">Builders</a></li>
                         <li><a href="pe-partners.html" class="nav-item" data-page="pe">Private Equity</a></li>
@@ -319,15 +345,21 @@
                 <div class="mb-4 text-lg">—— F</div>
                 <div class="flex justify-between items-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold">Latest Opinions</h2>
-                    <a href="opinions.html" class="text-teal-400 hover:text-teal-300 flex items-center">
+                    <a href="/blog/index.html" class="text-teal-400 hover:text-teal-300 flex items-center transition-colors">
                         View All
                         <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                         </svg>
                     </a>
                 </div>
-                <div id="latest-posts" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Latest posts will be injected here -->
+                <div id="latest-posts" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Loading placeholder -->
+                    <div class="col-span-full flex justify-center py-12">
+                        <svg class="animate-spin h-8 w-8 text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </div>
                 </div>
             </div>
         </div>
@@ -393,7 +425,7 @@
         <div class="bg-gradient-to-br from-gray-900 to-teal-800 rounded-lg shadow-xl max-w-md w-full mx-4 my-8 relative max-h-[90vh] overflow-y-auto">
             <div class="p-6">
                 <button class="modal-close absolute top-4 right-4 text-gray-300 hover:text-white focus:outline-none">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
@@ -441,7 +473,7 @@
     </div>
 
     <!-- JavaScript -->
-    <script src="js/menu.js" defer></script>
+    <script src="js/menu.js"></script>
     <script async src="https://events.flow.graph8.com/p.js" data-write-key="X7tbGBo0MEBYTMJzi6Bu7kdH0VNFuS2q:BOismoy8s94Ey0yUcKgz8PTACMFJ3WN1"></script>
     <script>
       window.jitsu = window.jitsu || [];
@@ -456,41 +488,10 @@
     <script type="module">
         (async () => {
             try {
-                // Set active menu item based on current page
-                const currentPath = window.location.pathname;
-                const lastSegment = currentPath.split('/').pop() || 'index.html';
-                const pageMap = {
-                    'index.html': 'home',
-                    'founders.html': 'founders',
-                    'builders.html': 'builders',
-                    'pe-partners.html': 'pe',
-                    'companies.html': 'companies',
-                    'about.html': 'about',
-                    'our-story.html': 'our-story',
-                    'opinions.html': 'opinions',
-                };
-                
-                const activePage = pageMap[lastSegment] || 'home';
-                const activeItem = document.querySelector(`.nav-item[data-page="${activePage}"]`);
-                if (activeItem) {
-                    activeItem.classList.add('active');
-                }
-                
-                // Mobile menu toggle
-                const menuToggle = document.getElementById('menu-toggle');
-                const navMenu = document.getElementById('nav-menu');
-                const mainContent = document.getElementById('main-content');
-                const header = document.querySelector('header');
-                
-                menuToggle.addEventListener('click', () => {
-                    navMenu.classList.toggle('hidden');
-                    navMenu.classList.toggle('translate-x-full');
-                    mainContent.classList.toggle('pushed');
-                    header.classList.toggle('pushed');
-                });
-                
                 // Create a colored background div with animated effect for the hero section
                 const lottieContainer = document.getElementById('lottie-container');
+                const fallbackImage = document.getElementById('fallback-image');
+                
                 if (lottieContainer) {
                     // Create a canvas element for particle animation
                     const canvas = document.createElement('canvas');
@@ -712,7 +713,7 @@
 
                 if (posts && posts.length > 0) {
                     document.getElementById('latest-posts').innerHTML = posts.map(post => `
-                        <a href="post.html?slug=${post.slug}" class="block group">
+                        <a href="/blog/posts/${post.slug}.html" class="block group">
                             <article class="bg-dark-bg p-6 rounded-lg border border-gray-800 hover:border-teal-400 transition-all h-full">
                                 <div class="flex items-center mb-4">
                                     <img src="${post.users.avatar_url || 'https://via.placeholder.com/32'}" 
@@ -742,6 +743,103 @@
         path: window.location.pathname,
         timestamp: new Date().toISOString()
       }]);
+    </script>
+    <script type="module">
+        (async () => {
+            try {
+                // Load latest blog posts
+                try {
+                    const latestPostsContainer = document.getElementById('latest-posts');
+                    if (latestPostsContainer) {
+                        const response = await fetch('/blog/posts.json');
+                        if (!response.ok) {
+                            throw new Error(`Failed to fetch posts: ${response.status}`);
+                        }
+                        
+                        const data = await response.json();
+                        const posts = data.posts || [];
+                        
+                        // Sort posts by date (newest first) and take the first 3
+                        const latestPosts = posts
+                            .sort((a, b) => new Date(b.date) - new Date(a.date))
+                            .slice(0, 3);
+                        
+                        if (latestPosts.length > 0) {
+                            // Clear loading placeholder
+                            latestPostsContainer.innerHTML = '';
+                            
+                            // Create post cards
+                            latestPosts.forEach(post => {
+                                // Format date
+                                const postDate = new Date(post.date);
+                                const formattedDate = postDate.toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'short',
+                                    day: 'numeric'
+                                });
+                                
+                                // Create post card with soft gradient hover effect
+                                const postCard = document.createElement('div');
+                                postCard.className = 'bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl hover:translate-y-[-4px] group';
+                                
+                                postCard.innerHTML = `
+                                    <a href="/blog/posts/${post.slug}.html" class="block">
+                                        <div class="aspect-w-16 aspect-h-9 relative overflow-hidden">
+                                            <img 
+                                                src="${post.coverImage || '/images/default-cover.jpg'}" 
+                                                alt="${post.title}" 
+                                                class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+                                                onerror="this.src='/images/default-cover.jpg';"
+                                            >
+                                            <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-70"></div>
+                                        </div>
+                                        <div class="p-5">
+                                            <div class="flex items-center mb-3">
+                                                <span class="text-xs text-teal-400 uppercase tracking-wider">${post.category || 'Opinion'}</span>
+                                                <span class="mx-2 text-gray-600">•</span>
+                                                <span class="text-xs text-gray-400">${formattedDate}</span>
+                                            </div>
+                                            <h3 class="text-lg font-bold mb-2 group-hover:text-teal-400 transition-colors">${post.title}</h3>
+                                            <p class="text-gray-400 text-sm line-clamp-2">${post.excerpt || ''}</p>
+                                            <div class="mt-4 flex items-center text-teal-400 text-sm font-medium">
+                                                Read Article
+                                                <svg class="w-4 h-4 ml-1 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </a>
+                                `;
+                                
+                                latestPostsContainer.appendChild(postCard);
+                            });
+                        } else {
+                            latestPostsContainer.innerHTML = `
+                                <div class="col-span-full text-center py-12">
+                                    <p class="text-gray-400">No posts available yet. Check back soon!</p>
+                                </div>
+                            `;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error loading blog posts:', error);
+                    const latestPostsContainer = document.getElementById('latest-posts');
+                    if (latestPostsContainer) {
+                        latestPostsContainer.innerHTML = `
+                            <div class="col-span-full text-center py-12">
+                                <p class="text-gray-400">Failed to load posts. Please try again later.</p>
+                            </div>
+                        `;
+                    }
+                }
+                
+                // Lottie animation setup
+                const lottieContainer = document.getElementById('lottie-container');
+                const fallbackImage = document.getElementById('fallback-image');
+            } catch (error) {
+                console.error('Error in script:', error);
+            }
+        })();
     </script>
 </body>
 </html>

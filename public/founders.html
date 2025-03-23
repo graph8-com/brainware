@@ -61,6 +61,14 @@
                         At <strong>Brainware</strong>, we don't just launch startups—we <strong>build high-growth, profitable companies that need the right leaders to take them to the next level.</strong>
                     </p>
                 </div>
+                <div class="mt-8">
+                    <a href="#" class="apply-now-btn inline-flex items-center px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors">
+                        Apply Now
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -310,11 +318,7 @@
                     </svg>
                 </button>
                 
-                <h2 class="text-2xl font-bold text-white mb-6">Apply Now</h2>
-                
-                <p class="mb-6 text-gray-300">Please fill out this form to apply and tell us why you're the right founder for Brainware.</p>
-                
-                <p class="mb-6 text-sm text-gray-400"><a href="view-applications.html" class="text-teal-400 hover:underline" target="_blank">View Submitted Applications</a></p>
+                <p class="mb-6 text-gray-300">Apply to become a Founder at Brainware.</p>
                 
                 <form id="application-form" class="space-y-4">
                     <div>
@@ -330,16 +334,13 @@
                     </div>
                     
                     <div>
-                        <label for="country" class="block text-sm font-medium text-gray-200 mb-1">Country *</label>
-                        <input type="text" id="country" name="country" required
-                            class="w-full px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400">
-                    </div>
-                    
-                    <div>
                         <label for="note" class="block text-sm font-medium text-gray-200 mb-1">Why are you the right founder? *</label>
                         <textarea id="note" name="note" rows="4" required
                             class="w-full px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400 resize-none"></textarea>
                     </div>
+                    
+                    <!-- Hidden Role Field -->
+                    <input type="hidden" id="role" name="role" value="Founder">
                     
                     <div id="form-message" class="hidden py-2 font-medium text-white"></div>
                     
@@ -369,7 +370,7 @@
                         </a>
                         <a href="https://x.com/graph8tc" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-teal-400" aria-label="X (Twitter)">
                             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                             </svg>
                         </a>
                     </div>
@@ -450,10 +451,10 @@
 
             const nameField = document.getElementById("name");
             const emailField = document.getElementById("email");
-            const countryField = document.getElementById("country");
             const noteField = document.getElementById("note");
+            const roleField = document.getElementById("role");
 
-            if (!nameField.value || !emailField.value || !countryField.value || !noteField.value) {
+            if (!nameField.value || !emailField.value || !noteField.value) {
               console.warn("⚠️ Required form fields are missing or empty.");
               return;
             }
@@ -461,7 +462,7 @@
             const traits = {
               email: emailField.value.trim(),
               name: nameField.value.trim(),
-              country: countryField.value.trim(),
+              role: roleField.value.trim(),
               application_source: "founders_page"
             };
 

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Opinions | Brainware{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="pt-32 pb-16 relative">
+    <div class="container mx-auto px-6">
+        <div class="max-w-3xl mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">Brainware Opinions</h1>
+            <p class="text-xl text-gray-300 mb-8">Thoughts and insights on building in the 4th Industrial Revolution</p>
+        </div>
+    </div>
+</section>
+
+<!-- Categories -->
+<section class="py-6">
+    <div class="container mx-auto px-6">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-4">
+            <button data-category="all" class="category-filter active text-teal-400 px-4 py-2 rounded-full border border-gray-700 hover:border-teal-400 transition-colors">
+                All
+            </button>
+            {% for category in categories %}
+            <button data-category="{{ category }}" class="category-filter px-4 py-2 rounded-full border border-gray-700 hover:border-teal-400 transition-colors">
+                {{ category }}
+            </button>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Featured Post -->
+<section class="py-12">
+    <div class="container mx-auto px-6">
+        <div class="max-w-7xl mx-auto">
+            {{ featured_post | safe }}
+        </div>
+    </div>
+</section>
+
+<!-- Recent Posts -->
+<section class="py-12 bg-dark-accent">
+    <div class="container mx-auto px-6">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-2xl font-bold mb-8">Latest Opinions</h2>
+            <div id="posts-grid" class="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 transition-opacity duration-300">
+                {{ post_previews | safe }}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter -->
+<section class="py-16">
+    <div class="container mx-auto px-6">
+        <div class="max-w-3xl mx-auto bg-gradient-to-br from-gray-900 to-teal-900/10 rounded-2xl p-8 text-center">
+            <h2 class="text-2xl font-bold mb-4">Subscribe to our newsletter</h2>
+            <p class="text-gray-300 mb-6">Get the latest insights and opinions delivered straight to your inbox.</p>
+            <form id="blog-newsletter-form" class="max-w-md mx-auto">
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <input type="email" id="blog-newsletter-email" class="flex-grow px-4 py-3 bg-white bg-opacity-10 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white placeholder-gray-500" placeholder="Your email address">
+                    <button type="submit" class="px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-400 text-white rounded-lg hover:from-teal-400 hover:to-teal-300 transition-all duration-300">Subscribe</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/blog-filter.js"></script>
+{% endblock %}

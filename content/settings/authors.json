@@ -1,0 +1,12 @@
+{
+  "authors": [
+    {
+      "id": "brainware-team",
+      "name": "Brainware Team",
+      "bio": "The team behind Brainware, focused on revolutionizing venture capital through technology.",
+      "avatar": "/images/authors/brainware-team.jpg",
+      "twitter": "brainwareio",
+      "linkedin": "brainwareio"
+    }
+  ]
+}

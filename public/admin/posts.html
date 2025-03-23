@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Posts | Brainware Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+    <link rel="icon" href="/images/brainware-icon.svg?v=1">
+    <style>
+        .post-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .post-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-white">
+    <header class="fixed w-full z-50 bg-dark-bg">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="/admin" class="flex items-center">
+                    <img src="/images/brainware-logo.svg" alt="Brainware" class="h-8">
+                    <span class="ml-2 text-sm px-2 py-1 bg-teal-500/20 text-teal-400 rounded">Admin</span>
+                </a>
+                <nav class="flex items-center space-x-6">
+                    <a href="/admin" class="text-white hover:text-teal-400 transition-colors">Dashboard</a>
+                    <a href="/admin/posts.html" class="text-teal-400 transition-colors">All Posts</a>
+                    <a href="/blog/index.html" target="_blank" class="text-white hover:text-teal-400 transition-colors flex items-center">
+                        <span>View Blog</span>
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-24 pb-16">
+        <div class="container mx-auto px-6">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-2xl font-bold">Manage Posts</h1>
+                <div>
+                    <a href="/admin/edit-post.html" class="px-4 py-2 bg-gradient-to-r from-teal-500 to-teal-400 text-white rounded-lg hover:from-teal-400 hover:to-teal-300 transition-all duration-300 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        New Post
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Filter Controls -->
+            <div class="mb-8 bg-gradient-to-r from-gray-900 to-gray-800 p-4 rounded-lg">
+                <div class="flex flex-wrap items-center gap-4">
+                    <div class="flex-1">
+                        <input type="text" id="search-input" placeholder="Search posts..." class="w-full px-4 py-2 bg-white bg-opacity-10 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white">
+                    </div>
+                    <div>
+                        <select id="category-filter" class="px-4 py-2 bg-white bg-opacity-10 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white">
+                            <option value="">All Categories</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Business">Business</option>
+                            <option value="Startups">Startups</option>
+                            <option value="AI">AI</option>
+                            <option value="Market Insights">Market Insights</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button id="refresh-button" class="px-4 py-2 border border-gray-700 rounded-lg text-white hover:bg-gray-800 transition-all">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Posts Grid -->
+            <div id="posts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Posts will be loaded dynamically here -->
+                <div class="col-span-full text-center py-12 text-gray-400">
+                    <svg class="animate-spin h-8 w-8 mx-auto mb-4 text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <p>Loading posts...</p>
+                </div>
+            </div>
+            
+            <!-- No Results Message -->
+            <div id="no-results" class="hidden text-center py-12 text-gray-400">
+                <svg class="w-12 h-12 mx-auto mb-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <p>No posts found matching your criteria.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="py-8 bg-dark-accent">
+        <div class="container mx-auto px-6">
+            <div class="text-center text-gray-500">
+                <p>© 2025 Brainware Admin Panel</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Delete Confirmation Modal (hidden by default) -->
+    <div id="delete-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div class="relative bg-dark-accent p-6 rounded-lg shadow-xl max-w-md w-full">
+            <h3 class="text-xl font-bold mb-4">Confirm Deletion</h3>
+            <p class="text-gray-300 mb-6">Are you sure you want to delete this post? This action cannot be undone.</p>
+            
+            <div class="flex justify-end space-x-4">
+                <button id="cancel-delete" class="px-4 py-2 border border-gray-700 rounded-lg text-white hover:bg-gray-800 transition-all">Cancel</button>
+                <button id="confirm-delete" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all">Delete Post</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Element -->
+    <div id="notification" class="fixed right-4 bottom-4 p-4 rounded-lg shadow-lg transform translate-y-full opacity-0 transition-all duration-300 z-50"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM Elements
+            const postsGrid = document.getElementById('posts-grid');
+            const noResults = document.getElementById('no-results');
+            const searchInput = document.getElementById('search-input');
+            const categoryFilter = document.getElementById('category-filter');
+            const refreshButton = document.getElementById('refresh-button');
+            const deleteModal = document.getElementById('delete-modal');
+            const cancelDelete = document.getElementById('cancel-delete');
+            const confirmDelete = document.getElementById('confirm-delete');
+            
+            // Current posts data
+            let allPosts = [];
+            let currentPostToDelete = null;
+            
+            // Load posts
+            function loadPosts() {
+                fetch('/blog/posts.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        allPosts = data.posts || [];
+                        displayPosts(allPosts);
+                    })
+                    .catch(error => {
+                        console.error('Error loading posts:', error);
+                        postsGrid.innerHTML = `
+                            <div class="col-span-full text-center py-12 text-red-400">
+                                <svg class="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                <p>Error loading posts. Please try again.</p>
+                            </div>
+                        `;
+                    });
+            }
+            
+            // Display posts
+            function displayPosts(posts) {
+                if (posts.length === 0) {
+                    postsGrid.innerHTML = '';
+                    noResults.classList.remove('hidden');
+                    return;
+                }
+                
+                noResults.classList.add('hidden');
+                
+                // Sort posts by date (newest first)
+                posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                // Generate HTML for each post
+                let html = '';
+                posts.forEach(post => {
+                    const date = new Date(post.date).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    
+                    html += `
+                        <div class="post-card bg-gradient-to-br from-gray-900 to-teal-900/10 rounded-lg overflow-hidden">
+                            <div class="aspect-[16/9] overflow-hidden">
+                                <img src="${post.coverImage || '/images/default-cover.jpg'}" alt="${post.title}" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-3">
+                                    <span class="text-sm text-teal-400">${post.category || 'Uncategorized'}</span>
+                                    <div class="flex space-x-2">
+                                        <a href="/admin/edit-post.html?slug=${post.slug}" class="text-gray-400 hover:text-white transition-colors">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                                            </svg>
+                                        </a>
+                                        <button class="text-gray-400 hover:text-red-400 transition-colors" data-slug="${post.slug}">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <h3 class="text-xl font-bold mb-3">${post.title}</h3>
+                                <p class="text-gray-300 mb-4 line-clamp-2">${post.excerpt || ''}</p>
+                                <div class="flex items-center text-gray-400">
+                                    <span>${date}</span>
+                                    <span class="mx-2">•</span>
+                                    <span>${post.author || 'Brainware Team'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                postsGrid.innerHTML = html;
+                
+                // Attach event listeners to delete buttons
+                document.querySelectorAll('[data-slug]').forEach(button => {
+                    button.addEventListener('click', () => {
+                        currentPostToDelete = button.dataset.slug;
+                        deleteModal.classList.remove('hidden');
+                    });
+                });
+            }
+            
+            // Filter posts
+            function filterPosts() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const categoryValue = categoryFilter.value;
+                
+                const filtered = allPosts.filter(post => {
+                    // Filter by search term
+                    const matchesSearch = 
+                        post.title.toLowerCase().includes(searchTerm) || 
+                        (post.excerpt && post.excerpt.toLowerCase().includes(searchTerm));
+                    
+                    // Filter by category
+                    const matchesCategory = !categoryValue || post.category === categoryValue;
+                    
+                    return matchesSearch && matchesCategory;
+                });
+                
+                displayPosts(filtered);
+            }
+            
+            // Initialize
+            loadPosts();
+            
+            // Event listeners
+            searchInput.addEventListener('input', filterPosts);
+            categoryFilter.addEventListener('change', filterPosts);
+            refreshButton.addEventListener('click', loadPosts);
+            
+            // Delete post modal
+            cancelDelete.addEventListener('click', () => {
+                deleteModal.classList.add('hidden');
+                currentPostToDelete = null;
+            });
+            
+            confirmDelete.addEventListener('click', async () => {
+                if (!currentPostToDelete) return;
+                
+                try {
+                    const response = await fetch(`/api/delete-post?slug=${currentPostToDelete}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Failed to delete post');
+                    }
+                    
+                    // Trigger rebuild
+                    await fetch('/api/build', { method: 'POST' });
+                    
+                    showNotification('Post deleted successfully!', 'success');
+                    deleteModal.classList.add('hidden');
+                    
+                    // Remove from local array and update display
+                    allPosts = allPosts.filter(post => post.slug !== currentPostToDelete);
+                    displayPosts(allPosts);
+                } catch (error) {
+                    console.error('Error deleting post:', error);
+                    showNotification('Error deleting post. Please try again.', 'error');
+                }
+                
+                currentPostToDelete = null;
+            });
+            
+            // Event delegation for post cards
+            postsGrid.addEventListener('click', (event) => {
+                const postCard = event.target.closest('.post-card');
+                if (!postCard) return;
+                
+                // Find if the click was on the card but not on the buttons
+                const isActionButton = event.target.closest('a, button');
+                if (!isActionButton) {
+                    // Find the edit link and navigate to it
+                    const editLink = postCard.querySelector('a');
+                    if (editLink) {
+                        window.location.href = editLink.href;
+                    }
+                }
+            });
+        });
+        
+        // Notification system
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            
+            // Set styling based on type
+            if (type === 'success') {
+                notification.className = 'fixed right-4 bottom-4 p-4 rounded-lg shadow-lg transform opacity-0 transition-all duration-300 z-50 bg-teal-500 text-white';
+            } else {
+                notification.className = 'fixed right-4 bottom-4 p-4 rounded-lg shadow-lg transform opacity-0 transition-all duration-300 z-50 bg-red-500 text-white';
+            }
+            
+            notification.textContent = message;
+            
+            // Show notification
+            setTimeout(() => {
+                notification.classList.remove('translate-y-full', 'opacity-0');
+            }, 10);
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                notification.classList.add('translate-y-full', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

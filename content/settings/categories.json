@@ -1,0 +1,24 @@
+{
+  "categories": [
+    {
+      "id": "ai",
+      "name": "AI",
+      "description": "Developments in artificial intelligence and machine learning."
+    },
+    {
+      "id": "founders",
+      "name": "Founders",
+      "description": ""
+    },
+    {
+      "id": "builders",
+      "name": "Builders",
+      "description": ""
+    },
+    {
+      "id": "private-equity",
+      "name": "Private Equity",
+      "description": ""
+    }
+  ]
+}
