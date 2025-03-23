@@ -48,25 +48,27 @@
                 </a>
                 
                 <!-- Mobile menu button -->
-                <button id="menu-toggle" class="focus:outline-none z-20">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
+                <button id="menu-toggle" class="focus:outline-none z-20 flex flex-col justify-center items-center w-10 h-10 rounded-full hover:bg-gray-800/30 transition-colors">
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
                 </button>
             </div>
             
-            <!-- Mobile Navigation (hidden by default) -->
-            <div id="nav-menu" class="fixed top-0 right-0 h-screen bg-gradient-to-br from-dark-accent via-dark-bg to-dark-bg border-l border-gray-800 z-10 hidden translate-x-full transform transition-transform duration-300">
-                <nav class="h-full flex items-start pt-32">
-                    <ul class="space-y-2 w-full">
-                        <li><a href="/" class="nav-item active" data-page="home">Home</a></li>
-                        <li><a href="founders.html" class="nav-item" data-page="founders">Founders</a></li>
-                        <li><a href="builders.html" class="nav-item" data-page="builders">Builders</a></li>
-                        <li><a href="pe-partners.html" class="nav-item" data-page="pe">Private Equity</a></li>
-                        <li><a href="companies.html" class="nav-item" data-page="companies">Companies</a></li>
-                        <li><a href="about.html" class="nav-item" data-page="about">About</a></li>
-                    </ul>
-                </nav>
+            <!-- Full-screen overlay menu -->
+            <div id="nav-menu" class="fixed inset-0 bg-gradient-to-br from-dark-accent/95 to-dark-bg/95 backdrop-filter backdrop-blur-md z-10 hidden opacity-0 transition-opacity duration-300">
+                <div class="container mx-auto px-6 h-full flex flex-col">
+                    <nav class="flex-1 flex items-center justify-end">
+                        <ul class="space-y-6 text-right pr-4">
+                            <li><a href="/" class="nav-item text-2xl" data-page="home">Home</a></li>
+                            <li><a href="founders.html" class="nav-item text-2xl" data-page="founders">Founders</a></li>
+                            <li><a href="builders.html" class="nav-item text-2xl" data-page="builders">Builders</a></li>
+                            <li><a href="pe-partners.html" class="nav-item text-2xl" data-page="pe">Private Equity</a></li>
+                            <li><a href="companies.html" class="nav-item text-2xl" data-page="companies">Companies</a></li>
+                            <li><a href="about.html" class="nav-item text-2xl" data-page="about">About</a></li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </header>
 
@@ -93,7 +95,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="w-full md:w-1/2 relative">
+                <div class="w-full md:w-1/2 relative hidden md:block">
                     <div class="bg-[#0E0E0E] rounded-xl overflow-hidden" id="lottie-container" style="height: 500px;">
                         <!-- Fallback image (only shown if animation fails) -->
                         <img src="images/sphere-placeholder.svg" alt="Animated sphere" class="w-full h-full object-cover" style="display: none;" id="fallback-image">
@@ -200,8 +202,8 @@
                             <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M7 20H2v-2a3 3 0 015.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                             </svg>
-                            <h3 class="text-xl font-bold">10% to 15% Equity</h3>
                         </div>
+                        <h3 class="text-xl font-bold">10% to 15% Equity</h3>
                         <p class="text-gray-400">Significant equity ownership in each venture you build.</p>
                     </div>
 
@@ -211,7 +213,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold">$10K Monthly+</h3>
+                        <h3 class="text-xl font-bold">Competitive Salary</h3>
                         <p class="text-gray-400">Competitive base salary plus performance bonuses and profit share.</p>
                     </div>
 
@@ -326,7 +328,7 @@
                             </svg>
                         </div>
                         <h3 class="text-xl font-bold mb-4">Retained Leadership</h3>
-                        <p class="text-gray-400">Founders keep 45% equity and stay committed post-acquisition.</p>
+                        <p class="text-gray-400">Founders keep up to 45% equity and stay committed post-acquisition.</p>
                     </div>
                 </div>
                 <div class="mt-12">
@@ -348,7 +350,7 @@
                     <a href="/blog/index.html" class="text-teal-400 hover:text-teal-300 flex items-center transition-colors">
                         View All
                         <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                         </svg>
                     </a>
                 </div>
@@ -804,7 +806,7 @@
                                             <div class="mt-4 flex items-center text-teal-400 text-sm font-medium">
                                                 Read Article
                                                 <svg class="w-4 h-4 ml-1 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                                                 </svg>
                                             </div>
                                         </div>

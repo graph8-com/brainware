@@ -66,25 +66,27 @@
             </a>
             
             <!-- Mobile menu button -->
-            <button id="menu-toggle" class="focus:outline-none z-20">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
+            <button id="menu-toggle" class="focus:outline-none z-20 flex flex-col justify-center items-center w-10 h-10 rounded-full hover:bg-gray-800/30 transition-colors">
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
             </button>
         </div>
         
-        <!-- Full Screen Navigation Menu -->
-        <div id="nav-menu" class="fixed top-0 right-0 h-screen bg-gradient-to-br from-dark-accent via-dark-bg to-dark-bg border-l border-gray-800 z-10 hidden translate-x-full transform transition-transform duration-300">
-            <nav class="h-full flex items-start pt-32">
-                <ul class="space-y-2 w-full">
-                    <li><a href="/" class="nav-item" data-page="home">Home</a></li>
-                    <li><a href="founders.html" class="nav-item" data-page="founders">Founders</a></li>
-                    <li><a href="builders.html" class="nav-item" data-page="builders">Builders</a></li>
-                    <li><a href="pe-partners.html" class="nav-item" data-page="pe">Private Equity</a></li>
-                    <li><a href="companies.html" class="nav-item active" data-page="companies">Companies</a></li>
-                    <li><a href="about.html" class="nav-item" data-page="about">About</a></li>
-                </ul>
-            </nav>
+        <!-- Full-screen overlay menu -->
+        <div id="nav-menu" class="fixed inset-0 bg-gradient-to-br from-dark-accent/95 to-dark-bg/95 backdrop-filter backdrop-blur-md z-10 hidden opacity-0 transition-opacity duration-300">
+            <div class="container mx-auto px-6 h-full flex flex-col">
+                <nav class="flex-1 flex items-center justify-end">
+                    <ul class="space-y-6 text-right pr-4">
+                        <li><a href="/" class="nav-item text-2xl" data-page="home">Home</a></li>
+                        <li><a href="founders.html" class="nav-item text-2xl" data-page="founders">Founders</a></li>
+                        <li><a href="builders.html" class="nav-item text-2xl" data-page="builders">Builders</a></li>
+                        <li><a href="pe-partners.html" class="nav-item text-2xl" data-page="pe">Private Equity</a></li>
+                        <li><a href="companies.html" class="nav-item text-2xl active" data-page="companies">Companies</a></li>
+                        <li><a href="about.html" class="nav-item text-2xl" data-page="about">About</a></li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </header>
 

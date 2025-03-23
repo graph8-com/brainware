@@ -22,25 +22,27 @@
             </a>
             
             <!-- Mobile menu button -->
-            <button id="menu-toggle" class="focus:outline-none z-20">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
+            <button id="menu-toggle" class="focus:outline-none z-20 flex flex-col justify-center items-center w-10 h-10 rounded-full hover:bg-gray-800/30 transition-colors">
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
             </button>
         </div>
         
-        <!-- Mobile Navigation (hidden by default) -->
-        <div id="nav-menu" class="fixed top-0 right-0 h-screen bg-gradient-to-br from-dark-accent via-dark-bg to-dark-bg border-l border-gray-800 z-10 hidden translate-x-full transform transition-transform duration-300">
-            <nav class="h-full flex items-start pt-32">
-                <ul class="space-y-2 w-full">
-                    <li><a href="/" class="nav-item" data-page="home">Home</a></li>
-                    <li><a href="founders.html" class="nav-item active" data-page="founders">Founders</a></li>
-                    <li><a href="builders.html" class="nav-item" data-page="builders">Builders</a></li>
-                    <li><a href="pe-partners.html" class="nav-item" data-page="pe">Private Equity</a></li>
-                    <li><a href="companies.html" class="nav-item" data-page="companies">Companies</a></li>
-                    <li><a href="about.html" class="nav-item" data-page="about">About</a></li>
-                </ul>
-            </nav>
+        <!-- Full-screen overlay menu -->
+        <div id="nav-menu" class="fixed inset-0 bg-gradient-to-br from-dark-accent/95 to-dark-bg/95 backdrop-filter backdrop-blur-md z-10 hidden opacity-0 transition-opacity duration-300">
+            <div class="container mx-auto px-6 h-full flex flex-col">
+                <nav class="flex-1 flex items-center justify-end">
+                    <ul class="space-y-6 text-right pr-4">
+                        <li><a href="/" class="nav-item text-2xl" data-page="home">Home</a></li>
+                        <li><a href="founders.html" class="nav-item text-2xl" data-page="founders">Founders</a></li>
+                        <li><a href="builders.html" class="nav-item text-2xl" data-page="builders">Builders</a></li>
+                        <li><a href="pe-partners.html" class="nav-item text-2xl" data-page="pe">Private Equity</a></li>
+                        <li><a href="companies.html" class="nav-item text-2xl" data-page="companies">Companies</a></li>
+                        <li><a href="about.html" class="nav-item text-2xl" data-page="about">About</a></li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </header>
 
@@ -91,7 +93,7 @@
                             <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 016 0zm6-3a9 9 0 00-9 9v-18"/>
                             </svg>
-                            <h3 class="text-xl font-bold">Leadership Through Action</h3>
+                            <h3 class="text-xl font-bold">Leadership Through Agency</h3>
                         </div>
                         <p class="text-gray-400">Leadership is earned through action, not just strategy. We expect you to get your hands dirty and push growth with your own hands.</p>
                     </div>
@@ -101,9 +103,9 @@
                             <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                             </svg>
-                            <h3 class="text-xl font-bold">Build First, Scale Later</h3>
+                            <h3 class="text-xl font-bold">We Build, You Scale</h3>
                         </div>
-                        <p class="text-gray-400">When you've done the work yourself, you'll know exactly what needs to be done, how to do it, and when to scale by hiring the right team.</p>
+                        <p class="text-gray-400">When you've done the work yourself, you'll know exactly what needs to be done, how to do it, and how to scale.</p>
                     </div>
                 </div>
             </div>
@@ -129,13 +131,13 @@
                                 <svg class="w-5 h-5 text-teal-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                 </svg>
-                                $10,000/month base salary
+                                Competitive base salary
                             </li>
                             <li class="flex items-center">
                                 <svg class="w-5 h-5 text-teal-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                 </svg>
-                                Performance bonuses up to $10K/month
+                                Performance bonuses
                             </li>
                             <li class="flex items-center">
                                 <svg class="w-5 h-5 text-teal-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -147,7 +149,7 @@
                                 <svg class="w-5 h-5 text-teal-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                                 </svg>
-                                Profit-sharing once cash-flow positive
+                                Profit-sharing
                             </li>
                         </ul>
                     </div>
@@ -231,7 +233,7 @@
                     <div class="bg-dark-bg p-6 rounded-lg border border-gray-800">
                         <div class="flex items-center gap-4 mb-4">
                             <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m-2 0h5m-9 0h2m4-4h2m4 4v2m0 4h2m-6 4h-2m6-4h2m6 4h2m-6 4h-2m6-4h2"/>
                             </svg>
                             <h3 class="text-xl font-bold">Operations & Scaling</h3>
                         </div>
@@ -370,7 +372,7 @@
                         </a>
                         <a href="https://x.com/graph8tc" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-teal-400" aria-label="X (Twitter)">
                             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-.707-.707L10 10.828 7.707 9.121.707 6.364 0 8l6 6 5.364-5.364z"/>
                             </svg>
                         </a>
                     </div>
