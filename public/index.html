@@ -15,6 +15,7 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            line-clamp: 2; /* Standard property for compatibility */
         }
         
         /* Aspect ratio utility for blog post images */
@@ -32,6 +33,67 @@
             bottom: 0;
             left: 0;
             object-fit: cover;
+        }
+        
+        /* Company modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 100;
+            overflow-y: auto;
+            padding: 0;
+        }
+        .modal.active {
+            display: block;
+        }
+        .modal-content {
+            background: #1a1a1a;
+            border-radius: 1rem;
+            width: 100%;
+            max-width: 800px;
+            position: relative;
+            margin: 1rem auto;
+            padding: 1rem;
+            max-height: calc(100vh - 2rem);
+            overflow-y: auto;
+        }
+        .modal-close {
+            position: fixed;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 110;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        @media (min-width: 640px) {
+            .modal-content {
+                padding: 1.5rem;
+                margin: 2rem auto;
+                max-height: calc(100vh - 4rem);
+            }
+            .modal-close {
+                top: 1rem;
+                right: 1rem;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .modal-content {
+                padding: 2rem;
+                margin: 3rem auto;
+                max-height: calc(100vh - 6rem);
+            }
         }
     </style>
 </head>
@@ -73,9 +135,20 @@
         </header>
 
         <main id="main-content" class="flex-grow">
+            <!-- Company Modal -->
+            <div id="company-modal" class="modal">
+                <button class="modal-close" onclick="closeModal()" aria-label="Close modal">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+                <div class="modal-content">
+                    <div id="modal-content" class="pb-6"></div>
+                </div>
+            </div>
+            
             <!-- Hero Section -->
-    <section class="hero-section min-h-screen relative flex items-center bg-[#0E0E0E]">
-        <div class="network-bg absolute inset-0"></div>
+    <section class="pt-32 pb-20 relative">
         <div class="container mx-auto px-6 relative z-10">
             <div class="flex flex-col md:flex-row items-center justify-between">
                 <div class="max-w-4xl md:w-1/2">
@@ -93,12 +166,6 @@
                         <a href="companies.html" class="btn-outline">
                             View Companies
                         </a>
-                    </div>
-                </div>
-                <div class="w-full md:w-1/2 relative hidden md:block">
-                    <div class="bg-[#0E0E0E] rounded-xl overflow-hidden" id="lottie-container" style="height: 500px;">
-                        <!-- Fallback image (only shown if animation fails) -->
-                        <img src="images/sphere-placeholder.svg" alt="Animated sphere" class="w-full h-full object-cover" style="display: none;" id="fallback-image">
                     </div>
                 </div>
             </div>
@@ -153,7 +220,7 @@
                 <div class="mb-4 text-lg">—— B</div>
                 <h2 class="text-3xl md:text-4xl font-bold mb-12">Actively Growing</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <a href="companies.html" class="block group">
+                    <div class="cursor-pointer group" onclick="openModal('graph8')">
                         <div class="bg-dark-accent p-8 rounded-xl border border-gray-800 hover:border-teal-400 transition-all">
                             <div class="w-48 bg-black/30 p-6 rounded-lg border border-gray-800 mb-8">
                                 <img src="images/graph8-logo.svg" alt="Graph8" class="w-full group-hover:scale-105 transition-transform">
@@ -167,9 +234,9 @@
                                 </svg>
                             </div>
                         </div>
-                    </a>
+                    </div>
 
-                    <a href="companies.html" class="block group">
+                    <div class="cursor-pointer group" onclick="openModal('cience')">
                         <div class="bg-dark-accent p-8 rounded-xl border border-gray-800 hover:border-teal-400 transition-all">
                             <div class="w-48 bg-black/30 p-6 rounded-lg border border-gray-800 mb-8">
                                 <img src="images/cience-logo.svg" alt="CIENCE" class="w-full group-hover:scale-105 transition-transform">
@@ -183,7 +250,7 @@
                                 </svg>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -239,7 +306,7 @@
                 </div>
                 <div class="mt-12">
                     <a href="builders.html" class="btn-primary">
-                        Learn More About Building
+                        Join as a Founder
                     </a>
                 </div>
             </div>
@@ -286,7 +353,7 @@
                 </div>
                 <div class="flex justify-start mt-10">
                     <a href="builders.html" class="btn-primary">
-                        Learn More
+                        Learn More About Building
                     </a>
                 </div>
             </div>
@@ -333,7 +400,7 @@
                 </div>
                 <div class="mt-12">
                     <a href="pe-partners.html" class="btn-primary">
-                        Learn More About Investing
+                        Partner With Us
                     </a>
                 </div>
             </div>
@@ -490,200 +557,93 @@
     <script type="module">
         (async () => {
             try {
-                // Create a colored background div with animated effect for the hero section
-                const lottieContainer = document.getElementById('lottie-container');
-                const fallbackImage = document.getElementById('fallback-image');
-                
-                if (lottieContainer) {
-                    // Create a canvas element for particle animation
-                    const canvas = document.createElement('canvas');
-                    canvas.width = lottieContainer.offsetWidth;
-                    canvas.height = lottieContainer.offsetHeight;
-                    canvas.style.width = '100%';
-                    canvas.style.height = '100%';
-                    lottieContainer.appendChild(canvas);
-                    
-                    const ctx = canvas.getContext('2d');
-                    
-                    // Mouse tracking
-                    let mouseX = canvas.width / 2;
-                    let mouseY = canvas.height / 2;
-                    let mouseActive = false;
-                    
-                    // Track mouse position
-                    canvas.addEventListener('mousemove', (e) => {
-                        const rect = canvas.getBoundingClientRect();
-                        mouseX = e.clientX - rect.left;
-                        mouseY = e.clientY - rect.top;
-                        mouseActive = true;
-                    });
-                    
-                    canvas.addEventListener('mouseleave', () => {
-                        mouseActive = false;
-                    });
-                    
-                    // Touch support for mobile
-                    canvas.addEventListener('touchmove', (e) => {
-                        e.preventDefault();
-                        const rect = canvas.getBoundingClientRect();
-                        mouseX = e.touches[0].clientX - rect.left;
-                        mouseY = e.touches[0].clientY - rect.top;
-                        mouseActive = true;
-                    });
-                    
-                    canvas.addEventListener('touchend', () => {
-                        mouseActive = false;
-                    });
-                    
-                    // Particle system
-                    const particles = [];
-                    const particleCount = 100;
-                    
-                    // Create particles
-                    for (let i = 0; i < particleCount; i++) {
-                        particles.push({
-                            x: Math.random() * canvas.width,
-                            y: Math.random() * canvas.height,
-                            radius: Math.random() * 3 + 1,
-                            color: getRandomColor(),
-                            speedX: Math.random() * 2 - 1,
-                            speedY: Math.random() * 2 - 1,
-                            alpha: Math.random() * 0.6 + 0.4,
-                            pulse: Math.random() * 0.02 + 0.01,
-                            pulseDelta: 0,
-                            connectionDistance: Math.random() * 50 + 100
-                        });
-                    }
-                    
-                    function getRandomColor() {
-                        const colors = ['#50E3C2', '#4A90E2', '#6C63FF', '#a3a8ff'];
-                        return colors[Math.floor(Math.random() * colors.length)];
-                    }
-                    
-                    function animate() {
-                        requestAnimationFrame(animate);
-                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                // Load latest blog posts
+                try {
+                    const latestPostsContainer = document.getElementById('latest-posts');
+                    if (latestPostsContainer) {
+                        const response = await fetch('/blog/posts.json');
+                        if (!response.ok) {
+                            throw new Error(`Failed to fetch posts: ${response.status}`);
+                        }
                         
-                        // Create central sphere effect
-                        const centerX = mouseActive ? mouseX : canvas.width / 2;
-                        const centerY = mouseActive ? mouseY : canvas.height / 2;
-                        const radius = Math.min(canvas.width, canvas.height) * 0.2;
+                        const data = await response.json();
+                        const posts = data.posts || [];
                         
-                        // Draw glowing central sphere
-                        const gradient = ctx.createRadialGradient(
-                            centerX, centerY, 0,
-                            centerX, centerY, radius
-                        );
-                        gradient.addColorStop(0, 'rgba(108, 99, 255, 0.3)');
-                        gradient.addColorStop(0.5, 'rgba(74, 144, 226, 0.15)');
-                        gradient.addColorStop(1, 'rgba(80, 227, 194, 0)');
+                        // Sort posts by date (newest first) and take the first 3
+                        const latestPosts = posts
+                            .sort((a, b) => new Date(b.date) - new Date(a.date))
+                            .slice(0, 3);
                         
-                        ctx.beginPath();
-                        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-                        ctx.fillStyle = gradient;
-                        ctx.fill();
-                        
-                        // Update and draw particles
-                        for (let i = 0; i < particleCount; i++) {
-                            const p = particles[i];
+                        if (latestPosts.length > 0) {
+                            // Clear loading placeholder
+                            latestPostsContainer.innerHTML = '';
                             
-                            // Pulse effect for particles
-                            p.pulseDelta += p.pulse;
-                            const pulseScale = 1 + 0.1 * Math.sin(p.pulseDelta);
-                            
-                            ctx.beginPath();
-                            ctx.arc(p.x, p.y, p.radius * pulseScale, 0, Math.PI * 2);
-                            ctx.fillStyle = p.color;
-                            ctx.globalAlpha = p.alpha;
-                            ctx.fill();
-                            
-                            // Add subtle glow
-                            ctx.beginPath();
-                            ctx.arc(p.x, p.y, p.radius * 2 * pulseScale, 0, Math.PI * 2);
-                            ctx.fillStyle = p.color;
-                            ctx.globalAlpha = p.alpha * 0.3;
-                            ctx.fill();
-                            
-                            // Update position with gravitational pull to cursor or center
-                            const dx = centerX - p.x;
-                            const dy = centerY - p.y;
-                            const distToCenter = Math.sqrt(dx * dx + dy * dy);
-                            
-                            // Apply attraction to center/cursor
-                            if (distToCenter > radius) {
-                                // Stronger attraction when mouse is active
-                                const attractionStrength = mouseActive ? 0.03 : 0.01;
-                                p.speedX += dx / distToCenter * attractionStrength;
-                                p.speedY += dy / distToCenter * attractionStrength;
-                            } else if (mouseActive) {
-                                // If inside the radius and mouse is active, add some randomness
-                                // to make particles move more energetically around the cursor
-                                p.speedX += (Math.random() - 0.5) * 0.3;
-                                p.speedY += (Math.random() - 0.5) * 0.3;
-                            }
-                            
-                            // Add slight repulsion from cursor when very close to create swirling effect
-                            if (mouseActive && distToCenter < radius * 0.5) {
-                                p.speedX -= dx / distToCenter * 0.05;
-                                p.speedY -= dy / distToCenter * 0.05;
-                            }
-                            
-                            // Limit maximum speed
-                            const speed = Math.sqrt(p.speedX * p.speedX + p.speedY * p.speedY);
-                            if (speed > 1.5) {
-                                p.speedX = (p.speedX / speed) * 1.5;
-                                p.speedY = (p.speedY / speed) * 1.5;
-                            }
-                            
-                            p.x += p.speedX;
-                            p.y += p.speedY;
-                            
-                            // Bounce off walls
-                            if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
-                            if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
-                            
-                            // Draw connections
-                            for (let j = i + 1; j < particleCount; j++) {
-                                const p2 = particles[j];
-                                const distance = Math.sqrt(
-                                    Math.pow(p.x - p2.x, 2) + 
-                                    Math.pow(p.y - p2.y, 2)
-                                );
+                            // Create post cards
+                            latestPosts.forEach(post => {
+                                // Format date
+                                const postDate = new Date(post.date);
+                                const formattedDate = postDate.toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'short',
+                                    day: 'numeric'
+                                });
                                 
-                                const connectionDist = (p.connectionDistance + p2.connectionDistance) / 2;
+                                // Create post card with soft gradient hover effect
+                                const postCard = document.createElement('div');
+                                postCard.className = 'bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl hover:translate-y-[-4px] group';
                                 
-                                if (distance < connectionDist) {
-                                    ctx.beginPath();
-                                    ctx.strokeStyle = p.color;
-                                    ctx.globalAlpha = 0.2 * (1 - distance / connectionDist);
-                                    ctx.lineWidth = 0.5 * (1 - distance / connectionDist) * 2;
-                                    ctx.moveTo(p.x, p.y);
-                                    ctx.lineTo(p2.x, p2.y);
-                                    ctx.stroke();
-                                }
-                            }
+                                postCard.innerHTML = `
+                                    <a href="/blog/posts/${post.slug}.html" class="block">
+                                        <div class="aspect-w-16 aspect-h-9 relative overflow-hidden">
+                                            <img 
+                                                src="${post.coverImage ? post.coverImage : '/blog/default-cover.jpg'}" 
+                                                alt="${post.title}" 
+                                                class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+                                                onerror="this.onerror=null; this.src='/blog/default-cover.jpg';"
+                                            >
+                                            <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-70"></div>
+                                        </div>
+                                        <div class="p-5">
+                                            <div class="flex items-center mb-3">
+                                                <span class="text-xs text-teal-400 uppercase tracking-wider">${post.category || 'Opinion'}</span>
+                                                <span class="mx-2 text-gray-600">•</span>
+                                                <span class="text-xs text-gray-400">${formattedDate}</span>
+                                            </div>
+                                            <h3 class="text-lg font-bold mb-2 group-hover:text-teal-400 transition-colors">${post.title}</h3>
+                                            <p class="text-gray-400 text-sm line-clamp-2">${post.excerpt || ''}</p>
+                                            <div class="mt-4 flex items-center text-teal-400 text-sm font-medium">
+                                                Read Article
+                                                <svg class="w-4 h-4 ml-1 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </a>
+                                `;
+                                
+                                latestPostsContainer.appendChild(postCard);
+                            });
+                        } else {
+                            latestPostsContainer.innerHTML = `
+                                <div class="col-span-full text-center py-12">
+                                    <p class="text-gray-400">No posts available yet. Check back soon!</p>
+                                </div>
+                            `;
                         }
                     }
-                    
-                    // Start animation
-                    animate();
-                    
-                    // Handle resize
-                    window.addEventListener('resize', () => {
-                        canvas.width = lottieContainer.offsetWidth;
-                        canvas.height = lottieContainer.offsetHeight;
-                    });
+                } catch (error) {
+                    console.error('Error loading blog posts:', error);
+                    const latestPostsContainer = document.getElementById('latest-posts');
+                    if (latestPostsContainer) {
+                        latestPostsContainer.innerHTML = `
+                            <div class="col-span-full text-center py-12">
+                                <p class="text-gray-400">Failed to load posts. Please try again later.</p>
+                            </div>
+                        `;
+                    }
                 }
-            } catch (error) {
-                console.error('Error in script:', error);
-            }
-        })();
-    </script>
-    
-    <!-- Supabase Script -->
-    <script type="module">
-        (async () => {
-            try {
+                
+                // Supabase Script
                 const { createClient } = await import('@supabase/supabase-js');
                 const { format } = await import('date-fns');
 
@@ -723,8 +683,8 @@
                                          class="w-8 h-8 rounded-full mr-3">
                                     <span class="text-gray-400">${post.users.full_name}</span>
                                 </div>
-                                <h3 class="text-xl font-bold mb-2 group-hover:text-teal-400 line-clamp-2">${post.title}</h3>
-                                <p class="text-gray-400 mb-4 line-clamp-2">${post.excerpt}</p>
+                                <h3 class="text-lg font-bold mb-2 group-hover:text-teal-400 transition-colors">${post.title}</h3>
+                                <p class="text-gray-400 mb-4 line-clamp-2">${post.excerpt || ''}</p>
                                 <div class="flex items-center justify-between text-sm">
                                     <span class="text-gray-500">${format(new Date(post.published_at), 'MMM d, yyyy')}</span>
                                     ${post.categories ? `<span class="text-teal-400">${post.categories.name}</span>` : ''}
@@ -788,10 +748,10 @@
                                     <a href="/blog/posts/${post.slug}.html" class="block">
                                         <div class="aspect-w-16 aspect-h-9 relative overflow-hidden">
                                             <img 
-                                                src="${post.coverImage || '/images/default-cover.jpg'}" 
+                                                src="${post.coverImage ? post.coverImage : '/blog/default-cover.jpg'}" 
                                                 alt="${post.title}" 
                                                 class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
-                                                onerror="this.src='/images/default-cover.jpg';"
+                                                onerror="this.onerror=null; this.src='/blog/default-cover.jpg';"
                                             >
                                             <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-70"></div>
                                         </div>
@@ -842,6 +802,118 @@
                 console.error('Error in script:', error);
             }
         })();
+    </script>
+    <!-- Company Modal Script -->
+    <script>
+        // Company modal functionality
+        let scrollPosition = 0;
+        
+        function openModal(companyId) {
+            const modal = document.getElementById('company-modal');
+            const modalContent = document.getElementById('modal-content');
+            
+            // Store current scroll position
+            scrollPosition = window.scrollY;
+            
+            // Set content based on company ID
+            if (companyId === 'graph8') {
+                modalContent.innerHTML = `
+                    <div class="space-y-6">
+                        <img src="images/graph8-logo.svg" alt="graph8" class="h-8 sm:h-10 md:h-12 object-contain">
+                        <p class="text-gray-300 text-sm sm:text-base">graph8 is revolutionizing sales development by transforming it into a scalable marketing function through AI-driven automation. By integrating advanced B2B data, intent signals, and sophisticated AI models, graph8 enables businesses to efficiently identify and engage high-value prospects.</p>
+                        <div class="grid grid-cols-1 gap-6 mt-6">
+                            <div>
+                                <h3 class="text-lg sm:text-xl font-bold mb-2">Key Features</h3>
+                                <ul class="list-disc pl-5 space-y-2 text-gray-300 text-sm sm:text-base">
+                                    <li>Advanced B2B Data Integration: Combines high-quality B2B and B2C contact data with rich intent signals from over 20 billion monthly data points, allowing for precise prediction of in-market buyer probability.</li>
+                                    <li>Comprehensive Sales Infrastructure: Offers an all-in-one platform that includes a Customer Data Platform (CDP), chat software, meeting scheduling tools, event data pipelines, and a multi-channel outreach system supporting email, SMS, and messaging apps.</li>
+                                    <li>AI-Powered Solutions: Utilizes advanced language models to facilitate human-like voice interactions and context-rich responses across various communication channels, optimizing engagement and driving results.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-lg sm:text-xl font-bold mb-2">Industry Applications</h3>
+                                <ul class="list-disc pl-5 space-y-2 text-gray-300 text-sm sm:text-base">
+                                    <li>Sales Development Automation: Transforms traditional sales processes into scalable functions, enhancing efficiency and effectiveness.</li>
+                                    <li>Data-Driven Decision Making: Empowers businesses with comprehensive data intelligence tools to make informed decisions.</li>
+                                    <li>Conversational AI: Enhances customer engagement through advanced conversational AI capabilities.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (companyId === 'cience') {
+                modalContent.innerHTML = `
+                    <div class="space-y-6">
+                        <img src="images/cience-logo.svg" alt="CIENCE" class="h-8 sm:h-10 md:h-12 object-contain">
+                        <p class="text-gray-300 text-sm sm:text-base">CIENCE is a leading B2B lead generation and sales acceleration firm that combines human expertise with advanced technology to drive business growth.</p>
+                        <div class="grid grid-cols-1 gap-6 mt-6">
+                            <div>
+                                <h3 class="text-lg sm:text-xl font-bold mb-2">Key Features</h3>
+                                <ul class="list-disc pl-5 space-y-2 text-gray-300 text-sm sm:text-base">
+                                    <li>Bespoke Sales Research: CIENCE offers tailored sales research services, combining AI, machine learning, and highly trained human researchers to deliver precise and actionable insights.</li>
+                                    <li>Orchestrated Outbound Campaigns: Utilizing multi-channel outreach strategies, CIENCE ensures coordinated touchpoints to engage potential clients effectively.</li>
+                                    <li>Comprehensive Data Solutions: CIENCE provides custom research and accurate data enrichment services, enhancing the quality and effectiveness of sales efforts.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-lg sm:text-xl font-bold mb-2">Industry Applications</h3>
+                                <ul class="list-disc pl-5 space-y-2 text-gray-300 text-sm sm:text-base">
+                                    <li>Technology: Assisting tech companies in identifying and engaging with potential clients through targeted lead generation.</li>
+                                    <li>Research: Supporting research firms by generating leads and conducting outbound sales campaigns to expand their client base.</li>
+                                    <li>Software Development: Enhancing the B2B sales funnel for software companies by providing tailored outbound sales strategies.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Show modal with smooth animation
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Add keyboard event listener for Escape key
+            document.addEventListener('keydown', handleEscapeKey);
+            
+            // Scroll to top of modal content
+            setTimeout(() => {
+                const modalContentElement = document.querySelector('.modal-content');
+                if (modalContentElement) {
+                    modalContentElement.scrollTop = 0;
+                }
+            }, 100);
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('company-modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            // Remove keyboard event listener
+            document.removeEventListener('keydown', handleEscapeKey);
+            
+            // Restore scroll position
+            setTimeout(() => {
+                window.scrollTo(0, scrollPosition);
+            }, 50);
+        }
+        
+        // Close modal when Escape key is pressed
+        function handleEscapeKey(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        }
+        
+        // Close modal when clicking outside of modal content
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('company-modal');
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+        });
     </script>
 </body>
 </html>

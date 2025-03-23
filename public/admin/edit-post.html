@@ -1462,33 +1462,54 @@
         // Function to load categories
         async function loadCategories() {
             try {
-                log('Loading categories...', 'info');
-                
+                log('Loading categories...');
                 const response = await fetch('/api/categories');
+                
                 if (!response.ok) {
                     throw new Error(`Failed to load categories (status: ${response.status})`);
                 }
                 
                 const data = await response.json();
+                const categories = data.categories || [];
                 
-                if (!data.categories || !Array.isArray(data.categories)) {
-                    throw new Error('Invalid categories data format');
-                }
+                log(`Loaded ${categories.length} categories`, 'success');
                 
                 const categorySelect = document.getElementById('post-category');
-                
-                // Keep the first "Select a category" option
-                categorySelect.innerHTML = '<option value="">Select a category</option>';
-                
-                // Add categories to dropdown
-                data.categories.forEach(category => {
-                    const option = document.createElement('option');
-                    option.value = category.slug;
-                    option.textContent = category.name;
-                    categorySelect.appendChild(option);
-                });
-                
-                log(`Loaded ${data.categories.length} categories`, 'success');
+                if (categorySelect) {
+                    // Clear existing options except the first one
+                    while (categorySelect.options.length > 1) {
+                        categorySelect.remove(1);
+                    }
+                    
+                    // Add categories
+                    categories.forEach(category => {
+                        const option = document.createElement('option');
+                        option.value = category.id;
+                        option.textContent = category.name;
+                        categorySelect.appendChild(option);
+                    });
+                    
+                    // Check if we have a post slug in the URL
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const postSlug = urlParams.get('slug');
+                    
+                    // If editing an existing post, try to select the right category
+                    if (postSlug) {
+                        fetch(`/api/posts/${postSlug}.json`)
+                            .then(response => response.json())
+                            .then(post => {
+                                if (post.category) {
+                                    for (let i = 0; i < categorySelect.options.length; i++) {
+                                        if (categorySelect.options[i].value === post.category) {
+                                            categorySelect.selectedIndex = i;
+                                            break;
+                                        }
+                                    }
+                                }
+                            })
+                            .catch(error => log(`Error setting category: ${error.message}`, 'error'));
+                    }
+                }
             } catch (error) {
                 log(`Error loading categories: ${error.message}`, 'error');
                 notify(`Error loading categories: ${error.message}`, 'error');
@@ -1498,33 +1519,54 @@
         // Function to load authors
         async function loadAuthors() {
             try {
-                log('Loading authors...', 'info');
-                
+                log('Loading authors...');
                 const response = await fetch('/api/authors');
+                
                 if (!response.ok) {
                     throw new Error(`Failed to load authors (status: ${response.status})`);
                 }
                 
                 const data = await response.json();
+                const authors = data.authors || [];
                 
-                if (!data.authors || !Array.isArray(data.authors)) {
-                    throw new Error('Invalid authors data format');
-                }
+                log(`Loaded ${authors.length} authors`, 'success');
                 
                 const authorSelect = document.getElementById('post-author');
-                
-                // Keep the first "Select an author" option
-                authorSelect.innerHTML = '<option value="">Select an author</option>';
-                
-                // Add authors to dropdown
-                data.authors.forEach(author => {
-                    const option = document.createElement('option');
-                    option.value = author.slug;
-                    option.textContent = author.name;
-                    authorSelect.appendChild(option);
-                });
-                
-                log(`Loaded ${data.authors.length} authors`, 'success');
+                if (authorSelect) {
+                    // Clear existing options except the first one
+                    while (authorSelect.options.length > 1) {
+                        authorSelect.remove(1);
+                    }
+                    
+                    // Add authors
+                    authors.forEach(author => {
+                        const option = document.createElement('option');
+                        option.value = author.name;
+                        option.textContent = author.name;
+                        authorSelect.appendChild(option);
+                    });
+                    
+                    // Check if we have a post slug in the URL
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const postSlug = urlParams.get('slug');
+                    
+                    // If editing an existing post, try to select the right author
+                    if (postSlug) {
+                        fetch(`/api/posts/${postSlug}.json`)
+                            .then(response => response.json())
+                            .then(post => {
+                                if (post.author) {
+                                    for (let i = 0; i < authorSelect.options.length; i++) {
+                                        if (authorSelect.options[i].value === post.author) {
+                                            authorSelect.selectedIndex = i;
+                                            break;
+                                        }
+                                    }
+                                }
+                            })
+                            .catch(error => log(`Error setting author: ${error.message}`, 'error'));
+                    }
+                }
             } catch (error) {
                 log(`Error loading authors: ${error.message}`, 'error');
                 notify(`Error loading authors: ${error.message}`, 'error');

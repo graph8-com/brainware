@@ -1,0 +1,39 @@
+<!-- Featured post template -->
+<div class="featured-post bg-dark-accent rounded-xl overflow-hidden shadow-lg">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
+        <!-- Image column -->
+        <div class="relative h-48 md:h-64 overflow-hidden">
+            {% if post.coverImage %}
+            <img src="{{ post.coverImage }}" alt="{{ post.title }}" class="w-full h-full object-cover">
+            {% else %}
+            <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-teal-500/20 to-teal-400/10 flex items-center justify-center">
+                <img src="/images/brainware-logo.svg" alt="Brainware" class="w-24 opacity-20">
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Content column -->
+        <div class="p-8 flex flex-col justify-center">
+            <div class="mb-4">
+                <span class="inline-block px-3 py-1 text-xs font-medium bg-gradient-to-r from-teal-500/20 to-teal-400/10 text-teal-400 rounded-full">
+                    {{ post.category }}
+                </span>
+            </div>
+            <h2 class="text-2xl md:text-3xl font-bold mb-4 text-white hover:text-teal-400 transition-colors">
+                <a href="/blog/posts/{{ post.slug }}.html">{{ post.title }}</a>
+            </h2>
+            <p class="text-gray-400 mb-6">{{ post.excerpt }}</p>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <span class="text-sm text-gray-500">{{ post.date }}</span>
+                </div>
+                <a href="/blog/posts/{{ post.slug }}.html" class="text-teal-400 hover:text-teal-300 font-medium flex items-center transition-colors">
+                    Read more
+                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -15,6 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(data => {
       allPosts = data.posts;
       
+      // Render all posts initially
+      renderPosts(allPosts);
+      
       // Set up category filter clicks
       categoryFilters.forEach(filter => {
         filter.addEventListener('click', (e) => {
@@ -52,10 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     })
     .catch(error => {
-      console.error('Error loading posts:', error);
+      console.error('Error fetching posts:', error);
       postsContainer.innerHTML = `
-        <div class="col-span-full p-8 text-center">
-          <p class="text-red-400">Failed to load posts. Please refresh the page.</p>
+        <div class="col-span-full text-center py-12">
+          <p class="text-gray-400">Error loading posts. Please try again later.</p>
         </div>
       `;
     });
@@ -80,25 +83,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // Create post cards with Brainware's design language
     posts.forEach(post => {
       const card = document.createElement('article');
-      card.className = 'post-card bg-gradient-to-br from-gray-900 to-teal-900/10 rounded-lg overflow-hidden group hover:shadow-lg transition-all duration-300';
+      card.className = 'post-card bg-gradient-to-br from-gray-900 to-teal-900/10 rounded-lg overflow-hidden group hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1';
       
       // Format date properly
       const postDate = formatDate(post.date);
       
       // Use the same card design as the templates for consistency
       card.innerHTML = `
-        <a href="/blog/posts/${post.slug}.html" class="block">
-          <div class="aspect-[16/9] overflow-hidden">
-            <img src="${post.coverImage}" alt="${post.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+        <a href="/blog/posts/${post.slug}.html" class="block h-full flex flex-col">
+          <div class="aspect-[16/9] overflow-hidden relative">
+            <div class="absolute inset-0 bg-gradient-to-t from-gray-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+            <img src="${post.coverImage || '/images/default-cover.jpg'}" alt="${post.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
           </div>
-          <div class="p-6">
-            <span class="text-sm text-teal-400">${post.category}</span>
-            <h3 class="text-xl font-bold mt-2 mb-3">${post.title}</h3>
-            <p class="text-gray-300 line-clamp-2">${post.excerpt}</p>
-            <div class="mt-4 flex items-center">
-              <span class="text-sm text-gray-400">${postDate}</span>
+          <div class="p-6 flex-grow flex flex-col">
+            <span class="text-sm text-teal-400 mb-1">${post.category || 'Uncategorized'}</span>
+            <h3 class="text-xl font-bold mb-3 line-clamp-2">${post.title}</h3>
+            <p class="text-gray-300 line-clamp-2 mb-4 flex-grow">${post.excerpt || ''}</p>
+            <div class="mt-auto flex items-center text-sm text-gray-400">
+              <span>${postDate}</span>
               <span class="mx-2 text-gray-600">•</span>
-              <span class="text-sm text-gray-400">${post.author}</span>
+              <span>${post.author || 'Brainware Team'}</span>
             </div>
           </div>
         </a>
@@ -114,12 +118,19 @@ document.addEventListener('DOMContentLoaded', () => {
    * @returns {string} Formatted date
    */
   function formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
+    if (!dateString) return '';
+    
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      });
+    } catch (e) {
+      console.error('Error formatting date:', e);
+      return dateString;
+    }
   }
   
   // Handle newsletter subscriptions
@@ -127,17 +138,25 @@ document.addEventListener('DOMContentLoaded', () => {
   if (newsletterForm) {
     newsletterForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const email = document.getElementById('blog-newsletter-email').value;
       
-      if (!email || !email.includes('@')) {
+      const emailInput = document.getElementById('blog-newsletter-email');
+      const email = emailInput.value.trim();
+      
+      if (!email) {
+        showNotification('Please enter your email address', 'error');
+        return;
+      }
+      
+      // Simple email validation
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         showNotification('Please enter a valid email address', 'error');
         return;
       }
       
-      // Here you would typically send this to your newsletter service
-      // For now, just show a success message
+      // Here you would typically send the email to your server
+      // For now, we'll just show a success message
       showNotification('Thank you for subscribing!', 'success');
-      newsletterForm.reset();
+      emailInput.value = '';
     });
   }
   
@@ -153,27 +172,36 @@ document.addEventListener('DOMContentLoaded', () => {
       existingNotification.remove();
     }
     
-    // Create new notification
+    // Create notification element
     const notification = document.createElement('div');
-    notification.className = 'notification fixed bottom-4 right-4 z-50 p-4 rounded-lg shadow-lg transition-all duration-300 transform translate-y-full opacity-0';
+    notification.className = `notification fixed bottom-4 right-4 p-4 rounded-lg shadow-lg z-50 transform transition-transform duration-300 translate-y-full ${
+      type === 'success' 
+        ? 'bg-gradient-to-r from-teal-500 to-teal-400 text-white' 
+        : 'bg-gradient-to-r from-red-500 to-red-400 text-white'
+    }`;
     
-    if (type === 'success') {
-      notification.classList.add('bg-teal-500', 'text-white');
-    } else {
-      notification.classList.add('bg-red-500', 'text-white');
-    }
+    notification.innerHTML = `
+      <div class="flex items-center">
+        <span class="mr-2">
+          ${type === 'success' 
+            ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>' 
+            : '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>'
+          }
+        </span>
+        <p>${message}</p>
+      </div>
+    `;
     
-    notification.textContent = message;
     document.body.appendChild(notification);
     
     // Animate in
     setTimeout(() => {
-      notification.classList.remove('translate-y-full', 'opacity-0');
+      notification.classList.remove('translate-y-full');
     }, 10);
     
-    // Automatically remove after 3 seconds
+    // Remove after 3 seconds
     setTimeout(() => {
-      notification.classList.add('translate-y-full', 'opacity-0');
+      notification.classList.add('translate-y-full');
       setTimeout(() => {
         notification.remove();
       }, 300);

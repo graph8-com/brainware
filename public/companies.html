@@ -13,45 +13,59 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.75);
+            background: rgba(0, 0, 0, 0.85);
             z-index: 100;
-            padding: 1rem;
             overflow-y: auto;
+            padding: 0;
         }
         .modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: block;
         }
         .modal-content {
             background: #1a1a1a;
-            padding: 1.5rem;
             border-radius: 1rem;
-            max-width: 800px;
             width: 100%;
+            max-width: 800px;
             position: relative;
-            margin: 0.5rem;
+            margin: 1rem auto;
+            padding: 1rem;
+            max-height: calc(100vh - 2rem);
+            overflow-y: auto;
         }
         .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
+            position: fixed;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
+            z-index: 110;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         @media (min-width: 640px) {
-            .modal {
-                padding: 1.5rem;
-            }
             .modal-content {
-                padding: 2rem;
-                margin: 1rem;
+                padding: 1.5rem;
+                margin: 2rem auto;
+                max-height: calc(100vh - 4rem);
+            }
+            .modal-close {
+                top: 1rem;
+                right: 1rem;
             }
         }
         
         @media (min-width: 768px) {
-            .modal {
+            .modal-content {
                 padding: 2rem;
+                margin: 3rem auto;
+                max-height: calc(100vh - 6rem);
             }
         }
     </style>
@@ -94,13 +108,13 @@
     <!-- Companies Section -->
     <!-- Modal -->
     <div id="company-modal" class="modal">
+        <button class="modal-close" onclick="closeModal()" aria-label="Close modal">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
         <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
-            <div id="modal-content"></div>
+            <div id="modal-content" class="pb-6"></div>
         </div>
     </div>
 
@@ -218,7 +232,7 @@
                 <div class="bg-dark-accent p-4 sm:p-6 md:p-8 rounded-xl hover:border hover:border-teal-400 transition-all">
                     <div class="flex flex-col lg:flex-row gap-6 lg:gap-12">
                         <div class="w-full lg:w-72 h-32 sm:h-40 lg:h-48 bg-black/30 p-4 sm:p-6 rounded-lg border border-gray-800 cursor-pointer hover:border-gray-700 transition-all flex items-center justify-center relative" onclick="openModal('helpware')">
-                            <img src="images/helpware-logo.png" alt="Helpware" class="w-full max-h-20 sm:max-h-24 lg:max-h-32 hover:scale-105 transition-transform">
+                            <img src="images/helpware-logo.png" alt="Helpware" class="w-auto max-w-full max-h-20 sm:max-h-24 lg:max-h-32 hover:scale-105 transition-transform object-contain">
                             <div class="absolute bottom-2 right-2 flex items-center">
                                 <span class="text-xs text-gray-400 mr-2">acquired by</span>
                                 <div class="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24">
@@ -286,7 +300,7 @@
                 <div class="bg-dark-accent p-4 sm:p-6 md:p-8 rounded-xl hover:border hover:border-teal-400 transition-all">
                     <div class="flex flex-col lg:flex-row gap-6 lg:gap-12">
                         <div class="w-full lg:w-72 h-32 sm:h-40 lg:h-48 bg-black/30 p-4 sm:p-6 rounded-lg border border-gray-800 cursor-pointer hover:border-gray-700 transition-all flex items-center justify-center relative" onclick="openModal('armatic')">
-                            <img src="images/armatic-logo.png" alt="Armatic" class="w-full max-h-20 sm:max-h-24 lg:max-h-32 hover:scale-105 transition-transform">
+                            <img src="images/armatic-logo.png" alt="Armatic" class="w-auto max-w-full max-h-20 sm:max-h-24 lg:max-h-32 hover:scale-105 transition-transform object-contain">
                             <div class="absolute bottom-2 right-2 flex items-center">
                                 <span class="text-xs text-gray-400 mr-2">acquired by</span>
                                 <div class="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24">
@@ -338,7 +352,7 @@
                 <div class="bg-dark-accent p-4 sm:p-6 md:p-8 rounded-xl hover:border hover:border-teal-400 transition-all">
                     <div class="flex flex-col lg:flex-row gap-6 lg:gap-12">
                         <div class="w-full lg:w-72 h-32 sm:h-40 lg:h-48 bg-black/30 p-4 sm:p-6 rounded-lg border border-gray-800 cursor-pointer hover:border-gray-700 transition-all flex items-center justify-center relative" onclick="openModal('eteam')">
-                            <img src="images/eteam.png" alt="ETEAM" class="w-full max-h-20 sm:max-h-24 lg:max-h-32 hover:scale-105 transition-transform">
+                            <img src="images/eteam.png" alt="ETEAM" class="w-auto max-w-full max-h-20 sm:max-h-24 lg:max-h-32 hover:scale-105 transition-transform object-contain">
                             <div class="absolute bottom-2 right-2 flex items-center">
                                 <span class="text-xs text-gray-400 mr-2">acquired by</span>
                                 <div class="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24">
@@ -455,16 +469,19 @@
             const modal = document.getElementById('company-modal');
             const modalContent = document.getElementById('modal-content');
             
+            // Reset scroll position
+            window.scrollTo(0, 0);
+            
             // Set content based on company ID
             if (companyId === 'graph8') {
                 modalContent.innerHTML = `
                     <div class="space-y-6">
-                        <img src="images/graph8-logo.svg" alt="graph8" class="h-8 sm:h-10 md:h-12">
+                        <img src="images/graph8-logo.svg" alt="graph8" class="h-8 sm:h-10 md:h-12 object-contain">
                         <p class="text-gray-300 text-sm sm:text-base">graph8 is revolutionizing sales development by transforming it into a scalable marketing function through AI-driven automation. By integrating advanced B2B data, intent signals, and sophisticated AI models, graph8 enables businesses to efficiently identify and engage high-value prospects.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                        <div class="grid grid-cols-1 gap-6 mt-6">
                             <div>
                                 <h3 class="text-lg sm:text-xl font-bold mb-2">Key Features</h3>
-                                <ul class="list-disc pl-5 space-y-1 text-gray-300 text-sm sm:text-base">
+                                <ul class="list-disc pl-5 space-y-2 text-gray-300 text-sm sm:text-base">
                                     <li>Advanced B2B Data Integration: Combines high-quality B2B and B2C contact data with rich intent signals from over 20 billion monthly data points, allowing for precise prediction of in-market buyer probability.</li>
                                     <li>Comprehensive Sales Infrastructure: Offers an all-in-one platform that includes a Customer Data Platform (CDP), chat software, meeting scheduling tools, event data pipelines, and a multi-channel outreach system supporting email, SMS, and messaging apps.</li>
                                     <li>AI-Powered Solutions: Utilizes advanced language models to facilitate human-like voice interactions and context-rich responses across various communication channels, optimizing engagement and driving results.</li>
@@ -472,7 +489,7 @@
                             </div>
                             <div>
                                 <h3 class="text-lg sm:text-xl font-bold mb-2">Industry Applications</h3>
-                                <ul class="list-disc pl-5 space-y-1 text-gray-300 text-sm sm:text-base">
+                                <ul class="list-disc pl-5 space-y-2 text-gray-300 text-sm sm:text-base">
                                     <li>Sales Development Automation: Transforms traditional sales processes into scalable functions, enhancing efficiency and effectiveness.</li>
                                     <li>Data-Driven Decision Making: Empowers businesses with comprehensive data intelligence tools to make informed decisions.</li>
                                     <li>Conversational AI: Enhances customer engagement through advanced conversational AI capabilities.</li>
@@ -484,12 +501,12 @@
             } else if (companyId === 'cience') {
                 modalContent.innerHTML = `
                     <div class="space-y-6">
-                        <img src="images/cience-logo.svg" alt="CIENCE" class="h-8 sm:h-10 md:h-12">
+                        <img src="images/cience-logo.svg" alt="CIENCE" class="h-8 sm:h-10 md:h-12 object-contain">
                         <p class="text-gray-300 text-sm sm:text-base">CIENCE is a leading B2B lead generation and sales acceleration firm that combines human expertise with advanced technology to drive business growth.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                        <div class="grid grid-cols-1 gap-6 mt-6">
                             <div>
                                 <h3 class="text-lg sm:text-xl font-bold mb-2">Key Features</h3>
-                                <ul class="list-disc pl-5 space-y-1 text-gray-300 text-sm sm:text-base">
+                                <ul class="list-disc pl-5 space-y-2 text-gray-300 text-sm sm:text-base">
                                     <li>Bespoke Sales Research: CIENCE offers tailored sales research services, combining AI, machine learning, and highly trained human researchers to deliver precise and actionable insights.</li>
                                     <li>Orchestrated Outbound Campaigns: Utilizing multi-channel outreach strategies, CIENCE ensures coordinated touchpoints to engage potential clients effectively.</li>
                                     <li>Comprehensive Data Solutions: CIENCE provides custom research and accurate data enrichment services, enhancing the quality and effectiveness of sales efforts.</li>
@@ -497,7 +514,7 @@
                             </div>
                             <div>
                                 <h3 class="text-lg sm:text-xl font-bold mb-2">Industry Applications</h3>
-                                <ul class="list-disc pl-5 space-y-1 text-gray-300 text-sm sm:text-base">
+                                <ul class="list-disc pl-5 space-y-2 text-gray-300 text-sm sm:text-base">
                                     <li>Technology: Assisting tech companies in identifying and engaging with potential clients through targeted lead generation.</li>
                                     <li>Research: Supporting research firms by generating leads and conducting outbound sales campaigns to expand their client base.</li>
                                     <li>Software Development: Enhancing the B2B sales funnel for software companies by providing tailored outbound sales strategies.</li>
@@ -509,12 +526,12 @@
             } else if (companyId === 'helpware') {
                 modalContent.innerHTML = `
                     <div class="space-y-6">
-                        <img src="images/helpware-logo.png" alt="Helpware" class="h-8 sm:h-10 md:h-12">
+                        <img src="images/helpware-logo.png" alt="Helpware" class="h-8 sm:h-10 md:h-12 object-contain">
                         <p class="text-gray-300 text-sm sm:text-base">Founded in 2015, Helpware is redefining the outsourcing industry by combining exceptional people, innovative processes, and advanced technology to deliver unparalleled customer experiences.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                        <div class="grid grid-cols-1 gap-6 mt-6">
                             <div>
                                 <h3 class="text-lg sm:text-xl font-bold mb-2">Key Features</h3>
-                                <ul class="list-disc pl-5 space-y-1 text-gray-300 text-sm sm:text-base">
+                                <ul class="list-disc pl-5 space-y-2 text-gray-300 text-sm sm:text-base">
                                     <li>Digital Customer Experience: Helpware offers comprehensive customer service solutions, including call centers, chat support, technical assistance, and email support, all designed to enhance brand loyalty and customer satisfaction.</li>
                                     <li>Content Control & Verification: The company provides robust content moderation services, ensuring a safe and trustworthy environment for users by preventing fraud, detecting abuse, and monitoring profiles.</li>
                                     <li>AI Customer Service: Helpware integrates advanced AI solutions to anticipate customer needs, streamline operations, and deliver efficient, personalized support experiences.</li>
@@ -523,7 +540,7 @@
                             </div>
                             <div>
                                 <h3 class="text-lg sm:text-xl font-bold mb-2">Industry Applications</h3>
-                                <ul class="list-disc pl-5 space-y-1 text-gray-300 text-sm sm:text-base">
+                                <ul class="list-disc pl-5 space-y-2 text-gray-300 text-sm sm:text-base">
                                     <li>E-commerce & Retail: Helpware crafts personalized customer journeys that boost brand loyalty and drive growth in the competitive e-commerce landscape.</li>
                                     <li>SaaS & Software: By exceeding customer expectations and expanding business opportunities, Helpware strengthens brands within the software industry.</li>
                                     <li>Healthcare & HealthTech: The company accelerates digital solutions, enhances patient engagement, and supports scalable growth for healthcare providers.</li>
@@ -536,12 +553,12 @@
             } else if (companyId === 'armatic') {
                 modalContent.innerHTML = `
                     <div class="space-y-6">
-                        <img src="images/armatic-logo.png" alt="Armatic" class="h-8 sm:h-10 md:h-12">
+                        <img src="images/armatic-logo.png" alt="Armatic" class="h-8 sm:h-10 md:h-12 object-contain">
                         <p class="text-gray-300 text-sm sm:text-base">Armatic is revolutionizing revenue lifecycle management by providing a comprehensive SaaS platform that automates and optimizes billing, invoicing, and accounts receivable processes. Their innovative solutions streamline business operations, enhance efficiency, and drive growth.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                        <div class="grid grid-cols-1 gap-6 mt-6">
                             <div>
                                 <h3 class="text-lg sm:text-xl font-bold mb-2">Key Features</h3>
-                                <ul class="list-disc pl-5 space-y-1 text-gray-300 text-sm sm:text-base">
+                                <ul class="list-disc pl-5 space-y-2 text-gray-300 text-sm sm:text-base">
                                     <li>Automated Invoicing: Armatic automates the creation and distribution of invoices, reducing manual effort and minimizing errors.</li>
                                     <li>Recurring Billing & Subscription Management: The platform supports recurring billing cycles and subscription management, ensuring accurate and timely payments.</li>
                                     <li>Accounts Receivable Automation: Armatic's AR automation accelerates the quote-to-cash cycle, streamlines billing, and reduces operating expenses.</li>
@@ -551,7 +568,7 @@
                             </div>
                             <div>
                                 <h3 class="text-lg sm:text-xl font-bold mb-2">Industry Applications</h3>
-                                <ul class="list-disc pl-5 space-y-1 text-gray-300 text-sm sm:text-base">
+                                <ul class="list-disc pl-5 space-y-2 text-gray-300 text-sm sm:text-base">
                                     <li>Financial Services: Armatic's automation tools assist financial institutions in managing billing and invoicing processes efficiently.</li>
                                     <li>Technology: Tech companies benefit from Armatic's subscription management and recurring billing features, supporting scalable growth.</li>
                                     <li>Professional Services: Armatic streamlines invoicing and payment processes for professional service firms, improving cash flow and client satisfaction.</li>
@@ -563,12 +580,12 @@
             } else if (companyId === 'eteam') {
                 modalContent.innerHTML = `
                     <div class="space-y-6">
-                        <img src="images/eteam.png" alt="ETEAM" class="h-8 sm:h-10 md:h-12">
+                        <img src="images/eteam.png" alt="ETEAM" class="h-8 sm:h-10 md:h-12 object-contain">
                         <p class="text-gray-300 text-sm sm:text-base">Founded in 2016, ETEAM is a seasoned software development company that transforms complex development challenges into streamlined, efficient processes. Their expertise lies in delivering swift, cost-effective, and high-quality software solutions tailored to both entrepreneurs and enterprise clients.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                        <div class="grid grid-cols-1 gap-6 mt-6">
                             <div>
                                 <h3 class="text-lg sm:text-xl font-bold mb-2">Key Features</h3>
-                                <ul class="list-disc pl-5 space-y-1 text-gray-300 text-sm sm:text-base">
+                                <ul class="list-disc pl-5 space-y-2 text-gray-300 text-sm sm:text-base">
                                     <li>Comprehensive Software Development: ETEAM specializes in custom software development, mobile app development, and web development, ensuring robust and scalable solutions for diverse business needs.</li>
                                     <li>Data Science & Engineering: Leveraging advanced data analytics and engineering practices, ETEAM provides insights and solutions that drive informed decision-making and operational efficiency.</li>
                                     <li>AI and Machine Learning: Incorporating generative AI and machine learning, ETEAM develops intelligent applications that enhance user experiences and optimize business processes.</li>
@@ -577,7 +594,7 @@
                             </div>
                             <div>
                                 <h3 class="text-lg sm:text-xl font-bold mb-2">Industry Applications</h3>
-                                <ul class="list-disc pl-5 space-y-1 text-gray-300 text-sm sm:text-base">
+                                <ul class="list-disc pl-5 space-y-2 text-gray-300 text-sm sm:text-base">
                                     <li>Financial Services: Developing secure and compliant financial applications that streamline transactions and enhance customer trust.</li>
                                     <li>Telecommunications: Providing scalable solutions that improve communication infrastructures and service delivery.</li>
                                     <li>Information Technology: Offering innovative IT solutions that drive digital transformation and operational excellence.</li>
@@ -589,15 +606,47 @@
                 `;
             }
             
+            // Show modal with smooth animation
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
+            
+            // Add keyboard event listener for Escape key
+            document.addEventListener('keydown', handleEscapeKey);
+            
+            // Scroll to top of modal content
+            setTimeout(() => {
+                const modalContentElement = document.querySelector('.modal-content');
+                if (modalContentElement) {
+                    modalContentElement.scrollTop = 0;
+                }
+            }, 100);
         }
         
         function closeModal() {
             const modal = document.getElementById('company-modal');
             modal.classList.remove('active');
             document.body.style.overflow = '';
+            
+            // Remove keyboard event listener
+            document.removeEventListener('keydown', handleEscapeKey);
         }
+        
+        // Close modal when Escape key is pressed
+        function handleEscapeKey(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        }
+        
+        // Close modal when clicking outside of modal content
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('company-modal');
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+        });
     </script>
 </body>
 </html>

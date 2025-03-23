@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog | Brainware</title>
+    <title>founders | Brainware Opinions</title>
     
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -11,49 +11,6 @@
     <link href="/css/blog.css" rel="stylesheet">
     <link rel="icon" href="/images/brainware-icon.svg?v=1">
     
-<style>
-    /* Line clamp utility for truncating text */
-    .line-clamp-2 {
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        line-clamp: 2; /* Standard property for compatibility */
-    }
-    
-    /* Aspect ratio utility for blog post images */
-    .aspect-w-16 {
-        position: relative;
-        padding-bottom: calc(9 / 16 * 100%);
-    }
-    
-    .aspect-w-16 > img {
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        object-fit: cover;
-    }
-    
-    /* Category filter active state */
-    .category-filter.active {
-        border-color: rgb(45, 212, 191); /* teal-400 */
-        background: linear-gradient(to right, rgba(45, 212, 191, 0.1), rgba(45, 212, 191, 0.05));
-    }
-    
-    /* Post card hover effects */
-    .post-card {
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    }
-    
-    .post-card:hover {
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    }
-</style>
-
 </head>
 <body class="bg-dark-bg text-white">
     <div class="min-h-screen flex flex-col">
@@ -95,110 +52,74 @@
 
         <main id="main-content" class="flex-grow">
             
-<!-- Hero Section -->
-<section class="pt-32 pb-8 relative">
+<!-- Category Header -->
+<section class="pt-32 pb-12 relative">
     <div class="container mx-auto px-6">
         <div class="max-w-7xl mx-auto">
-            <!-- Categories -->
-            <div class="flex flex-wrap items-center justify-center gap-4 mb-12">
-                <button data-category="all" class="category-filter active text-teal-400 px-5 py-2 rounded-full border border-gray-700 hover:border-teal-400 transition-colors duration-300 text-sm font-medium">
-                    All
-                </button>
-                
-                <button data-category="builders" class="category-filter px-5 py-2 rounded-full border border-gray-700 hover:border-teal-400 transition-colors duration-300 text-sm font-medium">
-                    builders
-                </button>
-                
-                <button data-category="founders" class="category-filter px-5 py-2 rounded-full border border-gray-700 hover:border-teal-400 transition-colors duration-300 text-sm font-medium">
-                    founders
-                </button>
-                
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Featured Post -->
-<section class="py-8">
-    <div class="container mx-auto px-6">
-        <div class="max-w-7xl mx-auto">
-            <!-- Featured post template -->
-<div class="featured-post bg-dark-accent rounded-xl overflow-hidden shadow-lg">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
-        <!-- Image column -->
-        <div class="relative h-48 md:h-64 overflow-hidden">
-            
-            <img src="/uploads/blog/1742725524949-8068.JPG" alt="# High-Agency Builders: What Makes a Great Brainware Operating Partner" class="w-full h-full object-cover">
-            
-        </div>
-        
-        <!-- Content column -->
-        <div class="p-8 flex flex-col justify-center">
-            <div class="mb-4">
-                <span class="inline-block px-3 py-1 text-xs font-medium bg-gradient-to-r from-teal-500/20 to-teal-400/10 text-teal-400 rounded-full">
-                    builders
-                </span>
-            </div>
-            <h2 class="text-2xl md:text-3xl font-bold mb-4 text-white hover:text-teal-400 transition-colors">
-                <a href="/blog/posts/-high-agency-builders-what-makes-a-great-brainware-operating-partner.html"># High-Agency Builders: What Makes a Great Brainware Operating Partner</a>
-            </h2>
-            <p class="text-gray-400 mb-6">The unique role of high-agency builders within the Brainware model—entrepreneurs who thrive in the zero-to-one phase of company creation. Unlike traditional founders or incubator models, Brainware Operating Partners start the business from scratch, build the infrastructure, land the first customers, and prove the concept before handing it off to subject-matter expert Founders to scale. </p>
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <span class="text-sm text-gray-500">March 22, 2025</span>
-                </div>
-                <a href="/blog/posts/-high-agency-builders-what-makes-a-great-brainware-operating-partner.html" class="text-teal-400 hover:text-teal-300 font-medium flex items-center transition-colors">
-                    Read more
-                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            <div class="mb-8">
+                <a href="/blog" class="text-teal-400 hover:text-teal-300 flex items-center transition-colors duration-300">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
+                    Back to all opinions
                 </a>
             </div>
-        </div>
-    </div>
-</div>
-
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">founders</h1>
+            <p class="text-xl text-gray-400 max-w-3xl">Articles and insights in the founders category.</p>
         </div>
     </div>
 </section>
 
-<!-- Recent Posts -->
-<section class="py-16 bg-dark-accent">
+<!-- Category Posts -->
+<section class="py-12">
     <div class="container mx-auto px-6">
         <div class="max-w-7xl mx-auto">
-            <div id="posts-grid" class="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 transition-opacity duration-300">
-                <!-- Post preview card template -->
-<div class="post-card bg-dark-bg rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:transform hover:translate-y-[-4px] hover:shadow-xl">
-    <a href="/blog/posts/brainwareio-model-vs-traditional-vc-why-founders-benefit.html" class="block">
-        <div class="relative h-48 overflow-hidden">
-            
-            <img src="/uploads/blog/1742688688248-8816.png" alt="Our Model vs Traditional VC: Why Founders Benefit" class="w-full h-full object-cover">
-            
-            <div class="absolute top-3 left-3">
-                <span class="inline-block px-3 py-1 text-xs font-medium bg-gradient-to-r from-teal-500/20 to-teal-400/10 text-teal-400 rounded-full">
-                    founders
-                </span>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <article class="post-card bg-gradient-to-br from-gray-900 to-teal-900/10 rounded-lg overflow-hidden group hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 h-full">
+                    <a href="/blog/posts/brainwareio-model-vs-traditional-vc-why-founders-benefit.html" class="block h-full flex flex-col">
+                        <div class="aspect-[16/9] overflow-hidden relative">
+                            <div class="absolute inset-0 bg-gradient-to-t from-gray-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                            <img src="/images/default-cover.jpg" alt="Our Model vs Traditional VC: Why Founders Benefit" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col">
+                            <span class="text-sm text-teal-400 mb-1">founders</span>
+                            <h3 class="text-xl font-bold mb-3 line-clamp-2">Our Model vs Traditional VC: Why Founders Benefit</h3>
+                            <p class="text-gray-300 line-clamp-2 mb-4 flex-grow">Brainware offers a founder-first alternative to traditional venture capital. Instead of chasing hyper-growth at any price and giving up control, founders at Brainware build profitable companies with support, ownership, and stability from day one. With a focus on real revenue, sustainable scaling, and shared success, Brainware empowers entrepreneurs to create lasting businesses—without the burn rate or boardroom battles.</p>
+                            <div class="mt-auto flex items-center text-sm text-gray-400">
+                                <span>March 21, 2025</span>
+                                <span class="mx-2 text-gray-600">•</span>
+                                <span>Thomas Cornelius</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                
             </div>
         </div>
-    </a>
-    
-    <div class="p-6">
-        <h3 class="text-xl font-bold mb-3 text-white hover:text-teal-400 transition-colors">
-            <a href="/blog/posts/brainwareio-model-vs-traditional-vc-why-founders-benefit.html">Our Model vs Traditional VC: Why Founders Benefit</a>
-        </h3>
-        <p class="text-gray-400 text-sm mb-4 line-clamp-2">Brainware offers a founder-first alternative to traditional venture capital. Instead of chasing hyper-growth at any price and giving up control, founders at Brainware build profitable companies with support, ownership, and stability from day one. With a focus on real revenue, sustainable scaling, and shared success, Brainware empowers entrepreneurs to create lasting businesses—without the burn rate or boardroom battles.</p>
-        <div class="flex items-center justify-between">
-            <span class="text-sm text-gray-500">March 21, 2025</span>
-            <a href="/blog/posts/brainwareio-model-vs-traditional-vc-why-founders-benefit.html" class="text-teal-400 hover:text-teal-300 text-sm font-medium flex items-center transition-colors">
-                Read more
-                <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                </svg>
-            </a>
-        </div>
     </div>
-</div>
+</section>
 
+<!-- Categories -->
+<section class="py-12 bg-dark-accent">
+    <div class="container mx-auto px-6">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-2xl font-bold mb-8">Browse by Category</h2>
+            <div class="flex flex-wrap gap-4">
+                <a href="/blog" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-white transition-colors">
+                    All
+                </a>
+                
+                <a href="/blog/categories/builders.html" 
+                   class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-white transition-colors">
+                    builders
+                </a>
+                
+                <a href="/blog/categories/founders.html" 
+                   class="px-4 py-2 bg-teal-500 hover:bg-teal-400 rounded-lg text-white transition-colors">
+                    founders
+                </a>
+                
             </div>
         </div>
     </div>
@@ -274,9 +195,6 @@
     </div>
 
     
-<script src="/static/js/blog-filter.js"></script>
-<script src="/js/cursor-effect.js"></script>
-
     <script src="/js/menu.js" defer></script>
     <script src="/js/newsletter.js" defer></script>
 </body>

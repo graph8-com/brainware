@@ -689,6 +689,71 @@ function handleLogin(req, res) {
   });
 }
 
+// Function to handle saving a newsletter subscription
+function handleSaveSubscription(req, res) {
+  let body = '';
+  
+  req.on('data', chunk => {
+    body += chunk.toString();
+  });
+  
+  req.on('end', () => {
+    try {
+      // Parse the form data
+      const formData = new URLSearchParams(body);
+      const email = formData.get('email');
+      const type = formData.get('type') || 'newsletter';
+      
+      // Validate email
+      if (!email) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, message: 'Email is required' }));
+        return;
+      }
+      
+      // Simple email validation
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, message: 'Invalid email format' }));
+        return;
+      }
+      
+      // Create subscription data
+      const subscriptionData = {
+        email,
+        type,
+        timestamp: new Date().toISOString()
+      };
+      
+      // Ensure subscriptions directory exists
+      const SUBSCRIPTIONS_DIR = path.join(__dirname, 'data', 'subscriptions');
+      fs.mkdirSync(SUBSCRIPTIONS_DIR, { recursive: true });
+      
+      // Create a unique filename using timestamp and email hash
+      const emailHash = Buffer.from(email).toString('base64').replace(/[\/\+\=]/g, '');
+      const fileName = `${Date.now()}_${emailHash}.json`;
+      const filePath = path.join(SUBSCRIPTIONS_DIR, fileName);
+      
+      // Save subscription to file
+      fs.writeFile(filePath, JSON.stringify(subscriptionData, null, 2), err => {
+        if (err) {
+          console.error('Error saving subscription:', err);
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: false, message: 'Failed to save subscription' }));
+        } else {
+          console.log(`Subscription saved successfully: ${email}`);
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: true, message: 'Subscription saved successfully' }));
+        }
+      });
+    } catch (error) {
+      console.error('Error processing subscription data:', error);
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, message: 'Invalid subscription data' }));
+    }
+  });
+}
+
 // Create HTTP server
 const server = http.createServer((req, res) => {
   // Set CORS headers for all responses
@@ -705,39 +770,40 @@ const server = http.createServer((req, res) => {
   
   // Parse the URL
   const url = new URL(req.url, `http://${req.headers.host}`);
+  const pathname = url.pathname;
   
   // Blog API endpoints
-  if (req.method === 'POST' && (url.pathname === '/api/posts' || url.pathname === '/api/save-post')) {
+  if (req.method === 'POST' && (pathname === '/api/posts' || pathname === '/api/save-post')) {
     handleSavePost(req, res);
     return;
   }
   
-  if (req.method === 'DELETE' && url.pathname === '/api/delete-post') {
+  if (req.method === 'DELETE' && pathname === '/api/delete-post') {
     handleDeletePost(req, res);
     return;
   }
   
-  if (req.method === 'POST' && url.pathname === '/api/upload-image') {
+  if (req.method === 'POST' && pathname === '/api/upload-image') {
     handleImageUpload(req, res);
     return;
   }
   
-  if (req.method === 'POST' && url.pathname === '/api/build') {
+  if (req.method === 'POST' && pathname === '/api/build') {
     handleBuildBlog(req, res);
     return;
   }
   
-  if (req.method === 'GET' && url.pathname === '/api/categories') {
+  if (req.method === 'GET' && pathname === '/api/categories') {
     handleGetCategories(req, res);
     return;
   }
   
-  if (req.method === 'POST' && url.pathname === '/api/categories') {
+  if (req.method === 'POST' && pathname === '/api/categories') {
     handleUpdateCategories(req, res);
     return;
   }
   
-  if (req.method === 'GET' && url.pathname === '/api/authors') {
+  if (req.method === 'GET' && pathname === '/api/authors') {
     const authorsPath = path.join(AUTHORS_DIR, 'authors.json');
     fs.access(authorsPath, fs.constants.F_OK, (err) => {
       if (err) {
@@ -767,7 +833,7 @@ const server = http.createServer((req, res) => {
     return;
   }
   
-  if (req.method === 'POST' && url.pathname === '/api/authors') {
+  if (req.method === 'POST' && pathname === '/api/authors') {
     let body = '';
     req.on('data', chunk => {
       body += chunk.toString();
@@ -819,20 +885,25 @@ const server = http.createServer((req, res) => {
     return;
   }
   
-  if (req.method === 'POST' && url.pathname === '/api/upload-author-image') {
+  if (req.method === 'POST' && pathname === '/api/upload-author-image') {
     handleAuthorImageUpload(req, res);
     return;
   }
   
-  if (req.method === 'POST' && url.pathname === '/api/login') {
+  if (req.method === 'POST' && pathname === '/api/login') {
     handleLogin(req, res);
     return;
   }
   
+  if (req.method === 'POST' && pathname === '/api/save-subscription') {
+    handleSaveSubscription(req, res);
+    return;
+  }
+  
   // Handle GET requests for a specific post by slug
-  if (req.method === 'GET' && url.pathname.startsWith('/api/posts/')) {
+  if (req.method === 'GET' && pathname.startsWith('/api/posts/')) {
     // Extract the slug from the URL (remove '/api/posts/' and '.json' if present)
-    const slug = url.pathname.replace(/^\/api\/posts\//, '').replace(/\.json$/, '');
+    const slug = pathname.replace(/^\/api\/posts\//, '').replace(/\.json$/, '');
     
     if (slug) {
       const filePath = path.join(POSTS_DIR, `${slug}.json`);
@@ -874,7 +945,7 @@ const server = http.createServer((req, res) => {
   }
   
   // Save application form data
-  if (req.method === 'POST' && url.pathname === '/save_application') {
+  if (req.method === 'POST' && pathname === '/save_application') {
     let body = '';
     
     req.on('data', chunk => {
@@ -925,12 +996,12 @@ const server = http.createServer((req, res) => {
   // Serve static files
   let filePath = '';
   
-  if (url.pathname === '/' || url.pathname === '/index.html') {
+  if (pathname === '/' || pathname === '/index.html') {
     filePath = path.join(__dirname, 'public', 'index.html');
   } else {
     // Remove leading slash and normalize path
     // Check first in public directory, then in root if not found
-    filePath = path.join(__dirname, 'public', path.normalize(url.pathname.substring(1)));
+    filePath = path.join(__dirname, 'public', path.normalize(pathname.substring(1)));
   }
   
   // Get the file extension

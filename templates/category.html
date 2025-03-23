@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<!-- Category Header -->
+<section class="pt-32 pb-12 relative">
+    <div class="container mx-auto px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-8">
+                <a href="/blog" class="text-teal-400 hover:text-teal-300 flex items-center transition-colors duration-300">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Back to all opinions
+                </a>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">{{ category }}</h1>
+            <p class="text-xl text-gray-400 max-w-3xl">Articles and insights in the {{ category }} category.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Category Posts -->
+<section class="py-12">
+    <div class="container mx-auto px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for post in posts %}
+                <article class="post-card bg-gradient-to-br from-gray-900 to-teal-900/10 rounded-lg overflow-hidden group hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 h-full">
+                    <a href="/blog/posts/{{ post.slug }}.html" class="block h-full flex flex-col">
+                        <div class="aspect-[16/9] overflow-hidden relative">
+                            <div class="absolute inset-0 bg-gradient-to-t from-gray-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                            <img src="{{ post.cover_image or '/images/default-cover.jpg' }}" alt="{{ post.title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col">
+                            <span class="text-sm text-teal-400 mb-1">{{ post.category }}</span>
+                            <h3 class="text-xl font-bold mb-3 line-clamp-2">{{ post.title }}</h3>
+                            <p class="text-gray-300 line-clamp-2 mb-4 flex-grow">{{ post.excerpt }}</p>
+                            <div class="mt-auto flex items-center text-sm text-gray-400">
+                                <span>{{ post.date }}</span>
+                                <span class="mx-2 text-gray-600">•</span>
+                                <span>{{ post.author }}</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories -->
+<section class="py-12 bg-dark-accent">
+    <div class="container mx-auto px-6">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-2xl font-bold mb-8">Browse by Category</h2>
+            <div class="flex flex-wrap gap-4">
+                <a href="/blog" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-white transition-colors">
+                    All
+                </a>
+                {% for cat in categories %}
+                <a href="/blog/categories/{{ cat|lower|replace(' ', '-') }}.html" 
+                   class="px-4 py-2 {% if cat == category %}bg-teal-500 hover:bg-teal-400{% else %}bg-gray-800 hover:bg-gray-700{% endif %} rounded-lg text-white transition-colors">
+                    {{ cat }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

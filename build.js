@@ -10,7 +10,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Configure Nunjucks
-nunjucks.configure('templates', { autoescape: true });
+nunjucks.configure('templates', { 
+  autoescape: true,
+  watch: false, // Set to true during development for auto-reloading
+  noCache: true // Disable caching to ensure templates are always re-read
+});
 
 // Configuration
 const CONTENT_DIR = path.join(__dirname, 'content');
@@ -51,39 +55,35 @@ async function buildBlog() {
         console.error(`Error parsing ${file}:`, err);
         return null;
       }
-    }));
-    
-    // Remove any null entries from parsing errors
-    const validPosts = posts.filter(post => post !== null);
+    })).then(results => results.filter(Boolean));
     
     // Sort posts by date (newest first)
-    validPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+    posts.sort((a, b) => new Date(b.date) - new Date(a.date));
     
-    // Extract all unique categories
-    const categories = [...new Set(validPosts.map(post => post.category))];
-    
-    console.log(`📝 Found ${validPosts.length} posts in ${categories.length} categories`);
+    // Get all unique categories
+    const categories = [...new Set(posts.map(post => post.category || 'Uncategorized'))];
     
     // Generate individual post pages
-    for (const post of validPosts) {
-      await generatePostPage(post, validPosts);
+    for (const post of posts) {
+      await generatePostPage(post, posts);
     }
     
     // Generate index page
-    await generateIndexPage(validPosts, categories);
+    await generateIndexPage(posts, categories);
     
     // Generate category pages
     for (const category of categories) {
-      await generateCategoryPage(category, validPosts.filter(post => post.category === category), categories);
+      const categoryPosts = posts.filter(post => 
+        (post.category || 'Uncategorized') === category
+      );
+      await generateCategoryPage(category, categoryPosts, categories);
     }
     
-    // Generate posts.json for client-side filtering
-    fs.writeFileSync(
-      path.join(OUTPUT_DIR, 'posts.json'),
-      JSON.stringify({ posts: validPosts.map(simplifyPost) }, null, 2)
-    );
+    // Copy assets
+    console.log('📁 Copying assets...');
     
-    console.log('✅ Blog built successfully!');
+    console.log('✅ Blog build completed successfully!');
+    
   } catch (error) {
     console.error('❌ Error building blog:', error);
   }
@@ -98,11 +98,11 @@ function simplifyPost(post) {
   return {
     title: post.title,
     slug: post.slug,
-    excerpt: post.excerpt || '',
-    coverImage: post.coverImage || '/images/default-cover.jpg',
-    category: post.category || 'Uncategorized',
     date: post.date,
-    author: post.author || 'Brainware Team'
+    excerpt: post.excerpt,
+    category: post.category || 'Uncategorized',
+    author: post.author || 'Brainware Team',
+    coverImage: post.coverImage || post.cover_image
   };
 }
 
@@ -137,14 +137,42 @@ async function generatePostPage(post, allPosts) {
       date: format(new Date(p.date), 'MMMM d, yyyy')
     }));
     
+    // Get author image if available
+    let authorImage = null;
+    try {
+      const authorsFilePath = path.join(CONTENT_DIR, 'authors', 'authors.json');
+      if (fs.existsSync(authorsFilePath)) {
+        const authorsData = JSON.parse(fs.readFileSync(authorsFilePath, 'utf-8'));
+        const authorData = authorsData.authors.find(a => 
+          a.name.toLowerCase() === post.author?.toLowerCase() || 
+          a.slug === post.author?.toLowerCase().replace(/\s+/g, '-')
+        );
+        if (authorData && authorData.image) {
+          authorImage = authorData.image;
+        }
+      }
+    } catch (err) {
+      console.error('Error getting author image:', err);
+    }
+    
     // Render the post HTML
     const html = nunjucks.render('post.html', {
       title: post.title,
       content: htmlContent,
       date: formattedDate,
       author: post.author || 'Brainware Team',
+      author_image: authorImage,
       category: post.category || 'Uncategorized',
-      related_posts: relatedPosts
+      related_posts: relatedPosts,
+      coverImage: post.coverImage, // Pass the cover image path
+      post: post, // Pass the full post object for additional data
+      footer: nunjucks.render('footer.html'), // Include the footer template
+      metaTags: {
+        title: post.title,
+        description: post.excerpt,
+        url: `https://brainware.io/blog/posts/${post.slug}.html`,
+        image: post.coverImage ? `https://brainware.io${post.coverImage}` : null
+      }
     });
     
     // Write the file
@@ -164,67 +192,43 @@ async function generatePostPage(post, allPosts) {
  */
 async function generateIndexPage(posts, categories) {
   try {
-    // Get featured post (first post)
-    const featuredPost = posts[0];
-    const formattedFeaturedDate = format(new Date(featuredPost.date), 'MMMM d, yyyy');
+    // Format dates for display
+    const formattedPosts = posts.map(post => ({
+      ...post,
+      date: format(new Date(post.date), 'MMMM d, yyyy')
+    }));
     
-    // Create featured post HTML
-    const featuredPostHtml = `
-      <article class="relative group h-[600px] rounded-2xl overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent z-10"></div>
-        <img src="${featuredPost.coverImage}" alt="${featuredPost.title}" class="absolute inset-0 w-full h-full object-cover">
-        <div class="absolute bottom-0 left-0 right-0 p-8 z-20">
-          <span class="inline-block px-3 py-1 rounded bg-teal-500/20 text-teal-400 text-sm mb-4">${featuredPost.category}</span>
-          <h2 class="text-3xl font-bold mb-4">${featuredPost.title}</h2>
-          <p class="text-gray-300 mb-4 line-clamp-2">${featuredPost.excerpt || ''}</p>
-          <div class="flex items-center">
-            <span class="text-sm text-gray-400">${formattedFeaturedDate}</span>
-            <span class="mx-2 text-gray-600">•</span>
-            <span class="text-sm text-gray-400">${featuredPost.author || 'Brainware Team'}</span>
-          </div>
-        </div>
-        <a href="posts/${featuredPost.slug}.html" class="absolute inset-0 z-30"></a>
-      </article>
-    `;
+    // Get featured post (most recent)
+    const featuredPost = formattedPosts[0];
     
-    // Generate regular post previews (skip the featured one)
-    let postPreviewsHtml = '';
-    for (let i = 1; i < Math.min(posts.length, POSTS_PER_PAGE); i++) {
-      const post = posts[i];
-      const formattedDate = format(new Date(post.date), 'MMMM d, yyyy');
-      
-      postPreviewsHtml += `
-        <article class="bg-gradient-to-br from-gray-900 to-teal-900/10 rounded-lg overflow-hidden group hover:shadow-lg transition-all duration-300">
-          <a href="posts/${post.slug}.html" class="block">
-            <div class="aspect-[16/9] overflow-hidden">
-              <img src="${post.coverImage || '/images/default-cover.jpg'}" alt="${post.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-            </div>
-            <div class="p-6">
-              <span class="text-sm text-teal-400">${post.category || 'Uncategorized'}</span>
-              <h3 class="text-xl font-bold mt-2 mb-3">${post.title}</h3>
-              <p class="text-gray-300 line-clamp-2">${post.excerpt || ''}</p>
-              <div class="mt-4 flex items-center">
-                <span class="text-sm text-gray-400">${formattedDate}</span>
-                <span class="mx-2 text-gray-600">•</span>
-                <span class="text-sm text-gray-400">${post.author || 'Brainware Team'}</span>
-              </div>
-            </div>
-          </a>
-        </article>
-      `;
-    }
+    // Get recent posts (excluding featured)
+    const recentPosts = formattedPosts.slice(1, POSTS_PER_PAGE);
     
-    // Render the index template
+    // Generate post previews HTML
+    const postPreviewsHtml = recentPosts.map(post => 
+      nunjucks.render('post-preview.html', { post })
+    ).join('');
+    
+    // Render the index HTML
     const html = nunjucks.render('index.html', {
+      title: 'Opinions | Brainware',
+      featured_post: nunjucks.render('featured-post.html', { post: featuredPost }),
+      post_previews: postPreviewsHtml,
       categories: categories,
-      featured_post: featuredPostHtml,
-      post_previews: postPreviewsHtml
+      all_posts: formattedPosts,
+      footer: nunjucks.render('footer.html') // Include the footer template
     });
     
-    // Write the index file
+    // Write the file
     const outputPath = path.join(OUTPUT_DIR, 'index.html');
     await fs.writeFile(outputPath, html);
     console.log('📄 Generated index page');
+    
+    // Create JSON file with all posts for client-side filtering
+    const postsJson = JSON.stringify({ posts: formattedPosts.map(simplifyPost) });
+    const jsonPath = path.join(OUTPUT_DIR, 'posts.json');
+    await fs.writeFile(jsonPath, postsJson);
+    console.log('📄 Generated posts.json');
     
   } catch (error) {
     console.error('Error generating index page:', error);
@@ -239,60 +243,66 @@ async function generateIndexPage(posts, categories) {
  */
 async function generateCategoryPage(category, posts, allCategories) {
   try {
-    // Similar to index page but filtered by category
-    // Implementation would be similar to generateIndexPage with category filtering
+    // Format dates for display
+    const formattedPosts = posts.map(post => ({
+      ...post,
+      date: format(new Date(post.date), 'MMMM d, yyyy')
+    }));
     
-    // For now, a simpler version without featured post
-    let postPreviewsHtml = '';
-    
-    posts.forEach(post => {
-      const formattedDate = format(new Date(post.date), 'MMMM d, yyyy');
-      
-      postPreviewsHtml += `
-        <article class="bg-gradient-to-br from-gray-900 to-teal-900/10 rounded-lg overflow-hidden group hover:shadow-lg transition-all duration-300">
-          <a href="../posts/${post.slug}.html" class="block">
-            <div class="aspect-[16/9] overflow-hidden">
-              <img src="${post.coverImage || '/images/default-cover.jpg'}" alt="${post.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-            </div>
-            <div class="p-6">
-              <span class="text-sm text-teal-400">${post.category}</span>
-              <h3 class="text-xl font-bold mt-2 mb-3">${post.title}</h3>
-              <p class="text-gray-300 line-clamp-2">${post.excerpt || ''}</p>
-              <div class="mt-4 flex items-center">
-                <span class="text-sm text-gray-400">${formattedDate}</span>
-                <span class="mx-2 text-gray-600">•</span>
-                <span class="text-sm text-gray-400">${post.author || 'Brainware Team'}</span>
-              </div>
-            </div>
-          </a>
-        </article>
-      `;
-    });
-    
-    // Render the index template with category-specific content
-    const html = nunjucks.render('index.html', {
-      title: `${category} | Brainware Opinions`,
-      categories: allCategories,
-      featured_post: '', // No featured post for category pages
-      post_previews: postPreviewsHtml
-    });
-    
-    // Create slug from category
+    // Create category slug
     const categorySlug = category.toLowerCase().replace(/\s+/g, '-');
     
-    // Write the category file
+    // Render the category HTML
+    const html = nunjucks.render('category.html', {
+      title: `${category} | Brainware Opinions`,
+      category: category,
+      posts: formattedPosts,
+      categories: allCategories,
+      footer: nunjucks.render('footer.html') // Include the footer template
+    });
+    
+    // Write the file
     const outputPath = path.join(OUTPUT_DIR, 'categories', `${categorySlug}.html`);
     await fs.writeFile(outputPath, html);
     console.log(`📄 Generated category page: ${category}`);
     
   } catch (error) {
-    console.error(`Error generating category page for ${category}:`, error);
+    console.error(`Error generating category page ${category}:`, error);
   }
 }
 
-// Execute the build
-buildBlog().catch(err => {
-  console.error('❌ Build failed:', err);
-});
+// Copy necessary assets to ensure the blog works properly
+async function copyAssets() {
+  // Make sure the JS directory exists
+  fs.ensureDirSync(path.join(OUTPUT_DIR, 'js'));
+  
+  // Copy newsletter.js to ensure subscription form works
+  try {
+    await fs.copy(
+      path.join(__dirname, 'public', 'js', 'newsletter.js'),
+      path.join(OUTPUT_DIR, 'js', 'newsletter.js')
+    );
+    console.log('📄 Copied newsletter.js');
+  } catch (error) {
+    console.error('Error copying newsletter.js:', error);
+  }
+  
+  // Copy menu.js for navigation
+  try {
+    await fs.copy(
+      path.join(__dirname, 'public', 'js', 'menu.js'),
+      path.join(OUTPUT_DIR, 'js', 'menu.js')
+    );
+    console.log('📄 Copied menu.js');
+  } catch (error) {
+    console.error('Error copying menu.js:', error);
+  }
+}
 
+// Export the build function
 export { buildBlog };
+
+// Add the copyAssets function to the buildBlog function
+buildBlog().then(() => {
+  copyAssets();
+});
